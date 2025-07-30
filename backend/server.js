@@ -13,6 +13,12 @@ let projects = [
   { id: 2, name: "3D Protein Viewer", description: "AR protein interaction explorer" }
 ];
 
+app.use(express.static(path.join(__dirname, '..' ,'client', 'dist')));
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..' ,'client', 'dist', 'index.html'));
+  });
 
 // GET all projects
 app.get('/api/projects', (req, res) => {
@@ -64,10 +70,5 @@ app.delete('/api/projects/:id', (req, res) => {
   res.json(deleted[0]);
 });
 
-// app.get('/*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
-// });
-test = path.join('..', 'client', 'dist', 'index.html')
-console.log(test)
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
