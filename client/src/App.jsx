@@ -4,6 +4,8 @@ import Home from './pages/home';
 //import About from './pages/about';
 import Contact from './pages/contact';
 import Navbar from './components/navbar';
+import Footer from './components/footer';
+
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
+      <Footer />
     </>
   );
 }
