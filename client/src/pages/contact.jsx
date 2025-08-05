@@ -1,3 +1,5 @@
+import '../css/contact.css';
+
 function Contact() {
   return (
     <div className="page">

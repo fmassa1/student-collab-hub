@@ -1,3 +1,4 @@
+import '../css/navbar.css';
 
 function NavBar() {
     return (
@@ -5,7 +6,7 @@ function NavBar() {
             <div className="nav-container">
                 <a href="/" className="logo">Peer Spark</a>
                 <ul className="nav-links">
-                    <li><a href="#browse">Browse Projects</a></li>
+                    <li><a href="/projects">Browse Projects</a></li>
                     <li><a href="/">About</a></li>
                     <li><a href="/contact">Contact</a></li>
                     <li><a href="#login">Login</a></li>
