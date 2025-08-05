@@ -8,7 +8,7 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 2rem;
-    color: #d50000;
+    color: #001e62;
     text-align: center;
   }
   
@@ -25,6 +25,7 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
     transition: all 0.3s ease;
+    position: relative;
   }
   
   .project-card:hover {
@@ -76,4 +77,23 @@
   .load-more-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(213, 0, 0, 0.4);
+  }
+
+  .icon-container {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .icon-container img {
+    width: 36px;
+    height: 36px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .icon-container img:hover {
+    transform: scale(1.1);
   }

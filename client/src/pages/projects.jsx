@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
+import LinkedIn from '../assets/linkedin.svg'
+import Github from '../assets/github.svg'
+
 import '../css/projects.css';
+import { Link } from 'react-router-dom';
 
 function Projects() {
 
@@ -28,12 +33,20 @@ function Projects() {
                     <img src={project.image_url} alt={project.name} />
                     <h2>{project.name}</h2>
                     <p>{project.description}</p>
+                    <div className="icon-container">
+                        <a href={project.linkedin_url} target="_blank" rel="noopener noreferrer">
+                            <img src={LinkedIn} alt="LinkedIn" />
+                        </a>
+                        <a href={project.github_url} target="_blank" rel="noopener noreferrer">
+                            <img src={Github} alt="Github" />
+                        </a>
+                    </div>
                 </div>
                 ))}
             </div>
             {visibleCount < allProjects.length && (
                 <div className="load-more-container">
-                    <button classname="load-more-btn" onClick={loadMore}>Load More</button>
+                    <button className="load-more-btn" onClick={loadMore}>Load More</button>
                 </div>
             )}
         </div>
