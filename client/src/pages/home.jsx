@@ -20,16 +20,7 @@ function Home() {
           >
             Post Your Project
           </a>
-          <a
-            href="#explore"
-            className="btn-secondary"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('Explore Projects feature coming soon!');
-            }}
-          >
-            Explore Projects
-          </a>
+          <a href="/projects" className="btn-secondary"> Explore Projects</a>
         </div>
       </section>
 

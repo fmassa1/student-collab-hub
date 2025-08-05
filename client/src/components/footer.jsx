@@ -15,7 +15,7 @@ function Footer() {
                 <a href="/about">About</a>
                 <a href="/contact">Contact</a>
                 <a href="#post-project" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>Post Project</a>
-                <a href="#explore" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>Explore Projects</a>
+                <a href="/projects">Explore Projects</a>
               </div>
     
               <div className="footer-column">
