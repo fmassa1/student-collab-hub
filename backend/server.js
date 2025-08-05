@@ -13,16 +13,13 @@ let projects = [
   { id: 2, name: "3D Protein Viewer", description: "AR protein interaction explorer" }
 ];
 
-app.use(express.static(path.join(__dirname, './../client/dist')));
-app.use(express.static(path.join(__dirname, './../client/src')));
 
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './../client/dist/index.html'));
-});
-app.get('/contact', (req, res) => {
-  res.sendFile(path.join(__dirname, './../client/public/contact.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, './../client/dist/index.html'));
+// });
+// app.get('/contact', (req, res) => {
+//   res.sendFile(path.join(__dirname, './../client/public/contact.html'));
+// });
 
 // GET all projects
 app.get('/api/projects', (req, res) => {
@@ -74,6 +71,12 @@ app.delete('/api/projects/:id', (req, res) => {
   res.json(deleted[0]);
 });
 
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+
+app.get(/^(?!\/api).*$/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
