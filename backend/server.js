@@ -28,8 +28,22 @@ let projects = [
   { id: 17, name: "Workout Logger", image_url: "https://picsum.photos/200?17", description: "Log workouts and share with your group" },
   { id: 18, name: "SkillShare UIC", image_url: "https://picsum.photos/200?18", description: "Exchange skills with others on campus" },
   { id: 19, name: "Focus Flow", image_url: "https://picsum.photos/200?19", description: "Pomodoro timer with music and task sync" },
-  { id: 20, name: "Lab Partner Finder", image_url: "https://picsum.photos/200?20", description: "Find lab partners based on availability" }
+  { id: 20, name: "Lab Partner Finder", image_url: "https://picsum.photos/200?20", description: "Find lab partners based on availability" },
+  { id: 21, name: "Language Buddy", image_url: "https://picsum.photos/200?15", description: "Pair up with native speakers to practice" },
+  { id: 22, name: "Crypto Tracker", image_url: "https://picsum.photos/200?16", description: "Track your crypto portfolio and news" },
+  { id: 23, name: "Workout Logger", image_url: "https://picsum.photos/200?17", description: "Log workouts and share with your group" },
+  { id: 24, name: "SkillShare UIC", image_url: "https://picsum.photos/200?18", description: "Exchange skills with others on campus" },
+  { id: 25, name: "Focus Flow", image_url: "https://picsum.photos/200?19", description: "Pomodoro timer with music and task sync" },
+  { id: 26, name: "Lab Partner Finder", image_url: "https://picsum.photos/200?20", description: "Find lab partners based on availability" },
+  { id: 27, name: "Lab Partner Finder", image_url: "https://picsum.photos/200?20", description: "Find lab partners based on availability" },
+  { id: 28, name: "Language Buddy", image_url: "https://picsum.photos/200?15", description: "Pair up with native speakers to practice" },
+  { id: 29, name: "Crypto Tracker", image_url: "https://picsum.photos/200?16", description: "Track your crypto portfolio and news" },
+  { id: 30, name: "Workout Logger", image_url: "https://picsum.photos/200?17", description: "Log workouts and share with your group" },
+  { id: 31, name: "SkillShare UIC", image_url: "https://picsum.photos/200?18", description: "Exchange skills with others on campus" },
+  { id: 32, name: "Focus Flow", image_url: "https://picsum.photos/200?19", description: "Pomodoro timer with music and task sync" },
+  { id: 33, name: "Lab Partner Finder", image_url: "https://picsum.photos/200?20", description: "Find lab partners based on availability" }
 ];
+
 
 
 // app.get('/', (req, res) => {
