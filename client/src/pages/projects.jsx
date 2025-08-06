@@ -41,6 +41,13 @@ function Projects() {
                             <img src={Github} alt="Github" />
                         </a>
                     </div>
+                    {project.tags?.length > 0 && (
+                        <div className="project-tags">
+                            {project.tags.map((tag, index) => (
+                            <span key={index} className="tag-badge">{tag}</span>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 ))}
             </div>

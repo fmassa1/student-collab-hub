@@ -9,7 +9,7 @@ app.use(express.json());
 
 // In-memory "database"
 let projects = [
-  { id: 1, name: "AI Chatbot", image_url: "https://picsum.photos/200?1", description: "A chatbot that helps students", linkedin_url: "https://www.linkedin.com/in/fredric-massa", github_url: "https://github.com/fmassa1" },
+  { id: 1, name: "AI Chatbot", image_url: "https://picsum.photos/200?1", description: "A chatbot that helps students", linkedin_url: "https://www.linkedin.com/in/fredric-massa", github_url: "https://github.com/fmassa1", tags: ["Python", "Flask", "HTML", "CSS"]},
   { id: 2, name: "3D Protein Viewer", image_url: "https://picsum.photos/200?2", description: "AR protein interaction explorer" },
   { id: 3, name: "Smart Scheduler", image_url: "https://picsum.photos/200?3", description: "AI-powered class and task scheduler" },
   { id: 4, name: "Campus Navigator", image_url: "https://picsum.photos/200?4", description: "Augmented reality app for navigating campus" },
