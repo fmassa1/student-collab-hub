@@ -46,13 +46,6 @@ let projects = [
 
 
 
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, './../client/dist/index.html'));
-// });
-// app.get('/contact', (req, res) => {
-//   res.sendFile(path.join(__dirname, './../client/public/contact.html'));
-// });
-
 // GET all projects
 app.get('/api/projects', (req, res) => {
   res.json(projects);
