@@ -10,9 +10,14 @@ function Projects() {
 
 
     useEffect(() => {
-        fetch('/api/projects')
+        fetch('http://localhost:5055/api/projects')
         .then(res => res.json())
-        .then(data => setProjects(data))
+        .then(data => {
+            console.log('Fetched projects:', data);
+            setProjects(data);
+        }
+        )
+        
         .catch(err => console.error('Failed to load projects', err));
     }, []);
 
@@ -40,11 +45,13 @@ function Projects() {
                     <h2>{project.name}</h2>
                     <p>{project.description}</p>
                     <div className="icon-container">
+                    {project.linkedin_url ? (
                         <a href={project.linkedin_url} target="_blank" rel="noopener noreferrer">
-                            <img src={LinkedIn} alt="LinkedIn" />
-                        </a>
+                            <img src='/linkedin.svg' alt="LinkedIn" />
+                            </a>
+                        ) : null}
                         <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                            <img src={Github} alt="Github" />
+                            <img src='/github.svg' alt="Github" />
                         </a>
                     </div>
                     {project.tags?.length > 0 && (

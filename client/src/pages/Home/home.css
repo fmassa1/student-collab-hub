@@ -148,7 +148,6 @@ body {
   line-height: 1.6;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .nav-container {
       padding: 0 1rem;
