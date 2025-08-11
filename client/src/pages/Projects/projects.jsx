@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import LinkedIn from '../assets/linkedin.svg'
-import Github from '../assets/github.svg'
-
-import '../css/projects.css';
+import './projects.css';
 
 function Projects() {
 
@@ -74,10 +71,10 @@ function Projects() {
                         <p>{selectedProject.description}</p>
                         <div className="modal-icon-container">
                             <a href={selectedProject.linkedin_url} target="_blank" rel="noopener noreferrer">
-                                <img src={LinkedIn} alt="LinkedIn" />
+                                <img src='/linkedin.svg' alt="LinkedIn" />
                             </a>
                             <a href={selectedProject.github_url} target="_blank" rel="noopener noreferrer">
-                                <img src={Github} alt="Github" />
+                                <img src='/github.svg' alt="Github" />
                             </a>
                         </div>
                         <div className="project-tags">
