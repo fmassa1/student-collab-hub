@@ -8,16 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const projectsController = require('./controllers/projectsController');
+
+
 // GET all projects
-app.get('/api/projects', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM projects');
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+app.get('/api/projects', projectsController.getAllProjects);
+
 
 // GET a single project by ID
 app.get('/api/projects/:id', (req, res) => {
