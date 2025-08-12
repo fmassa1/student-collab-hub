@@ -11,17 +11,11 @@ app.use(express.json());
 const projectsController = require('./controllers/projectsController');
 
 
-// GET all projects
 app.get('/api/projects', projectsController.getAllProjects);
+app.get('/api/projects/:id', projectsController.getProjectById);
 
 
-// GET a single project by ID
-app.get('/api/projects/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const project = projects.find(p => p.id === id);
-  if (!project) return res.status(404).json({ error: 'Project not found' });
-  res.json(project);
-});
+
 
 // POST a new project
 app.post('/api/projects', (req, res) => {

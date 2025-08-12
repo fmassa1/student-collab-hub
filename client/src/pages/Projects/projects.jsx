@@ -54,42 +54,12 @@ function Projects() {
                             <img src='/github.svg' alt="Github" />
                         </a>
                     </div>
-                    {project.tags?.length > 0 && (
-                        <div className="project-tags">
-                            {project.tags.map((tag, index) => (
-                            <span key={index} className="tag-badge">{tag}</span>
-                            ))}
-                        </div>
-                    )}
                 </div>
                 ))}
             </div>
             {visibleCount < allProjects.length && (
                 <div className="load-more-container">
                     <button className="load-more-btn" onClick={loadMore}>Load More</button>
-                </div>
-            )}
-            {selectedProject && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close" onClick={closeModal}> x </button>
-                        <img src={selectedProject.image_url} alt={selectedProject.name} />
-                        <h2>{selectedProject.name}</h2>
-                        <p>{selectedProject.description}</p>
-                        <div className="modal-icon-container">
-                            <a href={selectedProject.linkedin_url} target="_blank" rel="noopener noreferrer">
-                                <img src='/linkedin.svg' alt="LinkedIn" />
-                            </a>
-                            <a href={selectedProject.github_url} target="_blank" rel="noopener noreferrer">
-                                <img src='/github.svg' alt="Github" />
-                            </a>
-                        </div>
-                        <div className="project-tags">
-                            {selectedProject.tags?.map((tag, index) => (
-                                <span key={index} className="tag-badge">{tag}</span>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             )}
         </div>

@@ -16,3 +16,11 @@ CREATE TABLE project_tags (
     tag VARCHAR(100) NOT NULL,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
+
+CREATE TABLE project_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_id INT NOT NULL,
+    user VARCHAR(100) NOT NULL,
+    comment VARCHAR(100) NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);

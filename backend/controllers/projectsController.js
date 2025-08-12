@@ -11,6 +11,18 @@ async function getAllProjects(req, res) {
     }
 }
 
+async function getProjectById(req, res) {
+    try {
+        const id = req.params.id;
+        const project = await projectsModel.getProjectById(id);
+        res.json(project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 module.exports = {
     getAllProjects,
+    getProjectById,
 };

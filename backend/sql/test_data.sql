@@ -2,6 +2,7 @@ USE peer_spark;
 
 DELETE FROM project_tags;
 DELETE FROM projects;
+DELETE FROM project_comments;
 
 INSERT INTO projects (name, image_url, description, linkedin_url, github_url) VALUES
 ('AI Chatbot', 'https://picsum.photos/200?1', 'A chatbot that helps students', 'https://www.linkedin.com/in/fredric-massa', 'https://github.com/fmassa1'),
