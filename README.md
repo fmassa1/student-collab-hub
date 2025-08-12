@@ -1,13 +1,13 @@
-## Need to do
-# Project Posting
+# CHECK LIST
+## Project Posting
 - [ ] ensure proper links for gitub/linkedin
 - [ ] fix tags
 - [ ] upload pictures instead of url
 
-# Project Page
+## Project Page
 - [ ] add comments section
 - [ ] style better
  
-# Broad
+## General
 - [ ] updating projects
 - [ ] create login system
