@@ -13,23 +13,9 @@ const projectsController = require('./controllers/projectsController');
 
 app.get('/api/projects', projectsController.getAllProjects);
 app.get('/api/projects/:id', projectsController.getProjectById);
+app.post('/api/projects', projectsController.postProject);
 
 
-
-
-// POST a new project
-app.post('/api/projects', (req, res) => {
-  const { name, description } = req.body;
-  if (!name || !description) return res.status(400).json({ error: 'Missing name or description' });
-
-  const newProject = {
-    id: projects.length + 1,
-    name,
-    description
-  };
-  projects.push(newProject);
-  res.status(201).json(newProject);
-});
 
 // PUT update a project
 app.put('/api/projects/:id', (req, res) => {

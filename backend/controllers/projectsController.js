@@ -22,7 +22,29 @@ async function getProjectById(req, res) {
     }
 }
 
+async function postProject(req, res) {
+    try {
+        const { name, description, image_url, linkedin_url, github_url, tags } = req.body;
+        
+        const project = await projectsModel.postProject({
+            name,
+            description,
+            image_url,
+            linkedin_url,
+            github_url,
+            tags
+        });    
+
+        res.status(201).json(project);
+
+    } catch (err) {
+        console.error('Error posting project: ', err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 module.exports = {
     getAllProjects,
     getProjectById,
+    postProject,
 };

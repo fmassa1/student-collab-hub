@@ -1,0 +1,47 @@
+.create-project-page {
+    max-width: 600px;
+    margin: auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.project-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.project-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.project-form input,
+.project-form textarea {
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.8rem 1.2rem;
+    background: #001e62;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #003399;
+}
+
+.error {
+    color: red;
+    font-weight: 500;
+}

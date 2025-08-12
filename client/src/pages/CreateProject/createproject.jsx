@@ -1,0 +1,142 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import './createproject.css';
+
+
+function CreateProject() {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        image_url: '',
+        linkedin_url: '',
+        github_url: '',
+        tags: ''
+    });
+
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.name || !formData.description) {
+            setError('Name and description are required.');
+            return;
+        }
+
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await fetch('http://localhost:5055/api/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    tags: formData.tags.split(',').map(tag => tag.trim())
+                })
+            });
+
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
+
+            const data = await res.json();
+            console.log('Project created:', data);
+
+            navigate(`/projects/${data.id}`);
+        } catch (err) {
+            console.error('Failed to create project:', err);
+            setError('Failed to create project. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    return (
+        <div className="create-project-page">
+            <h1>Create New Project</h1>
+            <form className="project-form" onSubmit={handleSubmit}>
+                {error && <p className="error">{error}</p>}
+
+                <label>
+                    Project Name
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </label>
+
+                <label>
+                    Description
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                    />
+                </label>
+
+
+                {/* will change later to upload pictures */}
+                <label>
+                    Image URL
+                    <input
+                        type="text"
+                        name="image_url"
+                        value={formData.image_url}
+                        onChange={handleChange}
+                    />
+                </label>
+
+                <label>
+                    LinkedIn URL
+                    <input
+                        type="text"
+                        name="linkedin_url"
+                        value={formData.linkedin_url}
+                        onChange={handleChange}
+                    />
+                </label>
+
+                <label>
+                    GitHub URL
+                    <input
+                        type="text"
+                        name="github_url"
+                        value={formData.github_url}
+                        onChange={handleChange}
+                    />
+                </label>
+
+                <label>
+                    Tags (comma separated)
+                    <input
+                        type="text"
+                        name="tags"
+                        value={formData.tags}
+                        onChange={handleChange}
+                    />
+                </label>
+
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Create Project'}
+                </button>
+            </form>
+        </div>
+    );
+}
+
+export default CreateProject;
