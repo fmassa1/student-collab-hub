@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import './projects.css';
 
@@ -6,7 +7,9 @@ function Projects() {
 
     const [allProjects, setProjects] = useState([]);
     const [visibleCount, setVisibleCount] = useState(10);
-    const [selectedProject, setSelectedProject] = useState(null);
+
+    const navigate = useNavigate();
+
 
 
     useEffect(() => {
@@ -15,8 +18,7 @@ function Projects() {
         .then(data => {
             console.log('Fetched projects:', data);
             setProjects(data);
-        }
-        )
+        })
         
         .catch(err => console.error('Failed to load projects', err));
     }, []);
@@ -27,20 +29,14 @@ function Projects() {
 
     const visibleProjects = allProjects.slice(0, visibleCount);
 
-    const handleCardClick = (project) => {
-        setSelectedProject(project);
-    };
-    
-    const closeModal = () => {
-        setSelectedProject(null);
-    };
-
     return (
+
+        
         <div className="projects-page">
             <h1 className="projects-heading">Featured Projects</h1>
             <div className="project-grid">
                 {visibleProjects.map(project => (
-                <div key={project.id} className="project-card" onClick={() => handleCardClick(project)}>
+                <div key={project.id} className="project-card" onClick={() => navigate(`/projects/${project.id}`)}>
                     <img src={project.image_url} alt={project.name} />
                     <h2>{project.name}</h2>
                     <p>{project.description}</p>
@@ -50,9 +46,11 @@ function Projects() {
                             <img src='/linkedin.svg' alt="LinkedIn" />
                             </a>
                         ) : null}
+                    {project.github_url ? (
                         <a href={project.github_url} target="_blank" rel="noopener noreferrer">
                             <img src='/github.svg' alt="Github" />
                         </a>
+                    ) : null}
                     </div>
                 </div>
                 ))}

@@ -1,0 +1,92 @@
+.project-details-page {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(135deg, #d50000 0%, #001e62 100%);
+    min-height: 100vh;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.project-post-card {
+    background: white;
+    border-radius: 15px;
+    max-width: 700px;
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.project-header {
+    margin-bottom: 1.5rem;
+}
+
+.project-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #001e62;
+    margin-bottom: 0.5rem;
+}
+
+.project-meta {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.project-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.project-image {
+    border-radius: 12px;
+    max-width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.project-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+
+.project-tags {
+    margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-pill {
+    background: #f1f5f9;
+    color: #001e62;
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 30, 98, 0.2);
+}
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.project-links img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
