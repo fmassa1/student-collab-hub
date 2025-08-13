@@ -1,6 +1,5 @@
 # CHECK LIST
 ## Project Posting
-- [ ] ensure proper links for gitub/linkedin
 - [ ] fix tags
 - [ ] upload pictures instead of url
 

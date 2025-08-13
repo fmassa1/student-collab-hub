@@ -1,14 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./db');
+
 require('dotenv').config();
 
 const app = express();
+
+app.set('trust proxy', true);
+
 app.use(cors());
 app.use(express.json());
 
 const projectsController = require('./controllers/projectsController');
+const requestLogger = require('./middleware/logger');
+
+app.use(requestLogger);
 
 
 app.get('/api/projects', projectsController.getAllProjects);
