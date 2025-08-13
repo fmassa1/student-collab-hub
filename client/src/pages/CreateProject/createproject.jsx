@@ -24,11 +24,41 @@ function CreateProject() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const isValidGitHubUrl = (string) => {
+        try {
+            new URL(string);
+            return string.startsWith('https://github.com') || string.startsWith('https://www.github.com')
+
+        } catch (_) {
+            return false;
+        }
+    }
+
+    const isValidLinkedInUrl = (string) => {
+        try {
+            new URL(string);
+            return string.startsWith('https://linkedin.com') || string.startsWith('https://www.linkedin.com')
+
+        } catch (_) {
+            return false;
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!formData.name || !formData.description) {
             setError('Name and description are required.');
+            return;
+        }
+
+        if(formData.linkedin_url && !isValidLinkedInUrl(formData.linkedin_url)) {
+            setError('Invalid LinkedIn Url');
+            return;
+        }
+
+        if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
+            setError('Invalid Github Url');
             return;
         }
 
