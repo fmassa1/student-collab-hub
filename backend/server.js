@@ -1,6 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const helmet = require("helmet");
+
+const projectsController = require('./controllers/projectsController');
+const requestLogger = require('./middleware/logger');
+
 
 require('dotenv').config();
 
@@ -8,13 +13,13 @@ const app = express();
 
 app.set('trust proxy', true);
 
+
+//middleware
 app.use(cors());
 app.use(express.json());
-
-const projectsController = require('./controllers/projectsController');
-const requestLogger = require('./middleware/logger');
-
 app.use(requestLogger);
+app.use(helmet());
+
 
 
 app.get('/api/projects', projectsController.getAllProjects);

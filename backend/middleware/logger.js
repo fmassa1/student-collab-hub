@@ -16,7 +16,7 @@ const logger = createLogger({
         format.json()
     ),
     transports: [
-        new transports.Console({ format: format.simple() }),
+        //new transports.Console({ format: format.simple() }),
         new transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
         new transports.File({ filename: path.join(logDir, 'combined.log') })
     ],
@@ -33,7 +33,7 @@ const requestLogger = morgan((tokens, req, res) => {
         status: tokens.status(req, res),
         response_time: `${tokens['response-time'](req, res)} ms`,
         ip: ip,
-        user_agent: userAgent
+        user_agent: userAgent,
     });
 }, {
     stream: {
