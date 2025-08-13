@@ -5,20 +5,24 @@ const helmet = require("helmet");
 
 const projectsController = require('./controllers/projectsController');
 const requestLogger = require('./middleware/logger');
+const requestLimiter = require('./middleware/limiter');
 
 
 require('dotenv').config();
 
 const app = express();
 
-app.set('trust proxy', true);
+app.set('trust proxy', false);
 
 
 //middleware
 app.use(cors());
-app.use(express.json());
-app.use(requestLogger);
 app.use(helmet());
+
+app.use(requestLogger);
+app.use(requestLimiter);
+app.use(express.json());
+
 
 
 
