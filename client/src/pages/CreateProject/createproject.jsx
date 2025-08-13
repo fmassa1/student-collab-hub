@@ -7,13 +7,20 @@ import './createproject.css';
 function CreateProject() {
     const navigate = useNavigate();
 
+    const techOptions = [
+        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
+        'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
+        'React', 'Vue', 'Angular', 'Node.js', 'Express', 
+        'Django', 'Flask', 'Spring', 'MongoDB', 'PostgreSQL'
+    ];
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         image_url: '',
         linkedin_url: '',
         github_url: '',
-        tags: ''
+        tags: []
     });
 
     const [error, setError] = useState('');
@@ -22,6 +29,11 @@ function CreateProject() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleTagsChange = (e) => {
+        const selected = Array.from(e.target.selectedOptions, option => option.value);
+        setFormData(prev => ({ ...prev, tags: selected }));
     };
 
     const isValidGitHubUrl = (string) => {
@@ -71,7 +83,6 @@ function CreateProject() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
-                    tags: formData.tags.split(',').map(tag => tag.trim())
                 })
             });
 
@@ -152,13 +163,19 @@ function CreateProject() {
                 </label>
 
                 <label>
-                    Tags (comma separated)
-                    <input
-                        type="text"
+                    Tags
+                    <select
                         name="tags"
+                        multiple
                         value={formData.tags}
-                        onChange={handleChange}
-                    />
+                        onChange={handleTagsChange}
+                    >
+                        {techOptions.map(tag => (
+                            <option key={tag} value={tag}>
+                                {tag}
+                            </option>
+                        ))}
+                    </select>
                 </label>
 
                 <button type="submit" disabled={loading}>

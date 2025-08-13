@@ -45,3 +45,23 @@ button:hover {
     color: red;
     font-weight: 500;
 }
+
+.project-form select[multiple] {
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    min-height: 120px;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+.project-form select[multiple] option {
+    padding: 0.5rem;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.project-form select[multiple] option:hover {
+    background: #e6f0ff;
+}
