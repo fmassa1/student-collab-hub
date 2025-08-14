@@ -4,11 +4,11 @@ USE peer_spark;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
-    user_name VARCHAR(100) NOT NULL UNIQUE,
+    username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    university VARCHAR(100) NOT NULL
+    university VARCHAR(100),
 )ENGINE=InnoDB;
 
 CREATE TABLE projects (

@@ -8,7 +8,7 @@ function SignUp() {
 
     const [formData, setFormData] = useState({
         email: '',
-        user_name: '',
+        username: '',
         password: '',
         first_name: '',
         last_name: '',
@@ -53,8 +53,8 @@ function SignUp() {
                     Username
                     <input
                         type="text"
-                        name="user_name"
-                        value={formData.user_name}
+                        name="username"
+                        value={formData.username}
                         onChange={handleChange}
                         required
                     />
