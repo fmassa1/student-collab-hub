@@ -24,6 +24,47 @@ function SignUp() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.username || !formData.email || !formData.first_name | !formData.last_name) {
+            setError('Username, email, first name, and last name required');
+            return;
+        }
+
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await fetch('http://localhost:5055/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.error || 'Failed to create new user.');
+                return
+            }
+
+            console.log('User created:', data);
+
+
+            // TODO: Navigate to users profile page
+            //navigate(`/users/${data.id}`);
+            navigate(`/projects`);
+        } catch (err) {
+            console.error('Failed to create new user:', err);
+            setError('Failed to create new user. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     //TODO:
     //   - check email/username already taken
     //   - double password entry

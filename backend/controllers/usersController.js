@@ -17,7 +17,11 @@ async function addNewUser(req, res) {
 
     } catch (err) {
         console.error('Error signing up user: ', err);
-        res.status(500).json({ error: 'Database error' });
+        if (err.status) {
+            res.status(err.status).json({ error: err.message });
+        } else {
+            res.status(500).json({ error: 'Database error' });
+        }
     }
 }
 

@@ -11,7 +11,7 @@ function NavBar() {
                     <li><a href="/contact">Contact</a></li>
                     <li><a href="/create">Create Post</a></li>
                     <li><a href="#login" className="login-button">Login</a></li>
-                    <li><a href="#signup" className="signup-button">Sign Up</a></li>
+                    <li><a href="/signup" className="signup-button">Sign Up</a></li>
                 </ul>
             </div>
         </nav>
