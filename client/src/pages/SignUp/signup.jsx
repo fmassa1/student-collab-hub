@@ -65,13 +65,6 @@ function SignUp() {
         }
     };
 
-    //TODO:
-    //   - check email/username already taken
-    //   - double password entry
-    //   - pass info to database
-    //   - password hashing
-    //   - university drop down?
-
 
     return (
         <div className="signup-page">
