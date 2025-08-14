@@ -25,6 +25,26 @@ async function addNewUser(req, res) {
     }
 }
 
+async function loginUser(req, res) {
+    try {
+        const { email, password } = req.body;
+        
+        const user_info = await usersModel.loginUser({email,password});    
+
+        res.status(201).json(user_info);
+
+    } catch (err) {
+        console.error('Error signing in user: ', err);
+        if (err.status) {
+            res.status(err.status).json({ error: err.message });
+        } else {
+            res.status(500).json({ error: 'Database error' });
+        }
+    }
+}
+
+
+
 async function getAllUsers(req, res) {
     try {
         const users = await usersModel.getAllUsers();
@@ -50,6 +70,7 @@ async function getUserById(req, res) {
 
 module.exports = {
     addNewUser,
+    loginUser,
     getAllUsers,
     getUserById,
 };

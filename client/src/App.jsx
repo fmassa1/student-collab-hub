@@ -12,6 +12,7 @@ import Navbar from './components/NavBar/navbar';
 import Footer from './components/Footer/footer';
 
 import './styles/App.css'
+import Login from './pages/Login/login';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/projects/:id" element={<ProjectDetails />} />
 
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
 
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>

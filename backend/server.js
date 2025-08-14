@@ -35,7 +35,8 @@ app.post('/api/projects', projectsController.postProject);
 //user apis
 app.get('/api/users', usersController.getAllUsers);
 app.get('/api/users/:id', usersController.getUserById);
-app.post('/api/users', usersController.addNewUser);
+app.post('/api/signup', usersController.addNewUser);
+app.post('/api/login', usersController.loginUser);
 
 
 
