@@ -26,10 +26,16 @@ app.use(express.json());
 
 
 
-
+//project apis
 app.get('/api/projects', projectsController.getAllProjects);
 app.get('/api/projects/:id', projectsController.getProjectById);
 app.post('/api/projects', projectsController.postProject);
+
+
+//user apis
+app.get('/api/users', usersController.getAllUsers);
+app.get('/api/users/:id', usersController.getUserById);
+app.post('/api/users', usersController.addNewUser);
 
 
 

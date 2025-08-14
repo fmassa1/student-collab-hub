@@ -1,6 +1,12 @@
 CREATE DATABASE IF NOT EXISTS peer_spark;
 USE peer_spark;
 
+DROP TABLE IF EXISTS project_likes;
+DROP TABLE IF EXISTS project_comments;
+DROP TABLE IF EXISTS project_tags;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -8,7 +14,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    university VARCHAR(100),
+    university VARCHAR(100)
 )ENGINE=InnoDB;
 
 CREATE TABLE projects (

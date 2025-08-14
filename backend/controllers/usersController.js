@@ -1,4 +1,4 @@
-const projectsModel = require('../models/usersModel');
+const usersModel = require('../models/usersModel');
 
 async function addNewUser(req, res) {
     try {
