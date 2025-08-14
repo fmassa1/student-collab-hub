@@ -4,6 +4,7 @@ const path = require('path');
 const helmet = require("helmet");
 
 const projectsController = require('./controllers/projectsController');
+const usersController = require('./controllers/usersController');
 const requestLogger = require('./middleware/logger');
 const requestLimiter = require('./middleware/limiter');
 

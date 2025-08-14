@@ -1,6 +1,6 @@
 const db = require('../db');
 
-async function signUpUser(new_user) {
+async function addNewUser(new_user) {
     const [result] = await db.query(
       `INSERT INTO users (email, username, password, first_name, last_name, university)
        VALUES (?, ?, ?, ?, ?, ?)`,
@@ -31,7 +31,7 @@ async function getUserById(id) {
 
 
 module.exports = {
-    signUpUser,
+    addNewUser,
     getAllUsers,
     getUserById,
   };
