@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AuthContext } from "../../context/AuthContext";
 import './login.css';
 
-function Login() {
+function LoginPage() {
     const navigate = useNavigate();
+
+    const { login } = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -46,7 +49,7 @@ function Login() {
                 return
             }
 
-            console.log('Logged in:', data);
+            login(data)
 
 
             // TODO: Navigate to users profile page
@@ -62,7 +65,7 @@ function Login() {
 
     return (
         <div className="login-page">
-            <h1>Create New Project</h1>
+            <h1>Login</h1>
             <form className="login-form" onSubmit={handleSubmit}>
                 {error && <p className="error">{error}</p>}
 
@@ -89,11 +92,11 @@ function Login() {
                 </label>
 
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Create Project'}
+                    {loading ? 'Submitting...' : 'Login'}
                 </button>
             </form>
         </div>
     );
 }
 
-export default Login;
+export default LoginPage;

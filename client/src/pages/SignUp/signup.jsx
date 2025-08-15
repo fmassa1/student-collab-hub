@@ -68,7 +68,7 @@ function SignUp() {
 
     return (
         <div className="signup-page">
-            <h1>Create New Project</h1>
+            <h1>Sign Up</h1>
             <form className="signup-form" onSubmit={handleSubmit}>
                 {error && <p className="error">{error}</p>}
 
@@ -139,7 +139,7 @@ function SignUp() {
                 </label>
 
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Create Project'}
+                    {loading ? 'Submitting...' : 'Sign Up'}
                 </button>
             </form>
         </div>

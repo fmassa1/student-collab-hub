@@ -12,7 +12,8 @@ import Navbar from './components/NavBar/navbar';
 import Footer from './components/Footer/footer';
 
 import './styles/App.css'
-import Login from './pages/Login/login';
+import LoginPage from './pages/Login/login';
+import ProtectedRoute from './context/ProtectedRoute';
 
 function App() {
   return (
@@ -22,13 +23,14 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path="/about" element={<About />} /> */}
         <Route path="/contact" element={<Contact />} />
-        <Route path="/create" element={<CreateProject />} />
 
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
+        
+        <Route path="/create" element={<ProtectedRoute> <CreateProject /> </ProtectedRoute>} />
+        <Route path="/projects" element={<ProtectedRoute> <Projects /> </ProtectedRoute>} />
+        <Route path="/projects/:id" element={<ProtectedRoute> <ProjectDetails /> </ProtectedRoute>} />
 
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
