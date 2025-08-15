@@ -10,7 +10,6 @@
  
 ## Login/SignUp
 - [ ] double password entry
-- [ ] password hashing
 - [ ] keep users logged in (sessions)
 - [ ] styling
 

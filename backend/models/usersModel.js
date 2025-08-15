@@ -69,7 +69,7 @@ async function loginUser(user_info) {
 
 async function getAllUsers() {
   const [rows] = await db.query(`
-    SELECT *
+    SELECT id, email, username, first_name, last_name, university
     FROM users
   `);
   return rows;
@@ -77,7 +77,7 @@ async function getAllUsers() {
 
 async function getUserById(id) {
   const [rows] = await db.query(`
-    SELECT *
+    SELECT id, email, username, first_name, last_name, university
     FROM users
     WHERE id = ?
   `, [id]
