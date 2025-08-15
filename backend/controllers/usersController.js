@@ -1,4 +1,8 @@
 const usersModel = require('../models/usersModel');
+const jwt = require("jsonwebtoken");
+
+require('dotenv').config();
+
 
 async function addNewUser(req, res) {
     try {
@@ -29,9 +33,11 @@ async function loginUser(req, res) {
     try {
         const { email, password } = req.body;
         
-        const user_info = await usersModel.loginUser({email,password});    
+        const user_info = await usersModel.loginUser({email,password});
+        const token = jwt.sign({ id: user_info.id, email: user_info.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        
 
-        res.status(201).json(user_info);
+        res.status(201).json({'user': user_info, 'token': token});
 
     } catch (err) {
         console.error('Error signing in user: ', err);
