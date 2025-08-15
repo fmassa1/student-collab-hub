@@ -1,46 +1,70 @@
 const db = require('../db');
+const argon2 = require('argon2');
+
 
 async function addNewUser(new_user) {
-    const [existingEmail] = await db.query(
-        'SELECT id FROM users WHERE email = ?',
-        [new_user.email]
-    );
+    try {
+        const [existingEmail] = await db.query(
+            'SELECT id FROM users WHERE email = ?',
+            [new_user.email]
+        );
 
-    if (existingEmail.length > 0) {
-        throw { status: 409, message: 'Email already taken' };
-    }
+        if (existingEmail.length > 0) {
+            throw { status: 409, message: 'Email already taken' };
+        }
 
-    const [existingUsername] = await db.query(
-        'SELECT id FROM users WHERE username = ?',
-        [new_user.username]
-    );
+        const [existingUsername] = await db.query(
+            'SELECT id FROM users WHERE username = ?',
+            [new_user.username]
+        );
+        
+        if (existingUsername.length > 0) {
+            throw { status: 409, message: 'Username already taken' };
+        }
+
+        const password_hash = await argon2.hash(new_user.password);
+
+        const [result] = await db.query(
+        `INSERT INTO users (email, username, password, first_name, last_name, university)
+        VALUES (?, ?, ?, ?, ?, ?)`,
+        [new_user.email, new_user.username, password_hash, new_user.first_name, new_user.last_name, new_user.university]
+        );
     
-    if (existingUsername.length > 0) {
-        throw { status: 409, message: 'Username already taken' };
+    
+        return { id: result.insertId, ...new_user };
+    } 
+    catch(error) {
+        console.error("Error hashing password:", error);
+        throw error;
     }
-
-
-    const [result] = await db.query(
-      `INSERT INTO users (email, username, password, first_name, last_name, university)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [new_user.email, new_user.username, new_user.password, new_user.first_name, new_user.last_name, new_user.university]
-    );
-  
-  
-    return { id: result.insertId, ...new_user };
 }
 
 async function loginUser(user_info) {
-    const [rows] = await db.query(
-        'SELECT id, email, username, first_name, last_name, university FROM users WHERE email = ? AND password = ?',
-        [user_info.email, user_info.password]
-    );
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM users WHERE email = ? ',
+            [user_info.email]
+        );
 
-    if (rows.length === 0) {
-        throw { status: 401, message: 'Email or password is incorrect' };
+        if (rows.length === 0) {
+            throw { status: 401, message: 'Email not found' };
+        }
+
+        const user = rows[0];
+
+        if (await argon2.verify(user.password, user_info.password)) {
+            delete user.password;
+            return user;
+        } 
+
+        throw { status: 401, message: 'Incorrect Password' };
+
+    } 
+    catch(error) {
+        console.error("Error hashing password:", error);
+        throw error;
+
     }
-
-    return rows[0];
 }
 
 async function getAllUsers() {

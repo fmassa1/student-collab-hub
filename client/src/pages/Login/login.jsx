@@ -54,7 +54,7 @@ function Login() {
             navigate(`/projects`);
         } catch (err) {
             console.error('Failed to login user:', err);
-            setError('Failed to login. Please try again.');
+            setError('Failed to login. Please try again.: ', err);
         } finally {
             setLoading(false);
         }
