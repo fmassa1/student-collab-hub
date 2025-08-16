@@ -65,8 +65,8 @@ function LoginPage() {
 
     return (
         <div className="login-page">
-            <h1>Login</h1>
             <form className="login-form" onSubmit={handleSubmit}>
+                <h1 className="login-title">Login</h1>
                 {error && <p className="error">{error}</p>}
 
                 <label>

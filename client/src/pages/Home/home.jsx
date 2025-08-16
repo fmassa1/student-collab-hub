@@ -10,16 +10,7 @@ function Home() {
           Turn your ideas into reality with the help of your peers.
         </p>
         <div className="hero-buttons">
-          <a
-            href="#post-project"
-            className="btn-primary"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('Post Project feature coming soon!');
-            }}
-          >
-            Post Your Project
-          </a>
+          <a href="/create"className="btn-primary"> Post Your Project</a>
           <a href="/projects" className="btn-secondary"> Explore Projects</a>
         </div>
       </section>

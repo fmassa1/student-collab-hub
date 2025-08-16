@@ -14,7 +14,7 @@ function Footer() {
               <h4>Platform</h4>
               <a href="/about">About</a>
               <a href="/contact">Contact</a>
-              <a href="#post-project" onClick={(e) => { e.preventDefault(); alert('Coming soon!'); }}>Post Project</a>
+              <a href="/create">Post Project</a>
               <a href="/projects">Explore Projects</a>
             </div>
   

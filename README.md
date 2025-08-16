@@ -10,7 +10,6 @@
  
 ## Login/SignUp
 - [ ] double password entry
-
 - [ ] styling
 
 
