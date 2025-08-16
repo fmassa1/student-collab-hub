@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+import { AuthContext } from "../../context/AuthContext";
 import './createproject.css';
 
 
 function CreateProject() {
     const navigate = useNavigate();
+    const { user, token, logout } = useContext(AuthContext);
 
     const techOptions = [
         'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
@@ -80,15 +83,27 @@ function CreateProject() {
         try {
             const res = await fetch('http://localhost:5055/api/projects', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     ...formData,
                 })
             });
 
             if (!res.ok) {
-                throw new Error(`Server error: ${res.status}`);
-            }
+                let errorMsg = 'Something went wrong';
+                try {
+                  const errData = await res.json();
+                  errorMsg = errData.error || errorMsg;
+                } catch {
+                  errorMsg = await res.text();
+                }
+            
+                setError(errorMsg);
+                return;
+              }
 
             const data = await res.json();
             console.log('Project created:', data);
@@ -96,7 +111,7 @@ function CreateProject() {
             navigate(`/projects/${data.id}`);
         } catch (err) {
             console.error('Failed to create project:', err);
-            setError('Failed to create project. Please try again.');
+            setError(err);
         } finally {
             setLoading(false);
         }

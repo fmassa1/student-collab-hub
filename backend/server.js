@@ -7,6 +7,8 @@ const projectsController = require('./controllers/projectsController');
 const usersController = require('./controllers/usersController');
 const requestLogger = require('./middleware/logger');
 const requestLimiter = require('./middleware/limiter');
+const authenticator = require('./middleware/authenticator');
+
 
 
 require('dotenv').config();
@@ -29,7 +31,7 @@ app.use(express.json());
 //project apis
 app.get('/api/projects', projectsController.getAllProjects);
 app.get('/api/projects/:id', projectsController.getProjectById);
-app.post('/api/projects', projectsController.postProject);
+app.post('/api/projects', authenticator, projectsController.postProject);
 
 
 //user apis

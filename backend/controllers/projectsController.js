@@ -24,6 +24,7 @@ async function getProjectById(req, res) {
 
 async function postProject(req, res) {
     try {
+        const user_id = req.user.id;
         const { name, description, image_url, linkedin_url, github_url, tags } = req.body;
         
         const project = await projectsModel.postProject({
@@ -32,7 +33,8 @@ async function postProject(req, res) {
             image_url,
             linkedin_url,
             github_url,
-            tags
+            tags,
+            user_id
         });    
 
         res.status(201).json(project);
