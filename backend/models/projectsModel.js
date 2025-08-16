@@ -44,10 +44,29 @@ async function postProject(project) {
   return { id: result.insertId, ...project };
 }
 
+async function likeProject(user_id, project_id) {
+  const [result] = await db.query(
+    `INSERT INTO project_likes (user_id, project_id)
+     VALUES (?, ?)`,
+    [user_id, project_id]
+  );
 
+  return {success: true, user_id, project_id };
+}
+
+async function unlikeProject(user_id, project_id) {
+  const [result] = await db.query(
+    `DELETE FROM project_likes  WHERE user_id = ? AND project_id = ?`,
+    [user_id, project_id]
+  );
+
+  return { success: result.affectedRows > 0, user_id, project_id };
+}
 
 module.exports = {
     getAllProjects,
     getProjectById,
     postProject,
+    likeProject,
+    unlikeProject
   };

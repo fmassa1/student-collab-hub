@@ -45,8 +45,35 @@ async function postProject(req, res) {
     }
 }
 
+
+async function likeProjectHandler(req, res) {
+    try {
+        const user_id = req.params.user_id;
+        const project_id = req.params.project_id;
+        const project = await projectsModel.likeProject(user_id, project_id);
+        res.json(project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
+async function unlikeProjectHandler(req, res) {
+    try {
+        const user_id = req.params.user_id;
+        const project_id = req.params.project_id;
+        const project = await projectsModel.unlikeProject(user_id, project_id);
+        res.json(project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 module.exports = {
     getAllProjects,
     getProjectById,
     postProject,
+    likeProjectHandler,
+    unlikeProjectHandler
 };

@@ -8,7 +8,7 @@ import './createproject.css';
 
 function CreateProject() {
     const navigate = useNavigate();
-    const { user, token, logout } = useContext(AuthContext);
+    const { user, token} = useContext(AuthContext);
 
     const techOptions = [
         'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 

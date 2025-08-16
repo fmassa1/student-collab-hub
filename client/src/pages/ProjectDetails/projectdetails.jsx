@@ -1,11 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
+import { AuthContext } from "../../context/AuthContext";
 import './projectdetails.css'
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState(null);
+    const [liked, setLiked] = useState(false)
+    const { user, token} = useContext(AuthContext);
+    
     
     useEffect(() => {
         fetch(`http://localhost:5055/api/projects/${id}`)
@@ -17,6 +21,29 @@ function ProjectDetails() {
         
         .catch(err => console.error(`Failed to load project ID: ${id}`, err));
     }, [id]);
+
+    const handleToggleLike = async () => {
+        if (!user) {
+            alert('You must be logged in to like a project.');
+            return;
+        }
+
+        try {
+            const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}/${user.id}`;
+            const method = liked ? 'DELETE' : 'POST';
+
+            const res = await fetch(url, { method });
+            const data = await res.json();
+
+            if (res.ok) {
+                setLiked(!liked);
+            } else {
+                console.error('Failed to toggle like:', data.error);
+            }
+        } catch (err) {
+            console.error('Error toggling like:', err);
+        }
+    };
 
     if(!project) {
         return <p>Project not found</p>
@@ -58,6 +85,13 @@ function ProjectDetails() {
                         </a>
                     ) : null}
                 </div>
+
+                <button 
+                    className={`like-button ${liked ? 'liked' : ''}`} 
+                    onClick={handleToggleLike}
+                >
+                    {liked ? '❤️ Liked' : '🤍 Like'}
+                </button>
             </div>
         </div>
     );
