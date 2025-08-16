@@ -4,10 +4,14 @@ import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
 import './projectdetails.css'
 
+//TODO add auth when making calls
+
+
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
+    const [likes, setLikes] = useState(0)
     const { user, token} = useContext(AuthContext);
     
     
@@ -15,8 +19,14 @@ function ProjectDetails() {
         fetch(`http://localhost:5055/api/projects/${id}`)
         .then(res => res.json())
         .then(data => {
-            console.log(`Fetched project ID: ${id}:`, data);
-            setProject(data[0]);
+            const projectData = data[0];
+            const isLiked = projectData.liked_by?.includes(user.id) || false;
+            const numberOfLikes = projectData.liked_by?.length || 0;
+
+
+            setProject(projectData);
+            setLiked(isLiked); 
+            setLikes(numberOfLikes);
         })
         
         .catch(err => console.error(`Failed to load project ID: ${id}`, err));
@@ -37,6 +47,8 @@ function ProjectDetails() {
 
             if (res.ok) {
                 setLiked(!liked);
+                setLikes(prev => liked ? prev - 1 : prev + 1);
+
             } else {
                 console.error('Failed to toggle like:', data.error);
             }
@@ -90,7 +102,7 @@ function ProjectDetails() {
                     className={`like-button ${liked ? 'liked' : ''}`} 
                     onClick={handleToggleLike}
                 >
-                    {liked ? '❤️ Liked' : '🤍 Like'}
+                    {liked ? 'Liked' : 'Like'} ({likes})
                 </button>
             </div>
         </div>

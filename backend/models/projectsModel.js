@@ -12,9 +12,11 @@ async function getProjectById(id) {
   const [rows] = await db.query(`
     SELECT 
       projects.*,
-      GROUP_CONCAT(project_tags.tag) AS tags
+      GROUP_CONCAT(project_tags.tag) AS tags,
+      GROUP_CONCAT(DISTINCT project_likes.user_id) AS liked_by
     FROM projects
     LEFT JOIN project_tags ON projects.id = project_tags.project_id
+    LEFT JOIN project_likes ON projects.id = project_likes.project_id
     WHERE projects.id = ?
     GROUP BY projects.id
   `, [id]
@@ -22,7 +24,8 @@ async function getProjectById(id) {
 
   return rows.map(row => ({
     ...row,
-    tags: row.tags ? row.tags.split(',') : []
+    tags: row.tags ? row.tags.split(',') : [],
+    liked_by: row.liked_by ? row.liked_by.split(',').map(id => parseInt(id)) : []
   }));
 }
 
