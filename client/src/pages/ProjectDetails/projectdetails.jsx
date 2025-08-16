@@ -42,7 +42,12 @@ function ProjectDetails() {
             const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}/${user.id}`;
             const method = liked ? 'DELETE' : 'POST';
 
-            const res = await fetch(url, { method });
+            const res = await fetch(url, { 
+                method,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await res.json();
 
             if (res.ok) {
