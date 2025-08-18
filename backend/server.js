@@ -31,6 +31,7 @@ app.use(express.json());
 //project apis
 app.get('/api/projects', projectsController.getAllProjects);
 app.get('/api/projects/:id', projectsController.getProjectById);
+
 app.post('/api/projects', authenticator, projectsController.postProject);
 
 app.post('/api/projects/:project_id/like/:user_id', authenticator, projectsController.likeProjectHandler);
@@ -39,7 +40,9 @@ app.delete('/api/projects/:project_id/unlike/:user_id', authenticator, projectsC
 
 //user apis
 app.get('/api/users', usersController.getAllUsers);
-app.get('/api/users/:id', usersController.getUserById);
+app.get('/api/profile/:username', usersController.getUserByUsername);
+app.get('/api/profile/:username/projects', projectsController.getProjectsByUsername);
+
 app.post('/api/signup', usersController.addNewUser);
 app.post('/api/login', usersController.loginUser);
 

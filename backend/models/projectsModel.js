@@ -31,6 +31,23 @@ async function getProjectById(id) {
   }));
 }
 
+async function getProjectsByUsername(username) {
+  const [rows] = await db.query(`
+    SELECT projects.*
+    FROM projects
+    LEFT JOIN users ON users.id = projects.user_id
+    WHERE users.username = ?
+
+  `, [username]
+  );
+
+  return rows.map(row => ({
+    ...row,
+    tags: row.tags ? row.tags.split(',') : [],
+    liked_by: row.liked_by ? row.liked_by.split(',').map(id => parseInt(id)) : []
+  }));
+}
+
 async function postProject(project) {
   const [result] = await db.query(
     `INSERT INTO projects (name, description, image_url, linkedin_url, github_url, user_id)
@@ -71,6 +88,7 @@ async function unlikeProject(user_id, project_id) {
 module.exports = {
     getAllProjects,
     getProjectById,
+    getProjectsByUsername,
     postProject,
     likeProject,
     unlikeProject

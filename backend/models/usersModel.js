@@ -75,12 +75,12 @@ async function getAllUsers() {
   return rows;
 }
 
-async function getUserById(id) {
+async function getUserByUsername(username) {
   const [rows] = await db.query(`
-    SELECT id, email, username, first_name, last_name, university
+    SELECT users.id, users.email, users.username, users.first_name, users.last_name, users.university         
     FROM users
-    WHERE id = ?
-  `, [id]
+    WHERE username = ?
+  `, [username]
   );
   return rows;
 }
@@ -90,5 +90,5 @@ module.exports = {
     addNewUser,
     loginUser,
     getAllUsers,
-    getUserById,
+    getUserByUsername,
   };

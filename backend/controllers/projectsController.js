@@ -22,6 +22,17 @@ async function getProjectById(req, res) {
     }
 }
 
+async function getProjectsByUsername(req, res) {
+    try {
+        const username = req.params.username;
+        const projects = await projectsModel.getProjectsByUsername(username);
+        res.json(projects);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 async function postProject(req, res) {
     try {
         const user_id = req.user.id;
@@ -73,6 +84,7 @@ async function unlikeProjectHandler(req, res) {
 module.exports = {
     getAllProjects,
     getProjectById,
+    getProjectsByUsername,
     postProject,
     likeProjectHandler,
     unlikeProjectHandler

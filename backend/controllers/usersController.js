@@ -61,14 +61,14 @@ async function getAllUsers(req, res) {
     }
 }
 
-async function getUserById(req, res) {
+async function getUserByUsername(req, res) {
     try {
-        const id = req.params.id;
-        const  cur_user = await usersModel.getUserById(id);
+        const username = req.params.username;
+        const  cur_user = await usersModel.getUserByUsername(username);
         res.json(cur_user);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Database error getUserById' });
+        res.status(500).json({ error: 'Database error getUserByUserName' });
     }
 }
 
@@ -78,5 +78,5 @@ module.exports = {
     addNewUser,
     loginUser,
     getAllUsers,
-    getUserById,
+    getUserByUsername,
 };
