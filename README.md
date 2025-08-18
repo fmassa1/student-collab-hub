@@ -4,7 +4,6 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
-- [ ] add who posted
 - [ ] add comments section
 - [ ] style better
  
@@ -17,10 +16,13 @@
 - [ ] more user info
 - [ ] style better
 
+## Error Page
+- [ ] better styling
+- [ ] better message (display error message received from server)
+
 ## General
 - [ ] updating projects
-- [ ] 403 error page
-- [ ] 404 error page
+
 
 
 - [+] keep users logged in (sessions)
