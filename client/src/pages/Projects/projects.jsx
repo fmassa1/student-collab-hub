@@ -2,10 +2,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../context/AuthContext";
+import ErrorPage from "../../components/ErrorPage/error";
+
 import './projects.css';
 
 function Projects() {
-
+    const [error, setError] = useState(null);
     const [allProjects, setProjects] = useState([]);
     const [visibleCount, setVisibleCount] = useState(10);
     const { token } = useContext(AuthContext);
@@ -22,16 +24,27 @@ function Projects() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.status);
+            }
+            return res.json();
+        })
         .then(data => {
             console.log('Fetched projects:', data);
             setProjects(data);
         })
         
-        .catch(err => console.error('Failed to load projects', err));
+        .catch(err => {
+            console.error("Fetch failed:", err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
+        });
     }, []);
     
-
+    if (error) {
+        return <ErrorPage code={error} />;
+    }
     const loadMore = () => {
         setVisibleCount(prev=> Math.min(prev + 10, allProjects.length));
     };

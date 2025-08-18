@@ -3,10 +3,12 @@ import { useState, useEffect, useContext } from 'react';
 
 
 import { AuthContext } from "../../context/AuthContext";
+import ErrorPage from "../../components/ErrorPage/error";
 import './profile.css'
 
 
 function Profile() {
+    const [error, setError] = useState(null);
     const { username } = useParams();
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
@@ -23,26 +25,47 @@ function Profile() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                setError(res.status);
+                return;
+            }
+            return res.json();
+        })
         .then(data => {
             const profileData = data[0];
             setProfile(profileData);
 
         })
+
         fetch(`http://localhost:5055/api/profile/${username}/projects`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.status);
+            }
+            return res.json();
+        })
         .then(data => {
             const projectData = data;
             setProjects(projectData);
         })
         
-        .catch(err => console.error(`Failed to load profile username: ${username}`, err));
+        .catch(err => {
+            console.error("Fetch failed:", err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);    
+        });
     }, [username]);
+
+
+    if (error) {
+        return <ErrorPage code={error} />;
+    }
 
     if(!profile) {
         return <p>No profile found with username {username}</p>

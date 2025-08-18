@@ -2,10 +2,13 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 
 import { AuthContext } from "../../context/AuthContext";
+import ErrorPage from "../../components/ErrorPage/error";
+
 import './projectdetails.css'
 
 
 function ProjectDetails() {
+    const [error, setError] = useState(null);
     const { id } = useParams();
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
@@ -20,7 +23,12 @@ function ProjectDetails() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.status);
+            }
+            return res.json();
+        })
         .then(data => {
             const projectData = data[0];
             const isLiked = projectData.liked_by?.includes(user.id) || false;
@@ -32,8 +40,16 @@ function ProjectDetails() {
             setLikes(numberOfLikes);
         })
         
-        .catch(err => console.error(`Failed to load project ID: ${id}`, err));
+        .catch(err => {
+            console.error("Fetch failed:", err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
+        });
     }, [id]);
+
+    if (error) {
+        return <ErrorPage code={error} />;
+    }
 
     const handleToggleLike = async () => {
         if (!user) {
@@ -58,12 +74,18 @@ function ProjectDetails() {
                 setLikes(prev => liked ? prev - 1 : prev + 1);
 
             } else {
-                console.error('Failed to toggle like:', data.error);
+                throw new Error(res.status);
             }
         } catch (err) {
             console.error('Error toggling like:', err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
         }
     };
+
+    if (error) {
+        return <ErrorPage code={error} />;
+    }
 
     if(!project) {
         return <p>Project not found</p>

@@ -1,0 +1,68 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    padding: 2rem;
+    color: #001e62;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.error-container {
+    background: white;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    max-width: 500px;
+    width: 100%;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 800;
+    color: #d50000;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* Button style stays the same */
+.error-container .btn-primary {
+    background: #001e62;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.error-container .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    background: #d50000;
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+    .error-code {
+        font-size: 4rem;
+    }
+    .error-message {
+        font-size: 1.25rem;
+    }
+
+    .error-container .btn-primary {
+        width: 100%;
+        max-width: 250px;
+    }
+}
