@@ -4,8 +4,6 @@ import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
 import './projectdetails.css'
 
-//TODO add auth when making calls
-
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -71,7 +69,7 @@ function ProjectDetails() {
             <div className="project-post-card">
                 <div className="project-header">
                     <h1 className="project-title">{project.name}</h1>
-                    <span className="project-meta">Posted in <strong>Projects</strong> • {new Date().toLocaleDateString()}</span>
+                    <span className="project-meta">Posted by <strong>{project.username}</strong></span>
                 </div>
 
                 {project.image_url && (

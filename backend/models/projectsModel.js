@@ -12,9 +12,11 @@ async function getProjectById(id) {
   const [rows] = await db.query(`
     SELECT 
       projects.*,
+      users.username, 
       GROUP_CONCAT(DISTINCT project_tags.tag) AS tags,
       GROUP_CONCAT(DISTINCT project_likes.user_id) AS liked_by
     FROM projects
+    LEFT JOIN users ON projects.user_id = users.id
     LEFT JOIN project_tags ON projects.id = project_tags.project_id
     LEFT JOIN project_likes ON projects.id = project_likes.project_id
     WHERE projects.id = ?

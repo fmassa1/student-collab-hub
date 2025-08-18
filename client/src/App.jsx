@@ -5,6 +5,7 @@ import Home from './pages/Home/home';
 //import About from './pages/about';
 import Contact from './pages/Contact/contact';
 import Projects from './pages/Projects/projects';
+import Profile from './pages/Profile/profile';
 import ProjectDetails from './pages/ProjectDetails/projectdetails';
 import CreateProject from './pages/CreateProject/createproject';
 import SignUp from './pages/SignUp/signup';
@@ -28,6 +29,8 @@ function App() {
         <Route path="/create" element={<ProtectedRoute> <CreateProject /> </ProtectedRoute>} />
         <Route path="/projects" element={<ProtectedRoute> <Projects /> </ProtectedRoute>} />
         <Route path="/projects/:id" element={<ProtectedRoute> <ProjectDetails /> </ProtectedRoute>} />
+        <Route path="/profile/:username" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
+
 
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LoginPage />} />

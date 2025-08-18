@@ -4,6 +4,7 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
+- [ ] add who posted
 - [ ] add comments section
 - [ ] style better
  
