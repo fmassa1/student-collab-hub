@@ -14,7 +14,12 @@ function ProjectDetails() {
     
     
     useEffect(() => {
-        fetch(`http://localhost:5055/api/projects/${id}`)
+        fetch(`http://localhost:5055/api/projects/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(data => {
             const projectData = data[0];

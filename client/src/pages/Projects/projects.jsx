@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AuthContext } from "../../context/AuthContext";
 import './projects.css';
 
 function Projects() {
 
     const [allProjects, setProjects] = useState([]);
     const [visibleCount, setVisibleCount] = useState(10);
+    const { token } = useContext(AuthContext);
+    
 
     const navigate = useNavigate();
 
 
 
     useEffect(() => {
-        fetch('http://localhost:5055/api/projects')
+        fetch('http://localhost:5055/api/projects', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(data => {
             console.log('Fetched projects:', data);
@@ -22,6 +30,7 @@ function Projects() {
         
         .catch(err => console.error('Failed to load projects', err));
     }, []);
+    
 
     const loadMore = () => {
         setVisibleCount(prev=> Math.min(prev + 10, allProjects.length));

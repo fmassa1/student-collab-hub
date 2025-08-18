@@ -13,18 +13,28 @@ function Profile() {
     const [projects, setProjects] = useState([]);
 
     
-    const { user, token} = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     
     
     useEffect(() => {
-        fetch(`http://localhost:5055/api/profile/${username}`)
+        fetch(`http://localhost:5055/api/profile/${username}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(data => {
             const profileData = data[0];
             setProfile(profileData);
 
         })
-        fetch(`http://localhost:5055/api/profile/${username}/projects`)
+        fetch(`http://localhost:5055/api/profile/${username}/projects`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(data => {
             const projectData = data;

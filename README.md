@@ -12,10 +12,16 @@
 - [ ] double password entry
 - [ ] styling
 
+## User Profile
+- [ ] edit profile
+- [ ] more user info
+- [ ] style better
 
 ## General
 - [ ] updating projects
-- [ ] user profile page
+- [ ] 403 error page
+- [ ] 404 error page
+
 
 - [+] keep users logged in (sessions)
 - - need to add server side confirmation when user makes requests
