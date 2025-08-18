@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 
 import { AuthContext } from "../../context/AuthContext";
@@ -15,6 +15,7 @@ function ProjectDetails() {
     const [likes, setLikes] = useState(0)
     const { user, token} = useContext(AuthContext);
     
+    const navigate = useNavigate();
     
     useEffect(() => {
         fetch(`http://localhost:5055/api/projects/${id}`, {
@@ -96,7 +97,15 @@ function ProjectDetails() {
             <div className="project-post-card">
                 <div className="project-header">
                     <h1 className="project-title">{project.name}</h1>
-                    <span className="project-meta">Posted by <strong>{project.username}</strong></span>
+                    <span className="project-meta">
+                        Posted by{" "}
+                        <strong 
+                            onClick={() => navigate(`/profile/${project.username}`)} 
+                            className="clickable-username"
+                        >
+                            {project.username}
+                        </strong>
+                    </span>
                 </div>
 
                 {project.image_url && (
