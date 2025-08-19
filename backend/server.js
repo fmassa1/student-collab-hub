@@ -39,8 +39,8 @@ app.get('/api/projects/:id', authenticator, projectsController.getProjectById);
 
 app.post('/api/projects', authenticator, projectsController.postProject);
 
-app.post('/api/projects/:project_id/like/:user_id', authenticator, projectsController.likeProjectHandler);
-app.delete('/api/projects/:project_id/unlike/:user_id', authenticator, projectsController.unlikeProjectHandler);
+app.post('/api/projects/:project_id/like', authenticator, projectsController.likeProjectHandler);
+app.delete('/api/projects/:project_id/unlike', authenticator, projectsController.unlikeProjectHandler);
 
 app.post('/api/projects/:project_id/comments/', authenticator, projectsController.postCommentOnProjectHandler);
 app.delete('/api/projects/:project_id/comments/:comment_id', authenticator, projectsController.deleteCommentOnProjectHandler);

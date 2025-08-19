@@ -63,7 +63,7 @@ function ProjectDetails() {
         }
 
         try {
-            const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}/${user.id}`;
+            const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}`;
             const method = liked ? 'DELETE' : 'POST';
 
             const res = await fetch(url, { 

@@ -4,7 +4,8 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
-- [ ] add comments section
+- [ ] replying to comments
+- [ ] liking comments
 - [ ] style better
  
 ## Login/SignUp

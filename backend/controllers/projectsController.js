@@ -35,7 +35,7 @@ async function getProjectsByUsername(req, res) {
 
 async function postProject(req, res) {
     try {
-        const user_id = req.user.id;
+        const user_id = req.user.id;         
         const { name, description, image_url, linkedin_url, github_url, tags } = req.body;
         
         const project = await projectsModel.postProject({
@@ -59,7 +59,7 @@ async function postProject(req, res) {
 
 async function likeProjectHandler(req, res) {
     try {
-        const user_id = req.params.user_id;
+        const user_id = req.user.id;         
         const project_id = req.params.project_id;
         const project = await projectsModel.likeProject(user_id, project_id);
         res.json(project);
@@ -71,7 +71,7 @@ async function likeProjectHandler(req, res) {
 
 async function unlikeProjectHandler(req, res) {
     try {
-        const user_id = req.params.user_id;
+        const user_id = req.user.id;         
         const project_id = req.params.project_id;
         const project = await projectsModel.unlikeProject(user_id, project_id);
         res.json(project);
