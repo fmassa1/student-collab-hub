@@ -81,11 +81,50 @@ async function unlikeProjectHandler(req, res) {
     }
 }
 
+
+async function postCommentOnProjectHandler(req, res) {
+    try {
+        const user_id = req.user.id;         
+        const project_id = req.params.project_id;
+        const { comment } = req.body;
+
+        if (!comment || comment.trim() === '') {
+            return res.status(400).json({ error: 'Comment cannot be empty' });
+        }
+
+        const newComment = await projectsModel.postCommentOnProject(user_id, project_id, comment);
+
+        res.status(201).json(newComment);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
+async function deleteCommentOnProjectHandler(req, res) {
+    try {
+        const user_id = req.user.id;         
+        const comment_id = req.params.comment_id;
+        const project_id = req.params.project_id;
+        const deleted = await projectsModel.deleteCommentOnProject(user_id, project_id, comment_id);
+
+        if (!deleted) {
+            return res.status(403).json({ error: 'You cannot delete this comment' });
+        }
+        res.json({ message: 'Comment deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 module.exports = {
     getAllProjects,
     getProjectById,
     getProjectsByUsername,
     postProject,
     likeProjectHandler,
-    unlikeProjectHandler
+    unlikeProjectHandler,
+    postCommentOnProjectHandler,
+    deleteCommentOnProjectHandler
 };

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 
+import { postComment, deleteComment } from '../../services/commentAPI';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 
@@ -15,6 +16,8 @@ function ProjectDetails() {
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
     const [likes, setLikes] = useState(0)
+    const [newComment, setNewComment] = useState('');
+
     
     const navigate = useNavigate();
     
@@ -85,6 +88,46 @@ function ProjectDetails() {
         }
     };
 
+    const handlePostComment = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+
+        try {
+            const createdComment = await postComment(id, newComment, token);
+            
+            const commentWithUser = {
+                id: createdComment.id,
+                username: user.username,
+                comment: newComment
+            };
+            
+            setProject(prev => ({
+                ...prev,
+                comments: [...prev.comments, commentWithUser]
+            }));
+            setNewComment(''); 
+        } catch (err) {
+            console.error('Failed to post comment:', err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
+        }
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            await deleteComment(id, commentId, token);
+            
+            setProject(prev => ({
+                ...prev,
+                comments: prev.comments.filter(comment => comment.id !== commentId)
+            }));
+        } catch (err) {
+            console.error("Failed to delete comment:", err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
+        }
+    };
+
     if (error) {
         return <ErrorPage code={error} />;
     }
@@ -145,6 +188,7 @@ function ProjectDetails() {
                     {liked ? 'Liked' : 'Like'} ({likes})
                 </button>
 
+
                 <div className="project-comments">
                     <h3>Comments ({project.comments.length})</h3>
                     {project.comments.length === 0 ? (
@@ -152,15 +196,36 @@ function ProjectDetails() {
                     ) : (
                         project.comments.map((c) => (
                             <div key={c.id} className="comment-card">
-                                <strong 
-                                    onClick={() => navigate(`/profile/${c.username}`)} 
-                                    className="clickable-username"
+                              <strong 
+                                onClick={() => navigate(`/profile/${c.username}`)} 
+                                className="clickable-username"
+                              >
+                                {c.username}
+                              </strong>
+                              <p>{c.comment}</p>
+                          
+                              {user && c.username === user.username && (
+                                <button
+                                  className="delete-comment-btn"
+                                  onClick={() => handleDeleteComment(c.id)}
                                 >
-                                    {c.username}
-                                </strong>
-                                <p>{c.comment}</p>
+                                  Delete
+                                </button>
+                              )}
                             </div>
-                        ))
+                          ))
+                    )}
+                    {user && (
+                        <form className="comment-form" onSubmit={handlePostComment}>
+                            <input
+                                type="text"
+                                placeholder="Add a comment..."
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                className="comment-input"
+                            />
+                            <button type="submit" className="comment-submit">Post</button>
+                        </form>
                     )}
                 </div>
             </div>

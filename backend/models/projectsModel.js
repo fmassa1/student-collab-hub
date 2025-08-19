@@ -84,11 +84,40 @@ async function unlikeProject(user_id, project_id) {
   return { success: result.affectedRows > 0, user_id, project_id };
 }
 
+async function postCommentOnProject(user_id, project_id, comment) {
+  const [result] = await db.query(
+    `INSERT INTO project_comments (project_id, user_id, comment)
+     VALUES (?, ?, ?)`,
+    [project_id, user_id, comment]
+  );
+
+  const [rows] = await db.query(
+    `SELECT pc.id, pc.comment, u.username
+     FROM project_comments pc
+     JOIN users u ON pc.user_id = u.id
+     WHERE pc.id = ?`,
+    [result.insertId]
+  );
+
+  return rows[0]; 
+}
+
+async function deleteCommentOnProject(user_id, project_id, comment_id) {
+  const [result] = await db.query(
+    `DELETE FROM project_comments  WHERE user_id = ? AND project_id = ? AND id = ?`,
+    [user_id, project_id, comment_id]
+  );
+
+  return { success: result.affectedRows > 0, user_id, project_id, comment_id };
+}
+
 module.exports = {
     getAllProjects,
     getProjectById,
     getProjectsByUsername,
     postProject,
     likeProject,
-    unlikeProject
+    unlikeProject,
+    postCommentOnProject,
+    deleteCommentOnProject
   };
