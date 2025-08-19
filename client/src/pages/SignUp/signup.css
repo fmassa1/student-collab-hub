@@ -70,6 +70,16 @@
     cursor: not-allowed;
 }
 
+.password-error {
+    color: #d50000;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: fadeIn 0.3s ease-in;
+}
+
 .error {
     color: #d50000;
     background: rgba(213, 0, 0, 0.1);

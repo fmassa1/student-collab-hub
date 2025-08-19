@@ -10,6 +10,7 @@ function SignUp() {
         email: '',
         username: '',
         password: '',
+        confirmPassword: '',
         first_name: '',
         last_name: '',
         university: '',
@@ -17,33 +18,51 @@ function SignUp() {
     });    
 
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);    
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (name === 'password' || name === 'confirmPassword') {
+            const password = name === 'password' ? value : formData.password;
+            const confirmPassword = name === 'confirmPassword' ? value : formData.confirmPassword;
+            setPasswordsMatch(password === confirmPassword || confirmPassword === '');
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.username || !formData.email || !formData.first_name | !formData.last_name) {
+        if (!formData.username || !formData.email || !formData.first_name || !formData.last_name) {
             setError('Username, email, first name, and last name required');
             return;
         }
+
+        if (formData.password !== formData.confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        if (formData.password.length < 8) {
+            setError('Password must be at least 8 characters long');
+            return;
+        }
+
 
         setError('');
         setLoading(true);
 
         try {
+            const { confirmPassword, ...submitData } = formData;
             const res = await fetch('http://localhost:5055/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                })
+                body: JSON.stringify(submitData)
             });
 
+            
             const data = await res.json();
 
             if (!res.ok) {
@@ -56,7 +75,7 @@ function SignUp() {
 
             // TODO: Navigate to users profile page
             //navigate(`/users/${data.id}`);
-            navigate(`/projects`);
+            navigate(`/login`);
         } catch (err) {
             console.error('Failed to create new user:', err);
             setError('Failed to create new user. Please try again.');
@@ -98,12 +117,28 @@ function SignUp() {
                 <label>
                     Password
                     <input
-                        type="text"
+                        type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
                         required
                     />
+                </label>
+
+                <label>
+                    Confirm Password
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                        placeholder="Re-enter your password"
+                        className={!passwordsMatch ? 'password-mismatch' : ''}
+                    />
+                    {!passwordsMatch && formData.confirmPassword && (
+                        <span className="password-error">Passwords do not match</span>
+                    )}
                 </label>
 
                 <label>

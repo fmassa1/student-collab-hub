@@ -7,7 +7,7 @@ import './login.css';
 function LoginPage() {
     const navigate = useNavigate();
 
-    const { login } = useContext(AuthContext);
+    const { login, user } = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -54,7 +54,7 @@ function LoginPage() {
 
             // TODO: Navigate to users profile page
             //navigate(`/users/${data.id}`);
-            navigate(`/projects`);
+            navigate(`/profile/${data.user.username}`);
         } catch (err) {
             console.error('Failed to login user:', err);
             setError('Failed to login. Please try again.: ', err);
@@ -70,7 +70,7 @@ function LoginPage() {
                 {error && <p className="error">{error}</p>}
 
                 <label>
-                    Email or Username
+                    Email
                     <input
                         type="email"
                         name="email"
@@ -83,7 +83,7 @@ function LoginPage() {
                 <label>
                     Password
                     <input
-                        type="text"
+                        type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}

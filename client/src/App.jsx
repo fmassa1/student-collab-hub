@@ -11,6 +11,7 @@ import CreateProject from './pages/CreateProject/createproject';
 import SignUp from './pages/SignUp/signup';
 import Navbar from './components/NavBar/navbar';
 import Footer from './components/Footer/footer';
+import ErrorPage from './components/ErrorPage/error';
 
 import './styles/App.css'
 import LoginPage from './pages/Login/login';
@@ -35,7 +36,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LoginPage />} />
 
-        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+        <Route path="*" element={<ErrorPage code={404}/>} />
       </Routes>
       <Footer />
     </>
