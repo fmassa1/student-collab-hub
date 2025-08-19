@@ -9,26 +9,25 @@ async function getAllProjects() {
 }
 
 async function getProjectById(id) {
-  const [rows] = await db.query(`
-    SELECT 
-      projects.*,
-      users.username, 
-      GROUP_CONCAT(DISTINCT project_tags.tag) AS tags,
-      GROUP_CONCAT(DISTINCT project_likes.user_id) AS liked_by
-    FROM projects
-    LEFT JOIN users ON projects.user_id = users.id
-    LEFT JOIN project_tags ON projects.id = project_tags.project_id
-    LEFT JOIN project_likes ON projects.id = project_likes.project_id
-    WHERE projects.id = ?
-    GROUP BY projects.id
-  `, [id]
-  );
+  const [project] = await db.query(`SELECT projects.*, users.username FROM projects 
+    JOIN users ON projects.user_id = users.id 
+    WHERE projects.id = ?`, [id]);
 
-  return rows.map(row => ({
-    ...row,
-    tags: row.tags ? row.tags.split(',') : [],
-    liked_by: row.liked_by ? row.liked_by.split(',').map(id => parseInt(id)) : []
-  }));
+  const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [id]);
+  const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [id]);
+  const [comments] = await db.query(`
+    SELECT project_comments.id, project_comments.comment, users.username
+    FROM project_comments 
+    JOIN users ON project_comments.user_id = users.id 
+    WHERE project_comments.project_id = ?`, 
+  [id]);
+
+  return {
+    ...project[0],
+    tags: tags.map(t => t.tag),
+    liked_by: likes.map(l => l.user_id),
+    comments
+  };
 }
 
 async function getProjectsByUsername(username) {

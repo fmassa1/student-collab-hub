@@ -41,6 +41,11 @@ function SignUp() {
             return;
         }
 
+        if (formData.username.length < 6) {
+            setError('Username must be at least 6 characters long');
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;

@@ -9,11 +9,12 @@ import './projectdetails.css'
 
 function ProjectDetails() {
     const [error, setError] = useState(null);
+    const { user, token} = useContext(AuthContext);
     const { id } = useParams();
+
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
     const [likes, setLikes] = useState(0)
-    const { user, token} = useContext(AuthContext);
     
     const navigate = useNavigate();
     
@@ -31,7 +32,7 @@ function ProjectDetails() {
             return res.json();
         })
         .then(data => {
-            const projectData = data[0];
+            const projectData = data;
             const isLiked = projectData.liked_by?.includes(user.id) || false;
             const numberOfLikes = projectData.liked_by?.length || 0;
 
@@ -110,7 +111,7 @@ function ProjectDetails() {
 
                 {project.image_url && (
                     <div className="project-image-wrapper">
-                        <img src={project.image_url} alt={project.name} className="project-image" />
+                        <img src={project.image_url} alt={project.image_url} className="project-image" />
                     </div>
                 )}
 
@@ -143,6 +144,25 @@ function ProjectDetails() {
                 >
                     {liked ? 'Liked' : 'Like'} ({likes})
                 </button>
+
+                <div className="project-comments">
+                    <h3>Comments ({project.comments.length})</h3>
+                    {project.comments.length === 0 ? (
+                        <p>No comments yet.</p>
+                    ) : (
+                        project.comments.map((c) => (
+                            <div key={c.id} className="comment-card">
+                                <strong 
+                                    onClick={() => navigate(`/profile/${c.username}`)} 
+                                    className="clickable-username"
+                                >
+                                    {c.username}
+                                </strong>
+                                <p>{c.comment}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

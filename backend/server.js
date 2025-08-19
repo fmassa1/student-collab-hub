@@ -18,9 +18,14 @@ const app = express();
 app.set('trust proxy', false);
 
 
-//middleware
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      imgSrc: ["'self'", "data:", "https://placehold.co"],
+    },
+  },
+}));
 
 app.use(requestLogger);
 app.use(requestLimiter);
@@ -78,5 +83,5 @@ app.get(/^(?!\/api).*$/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
