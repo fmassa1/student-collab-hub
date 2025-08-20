@@ -1,4 +1,4 @@
-const usersModel = require('../models/usersModel');
+const usersModule = require('../modules/usersModule');
 const jwt = require("jsonwebtoken");
 
 require('dotenv').config();
@@ -8,7 +8,7 @@ async function addNewUser(req, res) {
     try {
         const { email, username, password, first_name, last_name, university } = req.body;
         
-        const new_user = await usersModel.addNewUser({
+        const new_user = await usersModule.addNewUser({
             email,
             username,
             password,
@@ -33,7 +33,7 @@ async function loginUser(req, res) {
     try {
         const { email, password } = req.body;
         
-        const user_info = await usersModel.loginUser({email,password});
+        const user_info = await usersModule.loginUser({email,password});
         const token = jwt.sign({ id: user_info.id, email: user_info.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
         
         res.status(201).json({'user': user_info, 'token': token});
@@ -52,7 +52,7 @@ async function loginUser(req, res) {
 
 async function getAllUsers(req, res) {
     try {
-        const users = await usersModel.getAllUsers();
+        const users = await usersModule.getAllUsers();
         res.json(users);
     } catch (err) {
         console.error(err);
@@ -63,7 +63,7 @@ async function getAllUsers(req, res) {
 async function getUserByUsername(req, res) {
     try {
         const username = req.params.username;
-        const  cur_user = await usersModel.getUserByUsername(username);
+        const  cur_user = await usersModule.getUserByUsername(username);
         res.json(cur_user);
     } catch (err) {
         console.error(err);
@@ -77,7 +77,7 @@ async function updateProfileHandler(req, res) {
         const user_id = req.user.id;
         const { first_name, last_name, university } = req.body;
 
-        const users = await usersModel.updateProfile(user_id, first_name, last_name, university);
+        const users = await usersModule.updateProfile(user_id, first_name, last_name, university);
         res.json(users);
     } catch (err) {
         console.error(err);
