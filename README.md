@@ -12,7 +12,6 @@
 - [ ] style better
  
 ## Login/SignUp
-- [ ] double password entry
 - [ ] styling
 
 ## User Profile

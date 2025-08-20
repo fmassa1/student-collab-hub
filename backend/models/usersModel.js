@@ -85,10 +85,29 @@ async function getUserByUsername(username) {
   return rows;
 }
 
+async function updateProfile(id, first_name, last_name, school) {
+    const [updated] = await db.query(`
+        UPDATE users
+        SET first_name = ?, last_name = ?, university = ?
+        WHERE id = ?
+    `, [first_name, last_name, school, id]
+    );
+
+    const [rows] = await db.query(`
+        SELECT id, email, username, first_name, last_name, university
+        FROM users
+        WHERE id = ?
+    `, [id]
+    );
+
+    return rows[0];
+}
+
 
 module.exports = {
     addNewUser,
     loginUser,
     getAllUsers,
     getUserByUsername,
+    updateProfile
   };
