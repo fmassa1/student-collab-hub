@@ -4,6 +4,9 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
+- [ ] search bar
+
+## Project Page
 - [ ] replying to comments
 - [ ] liking comments
 - [ ] style better
