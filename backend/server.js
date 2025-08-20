@@ -37,7 +37,10 @@ app.use(express.json());
 app.get('/api/projects', authenticator, projectsController.getAllProjects);
 app.get('/api/projects/:id', authenticator, projectsController.getProjectById);
 
+
 app.post('/api/projects', authenticator, projectsController.postProject);
+app.delete('/api/projects/:id', authenticator, projectsController.deleteProjectHandler);
+
 
 app.post('/api/projects/:project_id/like', authenticator, projectsController.likeProjectHandler);
 app.delete('/api/projects/:project_id/unlike', authenticator, projectsController.unlikeProjectHandler);
@@ -54,30 +57,6 @@ app.get('/api/profile/:username/projects', authenticator, projectsController.get
 app.post('/api/signup', usersController.addNewUser);
 app.post('/api/login', usersController.loginUser);
 
-
-
-// PUT update a project
-app.put('/api/projects/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const project = projects.find(p => p.id === id);
-  if (!project) return res.status(404).json({ error: 'Project not found' });
-
-  const { name, description } = req.body;
-  if (name) project.name = name;
-  if (description) project.description = description;
-
-  res.json(project);
-});
-
-// DELETE a project
-app.delete('/api/projects/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const index = projects.findIndex(p => p.id === id);
-  if (index === -1) return res.status(404).json({ error: 'Project not found' });
-
-  const deleted = projects.splice(index, 1);
-  res.json(deleted[0]);
-});
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 

@@ -128,6 +128,31 @@ function ProjectDetails() {
         }
     };
 
+    const handleDeleteProject = async () => {
+        if (!window.confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
+            return;
+        }
+    
+        try {
+            const res = await fetch(`http://localhost:5055/api/projects/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (res.ok) {
+                navigate('/');
+            } else {
+                throw new Error(res.status);
+            }
+        } catch (err) {
+            console.error("Failed to delete project:", err);
+            const statusCode = parseInt(err.message);
+            setError(statusCode || 500);
+        }
+    };
+
     if (error) {
         return <ErrorPage code={error} />;
     }
@@ -187,6 +212,15 @@ function ProjectDetails() {
                 >
                     {liked ? 'Liked' : 'Like'} ({likes})
                 </button>
+
+                {user && project.user_id === user.id && (
+                    <button 
+                        className="delete-project-btn"
+                        onClick={handleDeleteProject}
+                    >
+                        Delete Project
+                    </button>
+                )}
 
 
                 <div className="project-comments">

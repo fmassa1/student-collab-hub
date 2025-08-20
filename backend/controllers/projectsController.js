@@ -56,6 +56,21 @@ async function postProject(req, res) {
     }
 }
 
+async function deleteProjectHandler(req, res) {
+    try {
+        const user_id = req.user.id;         
+        const project_id = req.params.id;
+        const deleted = await projectsModel.deleteProject(user_id, project_id);
+        if (!deleted) {
+            return res.status(403).json({ error: 'You cannot delete this project' });
+        }
+        res.json({ message: 'Project deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 
 async function likeProjectHandler(req, res) {
     try {
@@ -123,6 +138,7 @@ module.exports = {
     getProjectById,
     getProjectsByUsername,
     postProject,
+    deleteProjectHandler,
     likeProjectHandler,
     unlikeProjectHandler,
     postCommentOnProjectHandler,

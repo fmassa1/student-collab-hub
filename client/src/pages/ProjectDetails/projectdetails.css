@@ -158,6 +158,21 @@
 }
 
 
+.delete-project-btn {
+    background-color: #d50000;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.delete-project-btn:hover {
+    background-color: #b71c1c;
+}
+
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
