@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { Link } from "react-router-dom";
+
 import './navbar.css';
 
 
@@ -17,8 +19,10 @@ function NavBar() {
                     <li><a href="/create">Create Post</a></li>
                     {user ? (
                         <>
-                            <li>Welcome, {user.first_name}</li>
-                            <li>
+                                <Link to={`/profile/${user.username}`}>
+                                    {user.username}
+                                </Link>                           
+                                 <li>
                                 <button className="logout-button" onClick={logout}>
                                     Logout
                                 </button>
