@@ -1,4 +1,5 @@
 const { createLogger, format, transports } = require('winston');
+const DailyRotateFile = require('winston-daily-rotate-file');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
@@ -16,9 +17,23 @@ const logger = createLogger({
         format.json()
     ),
     transports: [
-        //new transports.Console({ format: format.simple() }),
-        new transports.File({ filename: path.join(logDir, 'error.log'), level: 'error' }),
-        new transports.File({ filename: path.join(logDir, 'combined.log') })
+        new DailyRotateFile({
+            level: 'error',
+            dirname: logDir,
+            filename: 'error-%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d'
+        }),
+        new DailyRotateFile({
+            dirname: logDir,
+            filename: 'combined-%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
+            zippedArchive: true,
+            maxSize: '20m',
+            maxFiles: '14d'
+        })
     ],
 });
 
