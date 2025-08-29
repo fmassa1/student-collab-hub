@@ -39,6 +39,7 @@ app.get('/api/projects/:id', authenticator, projectsController.getProjectById);
 
 
 app.post('/api/projects', authenticator, projectsController.postProject);
+app.put('/api/projects/:id', authenticator, projectsController.updateProjectHandler);
 app.delete('/api/projects/:id', authenticator, projectsController.deleteProjectHandler);
 
 

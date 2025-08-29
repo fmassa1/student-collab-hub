@@ -65,6 +65,34 @@ async function postProject(project) {
   return { id: result.insertId, ...project };
 }
 
+async function updateProject(user_id, project_id, name, description, tags) {
+  const [updated] = await db.query(`
+      UPDATE projects
+      SET name = ?, description = ?
+      WHERE id = ? AND user_id = ?
+  `, [name, description, project_id, user_id]
+  );
+
+  //might be better way to update tags
+  if (Array.isArray(project.tags) && project.tags.length > 0) {
+
+    const [tag_delete_result] = await db.query(
+      `DELETE FROM tags  WHERE project_id = ?`,
+      [project_id]
+    );
+
+    const tagValues = tags.map(tag => [result.insertId, tag]);
+    await db.query(
+        `INSERT INTO project_tags (project_id, tag) VALUES ?`,
+        [tagValues]
+    );
+  }
+  
+
+
+  return getProjectById(project_id);
+}
+
 async function deleteProject(user_id, project_id) {
   const [result] = await db.query(
     `DELETE FROM projects  WHERE user_id = ? AND id = ?`,
@@ -125,6 +153,7 @@ module.exports = {
     getProjectById,
     getProjectsByUsername,
     postProject,
+    updateProject,
     deleteProject,
     likeProject,
     unlikeProject,

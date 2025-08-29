@@ -56,6 +56,21 @@ async function postProject(req, res) {
     }
 }
 
+async function updateProjectHandler(req, res) {
+    try {
+
+        const user_id = req.user.id;
+        const project_id = req.params.id;
+        const { name, description, tags } = req.body;
+
+        const updated_project = await projectsModule.updateProject(user_id, project_id, name, description, tags);
+        res.json(updated_project);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error getAllUsers' });
+    }
+}
+
 async function deleteProjectHandler(req, res) {
     try {
         const user_id = req.user.id;
@@ -133,11 +148,14 @@ async function deleteCommentOnProjectHandler(req, res) {
     }
 }
 
+
+
 module.exports = {
     getAllProjects,
     getProjectById,
     getProjectsByUsername,
     postProject,
+    updateProjectHandler,
     deleteProjectHandler,
     likeProjectHandler,
     unlikeProjectHandler,
