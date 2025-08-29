@@ -15,7 +15,6 @@
 - [ ] styling
 
 ## User Profile
-- [ ] edit profile
 - [ ] more user info
 - [ ] style better
 
@@ -25,9 +24,6 @@
 
 ## General
 - [ ] updating projects
-
-
-
 - [+] keep users logged in (sessions)
-- - need to add server side confirmation when user makes requests
+
 - - refresh tokens so users can stay logged in 

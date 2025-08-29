@@ -41,6 +41,7 @@ const logger = createLogger({
 const requestLogger = morgan((tokens, req, res) => {
     const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const userAgent = req.get('User-Agent') || 'unknown';
+    const userId = req.user?.id || 'unknown';
 
     return JSON.stringify({
         method: tokens.method(req, res),
@@ -49,6 +50,7 @@ const requestLogger = morgan((tokens, req, res) => {
         response_time: `${tokens['response-time'](req, res)} ms`,
         ip: ip,
         user_agent: userAgent,
+        user_id: userId,
     });
 }, {
     stream: {
