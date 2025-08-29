@@ -74,14 +74,14 @@ async function updateProject(user_id, project_id, name, description, tags) {
   );
 
   //might be better way to update tags
-  if (Array.isArray(project.tags) && project.tags.length > 0) {
+  if (Array.isArray(tags) && tags.length > 0) {
 
     const [tag_delete_result] = await db.query(
-      `DELETE FROM tags  WHERE project_id = ?`,
+      `DELETE FROM project_tags WHERE project_id = ?`,
       [project_id]
     );
 
-    const tagValues = tags.map(tag => [result.insertId, tag]);
+    const tagValues = tags.map(tag => [project_id, tag]);
     await db.query(
         `INSERT INTO project_tags (project_id, tag) VALUES ?`,
         [tagValues]

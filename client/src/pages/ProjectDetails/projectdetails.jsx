@@ -13,6 +13,15 @@ function ProjectDetails() {
     const { user, token} = useContext(AuthContext);
     const { id } = useParams();
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({});
+    const techOptions = [
+        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
+        'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
+        'React', 'Vue', 'Angular', 'Node.js', 'Express', 
+        'Django', 'Flask', 'Spring', 'MongoDB', 'PostgreSQL'
+    ];
+
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
     const [likes, setLikes] = useState(0)
@@ -52,16 +61,59 @@ function ProjectDetails() {
         });
     }, [id]);
 
+    useEffect(() => {
+        if (isEditing && project) {
+          setFormData({
+            name: project.name || "",
+            description: project.description || "",
+            tags: project.tags || []
+          });
+        }
+    }, [isEditing, project]);
+
     if (error) {
         return <ErrorPage code={error} />;
     }
 
-    const handleToggleLike = async () => {
-        if (!user) {
-            alert('You must be logged in to like a project.');
-            return;
-        }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+          ...prev,
+          [name]: value
+        }));
+    };
+      
+    const handleTagsChange = (e) => {
+        const values = Array.from(e.target.selectedOptions, option => option.value);
+        setFormData(prev => ({
+          ...prev,
+          tags: values
+        }));
+    };
 
+    const handleSave = async () => {
+        try {
+          const res = await fetch(`http://localhost:5055/api/projects/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(formData)
+          });
+      
+          if (!res.ok) throw new Error(res.status);
+          const updated = await res.json();
+      
+          setProject(updated);
+          setIsEditing(false);
+        } catch (err) {
+          console.error("Failed to update project:", err);
+          setError(parseInt(err.message) || 500);
+        }
+      };
+
+    const handleToggleLike = async () => {
         try {
             const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}`;
             const method = liked ? 'DELETE' : 'POST';
@@ -163,105 +215,137 @@ function ProjectDetails() {
 
     return (
         <div className="project-details-page">
+            
             <div className="project-post-card">
-                <div className="project-header">
-                    <h1 className="project-title">{project.name}</h1>
-                    <span className="project-meta">
-                        Posted by{" "}
-                        <strong 
-                            onClick={() => navigate(`/profile/${project.username}`)} 
-                            className="clickable-username"
-                        >
-                            {project.username}
-                        </strong>
-                    </span>
-                </div>
+                {user && project.user_id === user.id && (
+                        <button className="delete-project-btn" onClick={handleDeleteProject}>
+                            Delete Project
+                        </button>
 
-                {project.image_url && (
-                    <div className="project-image-wrapper">
-                        <img src={project.image_url} alt={project.image_url} className="project-image" />
-                    </div>
+
                 )}
-
-                <p className="project-description">{project.description}</p>
-
-                {project.tags && project.tags.length > 0 && (
-                    <div className="project-tags">
-                        {project.tags.map((tag, index) => (
-                            <span key={index} className="tag-pill">{tag}</span>
-                        ))}
-                    </div>
-                )}
-
-                <div className="project-links">
-                    {project.linkedin_url ? (
-                        <a href={project.linkedin_url} target="_blank" rel="noopener noreferrer">
-                            <img src='/linkedin.svg' alt="LinkedIn" />
-                        </a>
-                    ) : null}
-                    {project.github_url ? (
-                        <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                            <img src='/github.svg' alt="Github" />
-                        </a>
-                    ) : null}
-                </div>
-
-                <button 
-                    className={`like-button ${liked ? 'liked' : ''}`} 
-                    onClick={handleToggleLike}
-                >
-                    {liked ? 'Liked' : 'Like'} ({likes})
-                </button>
 
                 {user && project.user_id === user.id && (
-                    <button 
-                        className="delete-project-btn"
-                        onClick={handleDeleteProject}
-                    >
-                        Delete Project
+                    <button className="update-project-btn" onClick={() => setIsEditing(true)}>
+                        Update Project
                     </button>
                 )}
 
-
-                <div className="project-comments">
-                    <h3>Comments ({project.comments.length})</h3>
-                    {project.comments.length === 0 ? (
-                        <p>No comments yet.</p>
-                    ) : (
-                        project.comments.map((c) => (
-                            <div key={c.id} className="comment-card">
-                              <strong 
-                                onClick={() => navigate(`/profile/${c.username}`)} 
-                                className="clickable-username"
-                              >
-                                {c.username}
-                              </strong>
-                              <p>{c.comment}</p>
-                          
-                              {user && c.username === user.username && (
-                                <button
-                                  className="delete-comment-btn"
-                                  onClick={() => handleDeleteComment(c.id)}
+                {isEditing ? (
+                    <>
+                        <input name="name" value={formData.name || ""} onChange={handleChange} />
+                        <input name="description" value={formData.description || ""} onChange={handleChange} />
+                        <label>
+                            Tags
+                            <select
+                                name="tags"
+                                multiple
+                                value={formData.tags}
+                                onChange={handleTagsChange}
+                            >
+                                {techOptions.map(tag => (
+                                    <option key={tag} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => setIsEditing(false)}>Cancel</button>
+                    
+                    </>
+                ): (
+                    <>
+                        <div className="project-header">
+                            <h1 className="project-title">{project.name}</h1>
+                            <span className="project-meta">
+                                Posted by{" "}
+                                <strong 
+                                    onClick={() => navigate(`/profile/${project.username}`)} 
+                                    className="clickable-username"
                                 >
-                                  Delete
-                                </button>
-                              )}
+                                    {project.username}
+                                </strong>
+                            </span>
+                        </div>
+
+                        {project.image_url && (
+                            <div className="project-image-wrapper">
+                                <img src={project.image_url} alt={project.image_url} className="project-image" />
                             </div>
-                          ))
-                    )}
-                    {user && (
-                        <form className="comment-form" onSubmit={handlePostComment}>
-                            <input
-                                type="text"
-                                placeholder="Add a comment..."
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                className="comment-input"
-                            />
-                            <button type="submit" className="comment-submit">Post</button>
-                        </form>
-                    )}
-                </div>
+                        )}
+
+                        <p className="project-description">{project.description}</p>
+
+                        {project.tags && project.tags.length > 0 && (
+                            <div className="project-tags">
+                                {project.tags.map((tag, index) => (
+                                    <span key={index} className="tag-pill">{tag}</span>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="project-links">
+                            {project.linkedin_url ? (
+                                <a href={project.linkedin_url} target="_blank" rel="noopener noreferrer">
+                                    <img src='/linkedin.svg' alt="LinkedIn" />
+                                </a>
+                            ) : null}
+                            {project.github_url ? (
+                                <a href={project.github_url} target="_blank" rel="noopener noreferrer">
+                                    <img src='/github.svg' alt="Github" />
+                                </a>
+                            ) : null}
+                        </div>
+
+                        <button 
+                            className={`like-button ${liked ? 'liked' : ''}`} 
+                            onClick={handleToggleLike}
+                        >
+                            {liked ? 'Liked' : 'Like'} ({likes})
+                        </button>
+
+                        <div className="project-comments">
+                            <h3>Comments ({project.comments.length})</h3>
+                            {project.comments.length === 0 ? (
+                                <p>No comments yet.</p>
+                            ) : (
+                                project.comments.map((c) => (
+                                    <div key={c.id} className="comment-card">
+                                    <strong 
+                                        onClick={() => navigate(`/profile/${c.username}`)} 
+                                        className="clickable-username"
+                                    >
+                                        {c.username}
+                                    </strong>
+                                    <p>{c.comment}</p>
+                                
+                                    {user && c.username === user.username && (
+                                        <button
+                                        className="delete-comment-btn"
+                                        onClick={() => handleDeleteComment(c.id)}
+                                        >
+                                        Delete
+                                        </button>
+                                    )}
+                                    </div>
+                                ))
+                            )}
+                            {user && (
+                                <form className="comment-form" onSubmit={handlePostComment}>
+                                    <input
+                                        type="text"
+                                        placeholder="Add a comment..."
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                        className="comment-input"
+                                    />
+                                    <button type="submit" className="comment-submit">Post</button>
+                                </form>
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
