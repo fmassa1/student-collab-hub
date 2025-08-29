@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
@@ -12,13 +12,21 @@ function Projects() {
     const [visibleCount, setVisibleCount] = useState(10);
     const { token } = useContext(AuthContext);
     
-
+    const location = useLocation();
     const navigate = useNavigate();
 
 
 
     useEffect(() => {
-        fetch('http://localhost:5055/api/projects', {
+        const params = new URLSearchParams(location.search);
+        const tags = params.get('tags'); 
+
+        let url = 'http://localhost:5055/api/projects';
+        if (tags) {
+            url += `?tags=${encodeURIComponent(tags)}`;
+        }
+
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

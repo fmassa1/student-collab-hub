@@ -3,6 +3,15 @@ const projectsModule = require('../Modules/projectsModule');
 
 async function getAllProjects(req, res) {
     try {
+
+        const { tags } = req.query;
+
+        if (tags) {
+            const tagList = tags.split(",");
+            const projects = await projectsModule.getProjectsByTags(tagList);
+            return res.json(projects);
+        }
+
         const projects = await projectsModule.getAllProjects();
         res.json(projects);
     } catch (err) {

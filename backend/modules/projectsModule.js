@@ -8,6 +8,18 @@ async function getAllProjects() {
   return rows;
 }
 
+async function getProjectsByTags(tags) {
+  const placeholders = tags.map(() => "?").join(","); 
+  const [rows] = await db.query(
+    `SELECT DISTINCT p.* 
+     FROM projects p
+     JOIN project_tags pt ON p.id = pt.project_id
+     WHERE LOWER(pt.tag) IN (${placeholders})`,
+    tags.map(t => t.toLowerCase())
+  );
+  return rows;
+}
+
 async function getProjectById(id) {
   const [project] = await db.query(`SELECT projects.*, users.username FROM projects 
     JOIN users ON projects.user_id = users.id 
@@ -150,6 +162,7 @@ async function deleteCommentOnProject(user_id, project_id, comment_id) {
 
 module.exports = {
     getAllProjects,
+    getProjectsByTags,
     getProjectById,
     getProjectsByUsername,
     postProject,
