@@ -24,6 +24,10 @@ async function getProjectById(project_id, user_id) {
   const [project] = await db.query(`SELECT projects.*, users.username FROM projects 
     JOIN users ON projects.user_id = users.id 
     WHERE projects.id = ?`, [project_id]);
+
+  if(project) {
+    projectViewed(user_id, project_id);
+  }
   const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [project_id]);
   const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [project_id]);
   const [comments] = await db.query(`
@@ -159,6 +163,23 @@ async function deleteCommentOnProject(user_id, project_id, comment_id) {
   );
 
   return { success: result.affectedRows > 0, user_id, project_id, comment_id };
+}
+
+
+async function projectViewed(user_id, project_id) {
+  const [viewed] = await db.query(
+    `SELECT * 
+    FROM project_views
+    WHERE project_id = ? AND user_id = ?
+    `, [project_id, user_id]);
+
+
+  if(viewed.length === 0) {
+    const [results] = await db.query(
+      `INSERT INTO project_views (project_id, user_id)
+      VALUES (?, ?)`,
+      [project_id, user_id]);
+  }
 }
 
 module.exports = {
