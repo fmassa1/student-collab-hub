@@ -20,19 +20,20 @@ async function getProjectsByTags(tags) {
   return rows;
 }
 
-async function getProjectById(id) {
+async function getProjectById(project_id, user_id) {
   const [project] = await db.query(`SELECT projects.*, users.username FROM projects 
     JOIN users ON projects.user_id = users.id 
-    WHERE projects.id = ?`, [id]);
-
-  const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [id]);
-  const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [id]);
+    WHERE projects.id = ?`, [project_id]);
+  const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [project_id]);
+  const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [project_id]);
   const [comments] = await db.query(`
     SELECT project_comments.id, project_comments.comment, users.username
     FROM project_comments 
     JOIN users ON project_comments.user_id = users.id 
     WHERE project_comments.project_id = ?`, 
-  [id]);
+  [project_id]);
+
+
 
   return {
     ...project[0],

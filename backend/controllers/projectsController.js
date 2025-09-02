@@ -22,9 +22,15 @@ async function getAllProjects(req, res) {
 
 async function getProjectById(req, res) {
     try {
-        const id = req.params.id;
-        const project = await projectsModule.getProjectById(id);
-        res.json(project);
+        const user_id = req.user.id; 
+        const project_id = req.params.id;
+        const project = await projectsModule.getProjectById(project_id, user_id);
+        if(!project.id) {
+            res.status(404).json({ error: 'Project not found' });
+        }
+        else {
+            res.json(project);
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error' });

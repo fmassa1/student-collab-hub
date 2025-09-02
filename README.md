@@ -23,7 +23,6 @@
 - [ ] better message (display error message received from server)
 
 ## General
-- [ ] updating projects
 - [+] keep users logged in (sessions)
 
 - - refresh tokens so users can stay logged in 
