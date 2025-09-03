@@ -36,6 +36,8 @@ async function getProjectById(project_id, user_id) {
     JOIN users ON project_comments.user_id = users.id 
     WHERE project_comments.project_id = ?`, 
   [project_id]);
+  const [views] = await db.query(`SELECT * FROM project_views WHERE project_id = ?`, [project_id]);
+
 
 
 
@@ -43,7 +45,8 @@ async function getProjectById(project_id, user_id) {
     ...project[0],
     tags: tags.map(t => t.tag),
     liked_by: likes.map(l => l.user_id),
-    comments
+    comments,
+    views: views.length
   };
 }
 

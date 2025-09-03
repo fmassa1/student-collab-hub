@@ -54,6 +54,10 @@ async function loginUser(user_info) {
 
         if (await argon2.verify(user.password, user_info.password)) {
             delete user.password;
+            const [update_last_login] = await db.query(
+                `UPDATE users SET last_logged_in = NOW() WHERE id = ?;`, 
+                [user.id]
+            );
             return user;
         } 
 

@@ -3,9 +3,11 @@ USE peer_spark;
 
 DROP TABLE IF EXISTS project_likes;
 DROP TABLE IF EXISTS project_comments;
+DROP TABLE IF EXISTS project_views;
 DROP TABLE IF EXISTS project_tags;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
+
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +16,9 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    university VARCHAR(100)
+    university VARCHAR(100),
+    date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_logged_in TIMESTAMP DEFAULT NULL
 )ENGINE=InnoDB;
 
 CREATE TABLE projects (
@@ -25,6 +29,7 @@ CREATE TABLE projects (
     description TEXT,
     linkedin_url VARCHAR(500),
     github_url VARCHAR(500),
+    date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
@@ -40,6 +45,7 @@ CREATE TABLE project_comments (
     project_id INT NOT NULL,
     user_id INT NOT NULL,
     comment VARCHAR(100) NOT NULL,
+    date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )ENGINE=InnoDB;
