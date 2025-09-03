@@ -20,10 +20,14 @@ function Projects() {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const tags = params.get('tags'); 
+        const sort = params.get('sort'); 
 
         let url = 'http://localhost:5055/api/projects';
         if (tags) {
             url += `?tags=${encodeURIComponent(tags)}`;
+        }
+        if (sort) {
+            url += `?sort=${encodeURIComponent(sort)}`;
         }
 
         fetch(url, {
