@@ -4,10 +4,14 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
+- [ ] front end for searching by tags
+- [ ] front end for sorting projects based on likes, views, etc
 - [ ] search bar
 
 ## Project Page
+- [ ] show date posted (project and comment)
 - [ ] replying to comments
+- [ ] sorting comments
 - [ ] liking comments
 - [ ] style better
  
@@ -15,6 +19,7 @@
 - [ ] styling
 
 ## User Profile
+- [ ] notifications 
 - [ ] more user info
 - [ ] style better
 
