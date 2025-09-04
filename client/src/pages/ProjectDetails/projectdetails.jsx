@@ -150,6 +150,7 @@ function ProjectDetails() {
             const commentWithUser = {
                 id: createdComment.id,
                 username: user.username,
+                date_posted: createdComment.date_posted,
                 comment: newComment
             };
             
@@ -265,8 +266,13 @@ function ProjectDetails() {
                                     onClick={() => navigate(`/profile/${project.username}`)} 
                                     className="clickable-username"
                                 >
-                                    {project.username}
+                                    {project.username } 
                                 </strong>
+                                {" "} on {new Date(project.date_posted).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric"
+                                        })}
                                 </span>
                             </div>
                             
@@ -328,8 +334,14 @@ function ProjectDetails() {
                                         onClick={() => navigate(`/profile/${c.username}`)} 
                                         className="clickable-username"
                                     >
-                                        {c.username}
+                                        {c.username} 
                                     </strong>
+                                    <span>{"on "}
+                                        {new Date(c.date_posted).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric"
+                                        })}</span>
                                     <p>{c.comment}</p>
                                 
                                     {user && c.username === user.username && (

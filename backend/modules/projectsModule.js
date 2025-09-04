@@ -37,7 +37,7 @@ async function getProjectById(project_id, user_id) {
   const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [project_id]);
   const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [project_id]);
   const [comments] = await db.query(`
-    SELECT project_comments.id, project_comments.comment, users.username
+    SELECT project_comments.id, project_comments.comment, project_comments.date_posted,  users.username
     FROM project_comments 
     JOIN users ON project_comments.user_id = users.id 
     WHERE project_comments.project_id = ?`, 
@@ -155,7 +155,7 @@ async function postCommentOnProject(user_id, project_id, comment) {
   );
 
   const [rows] = await db.query(
-    `SELECT pc.id, pc.comment, u.username
+    `SELECT pc.id, pc.comment, pc.date_posted, u.username
      FROM project_comments pc
      JOIN users u ON pc.user_id = u.id
      WHERE pc.id = ?`,
