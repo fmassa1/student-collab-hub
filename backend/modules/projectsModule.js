@@ -1,7 +1,6 @@
 const db = require('../db');
 
 async function getAllProjects(sortColumn) {
-  console.log(sortColumn)
   const [rows] = await db.query(`
     SELECT p.*, COUNT(DISTINCT pl.user_id) AS likes, COUNT(DISTINCT pv.user_id) AS views
     FROM projects p
@@ -10,7 +9,6 @@ async function getAllProjects(sortColumn) {
     GROUP BY p.id
     ORDER BY ${sortColumn} DESC
   `);
-  console.log(rows)
   return rows;
 }
 
@@ -37,15 +35,14 @@ async function getProjectById(project_id, user_id) {
   const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [project_id]);
   const [likes] = await db.query(`SELECT user_id FROM project_likes WHERE project_id = ?`, [project_id]);
   const [comments] = await db.query(`
-    SELECT project_comments.id, project_comments.comment, project_comments.date_posted,  users.username
-    FROM project_comments 
-    JOIN users ON project_comments.user_id = users.id 
-    WHERE project_comments.project_id = ?`, 
-  [project_id]);
+    SELECT pc.id, pc.comment, pc.date_posted, COUNT(DISTINCT pcl.user_id) as likes, MAX(pcl.user_id = ?) AS liked_by_user, u.username
+    FROM project_comments pc
+    LEFT JOIN users u ON pc.user_id = u.id 
+    LEFT JOIN project_comment_likes pcl ON pc.id = pcl.comment_id 
+    WHERE pc.project_id = ?
+    GROUP BY pc.id, pc.comment, pc.date_posted, u.username`, 
+  [user_id, project_id]);
   const [views] = await db.query(`SELECT * FROM project_views WHERE project_id = ?`, [project_id]);
-
-
-
 
   return {
     ...project[0],
@@ -174,6 +171,24 @@ async function deleteCommentOnProject(user_id, project_id, comment_id) {
   return { success: result.affectedRows > 0, user_id, project_id, comment_id };
 }
 
+async function likeCommentOnProject(user_id, comment_id) {
+  const [result] = await db.query(
+    `INSERT INTO project_comment_likes (comment_id, user_id)
+     VALUES (?, ?)`,
+    [comment_id, user_id]
+  );
+  return {success: true, comment_id, user_id};
+}
+
+async function unlikeCommentOnProject(user_id, comment_id) {
+  const [result] = await db.query(
+    `DELETE FROM project_comment_likes  WHERE comment_id = ? AND user_id = ?`,
+    [comment_id, user_id]
+  );
+
+  return { success: result.affectedRows > 0, comment_id, user_id };
+}
+
 
 async function projectViewed(user_id, project_id) {
   const [viewed] = await db.query(
@@ -202,5 +217,7 @@ module.exports = {
     likeProject,
     unlikeProject,
     postCommentOnProject,
-    deleteCommentOnProject
+    deleteCommentOnProject,
+    likeCommentOnProject,
+    unlikeCommentOnProject
   };

@@ -170,6 +170,31 @@ async function deleteCommentOnProjectHandler(req, res) {
     }
 }
 
+async function likeCommentOnProjectHandler(req, res) {
+    try {
+        const user_id = req.user.id;         
+        const comment_id = req.params.comment_id;
+        const likedComment = await projectsModule.likeCommentOnProject(user_id, comment_id);
+
+        res.status(201).json(likedComment);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
+async function unlikeCommentOnProjectHandler(req, res) {
+    try {
+        const user_id = req.user.id;         
+        const comment_id = req.params.comment_id;
+        const unlikedComment = await projectsModule.unlikeCommentOnProject(user_id, comment_id);
+        res.status(201).json(unlikedComment);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+}
+
 
 
 module.exports = {
@@ -182,5 +207,7 @@ module.exports = {
     likeProjectHandler,
     unlikeProjectHandler,
     postCommentOnProjectHandler,
-    deleteCommentOnProjectHandler
+    deleteCommentOnProjectHandler,
+    likeCommentOnProjectHandler,
+    unlikeCommentOnProjectHandler
 };

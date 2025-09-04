@@ -2,6 +2,7 @@ USE peer_spark;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE project_likes;
+TRUNCATE TABLE project_comment_likes;
 TRUNCATE TABLE project_comments;
 TRUNCATE TABLE project_tags;
 TRUNCATE TABLE projects;
@@ -110,7 +111,7 @@ VALUES
 -- LIKES
 INSERT INTO project_likes (project_id, user_id)
 VALUES
-(1, 2), (1, 3),
+(1, 2), (1, 3), (1, 8), (1, 7),
 (2, 1), (2, 4),
 (3, 4), (3, 5),
 (4, 6), (4, 7),
@@ -119,7 +120,7 @@ VALUES
 (7, 3), (7, 6),
 (8, 5), (8, 7),
 (9, 1), (9, 2),
-(10, 3), (10, 6),
+(10, 3), (10, 6), (10, 1), (10, 2), (10, 7),
 (11, 4), (11, 7),
 (12, 2), (12, 5),
 (13, 6), (13, 8),
@@ -135,3 +136,9 @@ VALUES
 (23, 3), (23, 5),
 (24, 4), (24, 7),
 (25, 1), (25, 2);
+
+
+INSERT INTO project_comment_likes (comment_id, user_id)
+VALUES
+(1, 2), (1, 3), (1, 8), (1, 7),
+(2, 1), (2, 4);

@@ -9,10 +9,8 @@
 - [ ] search bar
 
 ## Project Page
-- [ ] show date posted (project and comment)
 - [ ] replying to comments
 - [ ] sorting comments
-- [ ] liking comments
 - [ ] style better
  
 ## Login/SignUp

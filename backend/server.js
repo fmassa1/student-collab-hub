@@ -47,6 +47,8 @@ app.delete('/api/projects/:project_id/unlike', authenticator, projectsController
 
 app.post('/api/projects/:project_id/comments/', authenticator, projectsController.postCommentOnProjectHandler);
 app.delete('/api/projects/:project_id/comments/:comment_id', authenticator, projectsController.deleteCommentOnProjectHandler);
+app.post('/api/projects/:project_id/comments/:comment_id/like', authenticator, projectsController.likeCommentOnProjectHandler);
+app.delete('/api/projects/:project_id/comments/:comment_id/unlike', authenticator, projectsController.unlikeCommentOnProjectHandler);
 
 
 //user apis

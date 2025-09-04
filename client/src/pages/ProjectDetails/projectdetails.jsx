@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 
-import { postComment, deleteComment } from '../../services/commentAPI';
+import { postComment, deleteComment, likeComment, unlikeComment } from '../../services/commentAPI';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 
@@ -10,7 +10,7 @@ import './projectdetails.css'
 
 function ProjectDetails() {
     const [error, setError] = useState(null);
-    const { user, token} = useContext(AuthContext);
+    const { user, token } = useContext(AuthContext);
     const { id } = useParams();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -181,6 +181,35 @@ function ProjectDetails() {
         }
     };
 
+    const handleToggleCommentLike = async (commentId, userLiked) => {
+        try {
+            if (userLiked) {
+                await unlikeComment(id, commentId, token);
+                setProject(prev => ({
+                    ...prev,
+                    comments: prev.comments.map(c =>
+                        c.id === commentId 
+                            ? { ...c, likes: c.likes - 1, liked_by_user: false }
+                            : c
+                    )
+                }));
+            } else {
+                await likeComment(id, commentId, token);
+                setProject(prev => ({
+                    ...prev,
+                    comments: prev.comments.map(c =>
+                        c.id === commentId 
+                            ? { ...c, likes: c.likes + 1, liked_by_user: true }
+                            : c
+                    )
+                }));
+            }
+        } catch (err) {
+            console.error("Error toggling comment like:", err);
+            setError(parseInt(err.message) || 500);
+        }
+    };
+
     const handleDeleteProject = async () => {
         if (!window.confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
             return;
@@ -343,6 +372,17 @@ function ProjectDetails() {
                                             day: "numeric"
                                         })}</span>
                                     <p>{c.comment}</p>
+                                    <button 
+                                        className={`comment-like-button ${c.liked_by_user ? 'liked' : ''}`}
+                                        onClick={() => handleToggleCommentLike(c.id, c.liked_by_user)}
+                                    >
+                                        <img 
+                                            src={c.liked_by_user ? "/thumbs-up-filled.svg" : "/thumbs-up-outline.svg"} 
+                                            alt="Like" 
+                                            className="like-icon"
+                                        />
+                                        <span>{c.likes}</span>
+                                    </button>
                                 
                                     {user && c.username === user.username && (
                                         <button

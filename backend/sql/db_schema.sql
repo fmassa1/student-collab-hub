@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS peer_spark;
 USE peer_spark;
 
 DROP TABLE IF EXISTS project_likes;
+DROP TABLE IF EXISTS project_comment_likes;
 DROP TABLE IF EXISTS project_comments;
 DROP TABLE IF EXISTS project_views;
 DROP TABLE IF EXISTS project_tags;
@@ -47,6 +48,14 @@ CREATE TABLE project_comments (
     comment VARCHAR(100) NOT NULL,
     date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+CREATE TABLE project_comment_likes (
+    comment_id INT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (comment_id, user_id),
+    FOREIGN KEY (comment_id) REFERENCES project_comments(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
