@@ -143,9 +143,8 @@ async function postCommentOnProjectHandler(req, res) {
         if (!comment || comment.trim() === '') {
             return res.status(400).json({ error: 'Comment cannot be empty' });
         }
-
         const newComment = await projectsModule.postCommentOnProject(user_id, project_id, comment);
-
+        console.log(newComment)
         res.status(201).json(newComment);
     } catch (err) {
         console.error(err);

@@ -148,9 +148,12 @@ function ProjectDetails() {
             const createdComment = await postComment(id, newComment, token);
             
             const commentWithUser = {
+
                 id: createdComment.id,
                 username: user.username,
                 date_posted: createdComment.date_posted,
+                likes: createdComment.likes,
+                liked_by_user: createdComment.liked_by_user,
                 comment: newComment
             };
             

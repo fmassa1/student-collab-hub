@@ -150,16 +150,16 @@ async function postCommentOnProject(user_id, project_id, comment) {
      VALUES (?, ?, ?)`,
     [project_id, user_id, comment]
   );
+  const [rows] = await db.query(`
+    SELECT pc.id, pc.comment, pc.date_posted, COUNT(DISTINCT pcl.user_id) as likes, MAX(pcl.user_id = ?) AS liked_by_user, u.username
+    FROM project_comments pc
+    LEFT JOIN users u ON pc.user_id = u.id 
+    LEFT JOIN project_comment_likes pcl ON pc.id = pcl.comment_id 
+    WHERE pc.project_id = ?
+    GROUP BY pc.id, pc.comment, pc.date_posted, u.username`, 
+  [user_id, project_id]);
 
-  const [rows] = await db.query(
-    `SELECT pc.id, pc.comment, pc.date_posted, u.username
-     FROM project_comments pc
-     JOIN users u ON pc.user_id = u.id
-     WHERE pc.id = ?`,
-    [result.insertId]
-  );
-
-  return rows[0]; 
+  return rows[rows.length - 1]; 
 }
 
 async function deleteCommentOnProject(user_id, project_id, comment_id) {
