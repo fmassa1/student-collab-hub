@@ -257,8 +257,9 @@ function ProjectDetails() {
                 ): (
                     <>
                         <div className="project-header">
-                            <h1 className="project-title">{project.name}</h1>
-                            <span className="project-meta">
+                            <div>
+                                <h1 className="project-title">{project.name}</h1>
+                                <span className="project-meta">
                                 Posted by{" "}
                                 <strong 
                                     onClick={() => navigate(`/profile/${project.username}`)} 
@@ -266,7 +267,13 @@ function ProjectDetails() {
                                 >
                                     {project.username}
                                 </strong>
-                            </span>
+                                </span>
+                            </div>
+                            
+                            <div className="project-views">
+                                <img src='/eye.svg' alt=""  className="views-icon" />
+                                <span>{project.views} views </span>
+                            </div>
                         </div>
 
                         {project.image_url && (
@@ -301,9 +308,14 @@ function ProjectDetails() {
                         <button 
                             className={`like-button ${liked ? 'liked' : ''}`} 
                             onClick={handleToggleLike}
-                        >
-                            {liked ? 'Liked' : 'Like'} ({likes})
-                        </button>
+                            >
+                            <img 
+                                src={liked ? "/thumbs-up-filled.svg" : "/thumbs-up-outline.svg"} 
+                                alt="Like" 
+                                className="like-icon"
+                            />
+                            <span className="like-count">{likes}</span>
+                         </button>
 
                         <div className="project-comments">
                             <h3>Comments ({project.comments.length})</h3>

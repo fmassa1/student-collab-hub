@@ -17,9 +17,29 @@
 }
 
 .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
     margin-bottom: 1.5rem;
 }
 
+.project-views {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 600;
+    white-space: nowrap;
+}
+  
+.project-views .views-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.8;
+}
+  
 .project-title {
     font-size: 2rem;
     font-weight: 800;
@@ -81,15 +101,24 @@
 }
 
 .like-button {
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
     border: 1px solid #001e62;
-    background: white;
+    background: #fff;
     color: #001e62;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 1rem;
+    margin-top: 1.25rem;
     transition: all 0.3s ease;
+}
+
+.like-button img,
+.like-button svg {
+    width: 20px;
+    height: 20px;
 }
 
 .like-button:hover {
@@ -99,7 +128,7 @@
 
 .like-button.liked {
     background: #001e62;
-    color: white;
+    color: #fff;
     border-color: #001e62;
 }
 
