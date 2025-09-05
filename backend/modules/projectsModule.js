@@ -135,6 +135,17 @@ async function likeProject(user_id, project_id) {
     [user_id, project_id]
   );
 
+  const [user] = await db.query(`
+    SELECT user_id
+    FROM projects
+    WHERE id = ?
+  `, [project_id]);
+
+  //if user likes their own project don't add a notifcation
+  if(user_id != user[0].user_id) {
+    addNotification(project_id, user_id, user[0].user_id, "project like");
+  }
+
   return {success: true, user_id, project_id };
 }
 
@@ -143,6 +154,16 @@ async function unlikeProject(user_id, project_id) {
     `DELETE FROM project_likes  WHERE user_id = ? AND project_id = ?`,
     [user_id, project_id]
   );
+
+  const [notification] = await db.query(
+    `SELECT id
+     FROM notifications
+     WHERE from_user_id = ? AND project_id = ? AND type = ?
+    `, [user_id, project_id, "project like"]
+  );
+  if(notification[0]) {
+    removeNotification(notification[0].id);
+  }
 
   return { success: result.affectedRows > 0, user_id, project_id };
 }
@@ -162,7 +183,20 @@ async function postCommentOnProject(user_id, project_id, comment) {
     GROUP BY pc.id, pc.comment, pc.date_posted, u.username`, 
   [user_id, project_id]);
 
-  return rows[rows.length - 1]; 
+  const newComment = rows[rows.length - 1];
+
+  const [user] = await db.query(`
+    SELECT user_id
+    FROM projects
+    WHERE id = ?
+  `, [project_id]);
+
+  //if user comments on their own project don't add a notifcation
+  if(user_id != user[0].user_id) {
+    addNotification(project_id, user_id, user[0].user_id, "comment", newComment.id);
+  }
+
+  return newComment; 
 }
 
 async function deleteCommentOnProject(user_id, project_id, comment_id) {
@@ -172,6 +206,16 @@ async function deleteCommentOnProject(user_id, project_id, comment_id) {
      WHERE user_id = ? AND project_id = ? AND id = ?`,
     [user_id, project_id, comment_id]
   );
+
+  const [notification] = await db.query(
+    `SELECT id
+     FROM notifications
+     WHERE from_user_id = ? AND comment_id = ? AND type = ?
+    `, [user_id, comment_id, "comment"]
+  );
+  if(notification[0]) {
+    removeNotification(notification[0].id);
+  }
 
   return { success: result.affectedRows > 0, user_id, project_id, comment_id };
 }
@@ -184,10 +228,14 @@ async function likeCommentOnProject(user_id, comment_id, project_id) {
   );
   const [user] = await db.query(`
     SELECT user_id
-    FROM projects
+    FROM project_comments
     WHERE id = ?
-  `, [project_id]);
-  addNotification(project_id, user_id, user[0].user_id, "comment like", comment_id)
+  `, [comment_id]);
+
+  //if user likes their own comment don't add a notifcation
+  if(user_id != user[0].user_id) {
+    addNotification(project_id, user_id, user[0].user_id, "comment like", comment_id);
+  }
   return {success: true, comment_id, user_id};
 }
 
@@ -203,7 +251,9 @@ async function unlikeCommentOnProject(user_id, comment_id) {
      WHERE from_user_id = ? AND comment_id = ? AND type = ?
     `, [user_id, comment_id, "comment like"]
   );
-  removeNotification(notification[0].id);
+  if(notification[0]) {
+    removeNotification(notification[0].id);
+  }
 
   return { success: result.affectedRows > 0, comment_id, user_id };
 }
