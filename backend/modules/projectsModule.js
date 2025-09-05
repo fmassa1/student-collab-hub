@@ -6,6 +6,7 @@ async function getAllProjects(sortColumn) {
     FROM projects p
     LEFT JOIN project_likes pl ON p.id = pl.project_id
     LEFT JOIN project_views pv ON p.id = pv.project_id
+    WHERE p.deleted = false
     GROUP BY p.id
     ORDER BY ${sortColumn} DESC
   `);
@@ -18,16 +19,18 @@ async function getProjectsByTags(tags) {
     `SELECT DISTINCT p.* 
      FROM projects p
      JOIN project_tags pt ON p.id = pt.project_id
-     WHERE LOWER(pt.tag) IN (${placeholders})`,
+     WHERE LOWER(pt.tag) IN (${placeholders}) AND p.deleted = false`,
     tags.map(t => t.toLowerCase())
   );
   return rows;
 }
 
 async function getProjectById(project_id, user_id) {
-  const [project] = await db.query(`SELECT projects.*, users.username FROM projects 
+  const [project] = await db.query(`
+    SELECT projects.*, users.username 
+    FROM projects 
     JOIN users ON projects.user_id = users.id 
-    WHERE projects.id = ?`, [project_id]);
+    WHERE projects.id = ? AND projects.deleted = false`, [project_id]);
 
   if(project) {
     projectViewed(user_id, project_id);
@@ -39,7 +42,7 @@ async function getProjectById(project_id, user_id) {
     FROM project_comments pc
     LEFT JOIN users u ON pc.user_id = u.id 
     LEFT JOIN project_comment_likes pcl ON pc.id = pcl.comment_id 
-    WHERE pc.project_id = ?
+    WHERE pc.project_id = ? AND pc.deleted = false
     GROUP BY pc.id, pc.comment, pc.date_posted, u.username`, 
   [user_id, project_id]);
   const [views] = await db.query(`SELECT * FROM project_views WHERE project_id = ?`, [project_id]);
@@ -58,7 +61,7 @@ async function getProjectsByUsername(username) {
     SELECT projects.*
     FROM projects
     LEFT JOIN users ON users.id = projects.user_id
-    WHERE users.username = ?
+    WHERE users.username = ? AND projects.deleted = false
 
   `, [username]
   );
@@ -118,7 +121,7 @@ async function updateProject(user_id, project_id, name, description, tags) {
 
 async function deleteProject(user_id, project_id) {
   const [result] = await db.query(
-    `DELETE FROM projects  WHERE user_id = ? AND id = ?`,
+    `UPDATE projects set deleted = TRUE WHERE user_id = ? AND id = ?`,
     [user_id, project_id]
   );
 
@@ -164,7 +167,9 @@ async function postCommentOnProject(user_id, project_id, comment) {
 
 async function deleteCommentOnProject(user_id, project_id, comment_id) {
   const [result] = await db.query(
-    `DELETE FROM project_comments  WHERE user_id = ? AND project_id = ? AND id = ?`,
+    `UPDATE project_comments 
+     SET deleted = TRUE 
+     WHERE user_id = ? AND project_id = ? AND id = ?`,
     [user_id, project_id, comment_id]
   );
 
@@ -193,15 +198,15 @@ async function unlikeCommentOnProject(user_id, comment_id) {
 async function projectViewed(user_id, project_id) {
   const [viewed] = await db.query(
     `SELECT * 
-    FROM project_views
-    WHERE project_id = ? AND user_id = ?
+     FROM project_views
+     WHERE project_id = ? AND user_id = ?
     `, [project_id, user_id]);
 
 
   if(viewed.length === 0) {
     const [results] = await db.query(
       `INSERT INTO project_views (project_id, user_id)
-      VALUES (?, ?)`,
+       VALUES (?, ?)`,
       [project_id, user_id]);
   }
 }
