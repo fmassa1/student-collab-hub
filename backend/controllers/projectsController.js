@@ -173,7 +173,8 @@ async function likeCommentOnProjectHandler(req, res) {
     try {
         const user_id = req.user.id;         
         const comment_id = req.params.comment_id;
-        const likedComment = await projectsModule.likeCommentOnProject(user_id, comment_id);
+        const project_id = req.params.project_id;
+        const likedComment = await projectsModule.likeCommentOnProject(user_id, comment_id, project_id);
 
         res.status(201).json(likedComment);
     } catch (err) {

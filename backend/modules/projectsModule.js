@@ -176,12 +176,18 @@ async function deleteCommentOnProject(user_id, project_id, comment_id) {
   return { success: result.affectedRows > 0, user_id, project_id, comment_id };
 }
 
-async function likeCommentOnProject(user_id, comment_id) {
+async function likeCommentOnProject(user_id, comment_id, project_id) {
   const [result] = await db.query(
     `INSERT INTO project_comment_likes (comment_id, user_id)
      VALUES (?, ?)`,
     [comment_id, user_id]
   );
+  const [user] = await db.query(`
+    SELECT user_id
+    FROM projects
+    WHERE id = ?
+  `, [project_id]);
+  addNotification(project_id, user_id, user[0].user_id, "comment like", comment_id)
   return {success: true, comment_id, user_id};
 }
 
@@ -190,6 +196,14 @@ async function unlikeCommentOnProject(user_id, comment_id) {
     `DELETE FROM project_comment_likes  WHERE comment_id = ? AND user_id = ?`,
     [comment_id, user_id]
   );
+
+  const [notification] = await db.query(
+    `SELECT id
+     FROM notifications
+     WHERE from_user_id = ? AND comment_id = ? AND type = ?
+    `, [user_id, comment_id, "comment like"]
+  );
+  removeNotification(notification[0].id);
 
   return { success: result.affectedRows > 0, comment_id, user_id };
 }
@@ -210,6 +224,25 @@ async function projectViewed(user_id, project_id) {
       [project_id, user_id]);
   }
 }
+
+async function addNotification(project_id, from_user_id, to_user_id, type, comment_id = null) {
+  const [result] = await db.query(
+    `INSERT INTO notifications (project_id, user_id, from_user_id, type, comment_id)
+     VALUES (?, ?, ?, ?, ?)`,
+    [project_id, to_user_id, from_user_id, type, comment_id]
+  );
+  return {success: true, project_id, to_user_id, from_user_id,  type, comment_id};
+}
+
+async function removeNotification(notification_id) {
+  const [result] = await db.query(
+    `DELETE FROM notifications
+     WHERE id = ?`,
+    [notification_id]
+  );
+  return {success: true, notification_id};
+}
+
 
 module.exports = {
     getAllProjects,
