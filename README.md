@@ -17,7 +17,6 @@
 - [ ] styling
 
 ## User Profile
-- [ ] notifications 
 - [ ] more user info
 - [ ] style better
 
@@ -27,5 +26,5 @@
 
 ## General
 - [+] keep users logged in (sessions)
-
 - - refresh tokens so users can stay logged in 
+- [ ] displaying notifications on frontend for users

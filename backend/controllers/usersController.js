@@ -85,10 +85,35 @@ async function updateProfileHandler(req, res) {
     }
 }
 
+async function getNotificationsHandler(req, res) {
+    try {
+        const user_id = req.user.id;
+        const notifications = await usersModule.getUserNotifications(user_id);
+        res.json(notifications);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error getAllUsers' });
+    }
+}
+
+async function markNotificationReadHandler(req, res) {
+    try {
+        const user_id = req.user.id;
+        const { notification_id } = req.body;
+        const notification = await usersModule.markUserNotificationRead(user_id);
+        res.json(notification);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error getAllUsers' });
+    }
+}
+
 module.exports = {
     addNewUser,
     loginUser,
     getAllUsers,
     getUserByUsername,
     updateProfileHandler,
+    getNotificationsHandler,
+    markNotificationReadHandler,
 };

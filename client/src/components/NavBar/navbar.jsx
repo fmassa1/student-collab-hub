@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { NotificationsContext } from "../../context/Notifications";
+
 import { Link } from "react-router-dom";
+
 
 import './navbar.css';
 
 
 function NavBar() {
     const { user, logout } = useContext(AuthContext);
+    const { notifications } = useContext(NotificationsContext);
 
     return (
         <nav className="navbar">
@@ -19,14 +23,18 @@ function NavBar() {
                     <li><a href="/create">Create Post</a></li>
                     {user ? (
                         <>
-                                <Link to={`/profile/${user.username}`}>
+                            <Link to={`/profile/${user.username}`}>
                                     {user.username}
-                                </Link>                           
-                                 <li>
+                            </Link>                           
+                             <li>
                                 <button className="logout-button" onClick={logout}>
                                     Logout
                                 </button>
                             </li>
+                            <div>
+                                {notifications.length} new notis
+                            </div>
+
                         </>
                     ) : (
                         <>

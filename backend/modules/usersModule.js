@@ -107,11 +107,33 @@ async function updateProfile(id, first_name, last_name, school) {
     return rows[0];
 }
 
+async function getUserNotifications(user_id) {
+    const [notifications] = await db.query(`
+        SELECT * 
+        FROM notifications
+        WHERE user_id = ? AND seen = false
+    `, [user_id]
+    );
+    return notifications;
+}
+
+async function markUserNotificationRead(notifications_id) {
+    const [updated] = await db.query(`
+        UPDATE notifications 
+        SET seen = TRUE
+        WHERE id = ? 
+    `, [notifications_id]
+    );
+    return updated;
+}
+
 
 module.exports = {
     addNewUser,
     loginUser,
     getAllUsers,
     getUserByUsername,
-    updateProfile
+    updateProfile,
+    getUserNotifications,
+    markUserNotificationRead,
   };

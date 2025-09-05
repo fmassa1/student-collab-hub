@@ -53,8 +53,14 @@ app.delete('/api/projects/:project_id/comments/:comment_id/unlike', authenticato
 
 //user apis
 app.get('/api/users', authenticator, usersController.getAllUsers);
+
+app.get('/api/profile/notifications', authenticator, usersController.getNotificationsHandler);
+app.put('/api/profile/notifications/:id', authenticator, usersController.markNotificationReadHandler);
+
 app.get('/api/profile/:username', authenticator, usersController.getUserByUsername);
 app.put('/api/profile/:username', authenticator, usersController.updateProfileHandler);
+
+
 
 app.get('/api/profile/:username/projects', authenticator, projectsController.getProjectsByUsername);
 
