@@ -27,4 +27,4 @@
 ## General
 - [+] keep users logged in (sessions)
 - - refresh tokens so users can stay logged in 
-- [ ] displaying notifications on frontend for users
+- [ ] displaying a list of new notifications, clickable and link to show
