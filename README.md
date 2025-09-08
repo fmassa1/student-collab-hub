@@ -27,4 +27,4 @@
 ## General
 - [+] keep users logged in (sessions)
 - - refresh tokens so users can stay logged in 
-- [ ] displaying a list of new notifications, clickable and link to show
+- [ ] fix formating of notification drop downs
