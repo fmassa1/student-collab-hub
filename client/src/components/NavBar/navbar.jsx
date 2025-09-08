@@ -1,16 +1,15 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { NotificationsContext } from "../../context/Notifications";
-
 import { Link } from "react-router-dom";
-
-
 import './navbar.css';
 
 
 function NavBar() {
     const { user, logout } = useContext(AuthContext);
     const { notifications } = useContext(NotificationsContext);
+    const [showDropdown, setShowDropdown] = useState(false);
+
 
     return (
         <nav className="navbar">
@@ -24,17 +23,34 @@ function NavBar() {
                     {user ? (
                         <>
                             <Link to={`/profile/${user.username}`}>
-                                    {user.username}
-                            </Link>                           
-                             <li>
+                                {user.username}
+                            </Link>
+                            <li>
                                 <button className="logout-button" onClick={logout}>
                                     Logout
                                 </button>
                             </li>
-                            <div>
-                                {notifications.length} new notis
-                            </div>
-
+                            <li className="notifications">
+                                <button 
+                                    className="notifications-button" 
+                                    onClick={() => setShowDropdown(prev => !prev)}
+                                >
+                                    Notifications: {notifications.length}
+                                </button>
+                                {showDropdown && (
+                                    <div className="notifications-dropdown">
+                                        {notifications.length > 0 ? (
+                                            notifications.map((n, idx) => (
+                                                <div key={idx} className="notification-item">
+                                                    {n.message || "New Notification"}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="notification-empty">No new notifications</div>
+                                        )}
+                                    </div>
+                                )}
+                            </li>
                         </>
                     ) : (
                         <>

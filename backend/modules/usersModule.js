@@ -109,12 +109,39 @@ async function updateProfile(id, first_name, last_name, school) {
 
 async function getUserNotifications(user_id) {
     const [notifications] = await db.query(`
-        SELECT * 
-        FROM notifications
-        WHERE user_id = ? AND seen = false
-    `, [user_id]
-    );
-    return notifications;
+        SELECT n.*, u.username AS from_username, p.name AS project_title
+        FROM notifications n
+        JOIN users u ON n.from_user_id = u.id
+        JOIN projects p ON n.project_id = p.id
+        WHERE n.user_id = ? AND n.seen = false
+        ORDER BY n.date_created DESC
+    `, [user_id]);
+
+    return notifications.map(n => {
+        let message;
+        switch (n.type) {
+            case "comment like":
+                message = `${n.from_username} liked you comment on "${n.project_title}"`;
+                break;
+            case "comment":
+                message = `${n.from_username} commented on your project "${n.project_title}"`;
+                break;
+            case "project like":
+                message = `${n.from_username} liked your project "${n.project_title}"`;
+                break;
+            default:
+                message = `New activity on "${n.project_title}"`;
+        }
+
+        return {
+            id: n.id,
+            message,
+            type: n.type,
+            seen: n.seen,
+            date_created: n.date_created,
+            raw: n
+        };
+    });
 }
 
 async function markUserNotificationRead(notifications_id) {
