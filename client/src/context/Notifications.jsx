@@ -33,8 +33,26 @@ export function NotificationsProvider({ children }) {
         return () => clearInterval(interval);
     }, [token]);
 
+    async function markAsRead(notificationId) {
+        if (!token) return;
+        try {
+            await fetch(`http://localhost:5055/api/profile/notifications/${notificationId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ notification_id: notificationId })
+            });
+
+            setNotifications(prev => prev.filter(n => n.id !== notificationId));
+        } catch (err) {
+            console.error("Failed to mark notification as read:", err);
+        }
+    }
+
     return (
-        <NotificationsContext.Provider value={{ notifications, setNotifications }}>
+        <NotificationsContext.Provider value={{ notifications, setNotifications, markAsRead }}>
             {children}
         </NotificationsContext.Provider>
     );

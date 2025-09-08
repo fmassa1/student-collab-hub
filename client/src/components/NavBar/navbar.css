@@ -5,7 +5,7 @@
   padding: 1rem 0;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
   
@@ -89,6 +89,7 @@
 
 .notifications {
   position: relative;
+  z-index: 1000;
 }
 
 .notifications-button {
@@ -101,7 +102,7 @@
 
 .notifications-button:hover,
 .notifications-button:focus {
-  background: linear-gradient(135deg, #00123d, #203c7c); /* darker on hover */
+  background: linear-gradient(135deg, #00123d, #203c7c); 
   outline: none;
   color: white;
 }
@@ -117,13 +118,15 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0,0,0,0.15);
-  z-index: 10;
+  z-index: 2000;
+  pointer-events: auto;
 }
 
 .notification-item {
   padding: 10px;
   border-bottom: 1px solid #eee;
   font-size: 0.9rem;
+  cursor: pointer;
 }
 
 .notification-item:hover {

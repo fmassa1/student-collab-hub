@@ -7,7 +7,7 @@ import './navbar.css';
 
 function NavBar() {
     const { user, logout } = useContext(AuthContext);
-    const { notifications } = useContext(NotificationsContext);
+    const { notifications, markAsRead } = useContext(NotificationsContext);
     const [showDropdown, setShowDropdown] = useState(false);
 
 
@@ -42,7 +42,13 @@ function NavBar() {
                                         {notifications.length > 0 ? (
                                             notifications.map((n, idx) => (
                                                 <div key={idx} className="notification-item">
-                                                    {n.message || "New Notification"}
+                                                    <Link to={`/projects/${n.project_id}`} className="notification-link" 
+                                                        onClick={() => {
+                                                            markAsRead(n.id);
+                                                            setShowDropdown(prev => !prev);
+                                                        }}> 
+                                                        {n.message || "New Notification"}
+                                                    </Link>
                                                 </div>
                                             ))
                                         ) : (

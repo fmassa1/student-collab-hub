@@ -99,8 +99,8 @@ async function getNotificationsHandler(req, res) {
 async function markNotificationReadHandler(req, res) {
     try {
         const user_id = req.user.id;
-        const { notification_id } = req.body;
-        const notification = await usersModule.markUserNotificationRead(user_id);
+        const notification_id  = req.params.id;
+        const notification = await usersModule.markUserNotificationRead(notification_id);
         res.json(notification);
     } catch (err) {
         console.error(err);

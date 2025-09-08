@@ -138,6 +138,7 @@ async function getUserNotifications(user_id) {
             message,
             type: n.type,
             seen: n.seen,
+            project_id: n.project_id,
             date_created: n.date_created,
             raw: n
         };
