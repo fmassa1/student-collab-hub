@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
+import TagSelector from "../../components/TagSelector/TagSelector";
 
 import './projects.css';
 
@@ -15,6 +16,9 @@ function Projects() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const [formData, setFormData] = useState({
+        tags: []
+    });
 
 
     useEffect(() => {
@@ -23,12 +27,10 @@ function Projects() {
         const sort = params.get('sort'); 
 
         let url = 'http://localhost:5055/api/projects';
-        if (tags) {
-            url += `?tags=${encodeURIComponent(tags)}`;
-        }
-        if (sort) {
-            url += `?sort=${encodeURIComponent(sort)}`;
-        }
+        const query = [];
+        if (tags) query.push(`tags=${encodeURIComponent(tags)}`);
+        if (sort) query.push(`sort=${encodeURIComponent(sort)}`);
+        if (query.length) url += `?${query.join("&")}`;
 
         fetch(url, {
             method: 'GET',
@@ -52,7 +54,7 @@ function Projects() {
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
         });
-    }, []);
+    }, [location.search, token]);
     
     if (error) {
         return <ErrorPage code={error} />;
@@ -63,11 +65,36 @@ function Projects() {
 
     const visibleProjects = allProjects.slice(0, visibleCount);
 
-    return (
+    const handleTagsChange = (tags) => {
+        setFormData(prev => ({ ...prev, tags }));
+        const query = new URLSearchParams(location.search);
 
+        if (tags.length > 0) {
+            query.set("tags", tags.join(","));
+        } else {
+            query.delete("tags");
+        }
+
+        navigate({
+            pathname: "/projects",
+            search: query.toString()
+        });
+    };
+
+    return (
+        
         
         <div className="projects-page">
+
             <h1 className="projects-heading">Featured Projects</h1>
+
+            <div className="filter-by-tag">
+                <TagSelector 
+                    selected={formData.tags || []}
+                    setSelected={handleTagsChange}
+                />
+            </div>
+
             <div className="project-grid">
                 {visibleProjects.map(project => (
                 <div key={project.id} className="project-card" onClick={() => navigate(`/projects/${project.id}`)}>

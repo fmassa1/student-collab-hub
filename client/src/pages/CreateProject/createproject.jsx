@@ -10,13 +10,6 @@ function CreateProject() {
     const navigate = useNavigate();
     const { user, token} = useContext(AuthContext);
 
-    const techOptions = [
-        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
-        'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
-        'React', 'Vue', 'Angular', 'Node.js', 'Express', 
-        'Django', 'Flask', 'Spring', 'MongoDB', 'PostgreSQL'
-    ];
-
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -32,11 +25,6 @@ function CreateProject() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleTagsChange = (e) => {
-        const selected = Array.from(e.target.selectedOptions, option => option.value);
-        setFormData(prev => ({ ...prev, tags: selected }));
     };
 
     const isValidGitHubUrl = (string) => {
@@ -178,7 +166,6 @@ function CreateProject() {
                 </label>
 
                 <TagSelector
-                    options={techOptions}
                     selected={formData.tags || []}
                     setSelected={(tags) =>
                         setFormData((prev) => ({ ...prev, tags }))

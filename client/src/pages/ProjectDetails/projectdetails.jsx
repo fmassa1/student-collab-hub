@@ -14,15 +14,7 @@ function ProjectDetails() {
     const { user, token } = useContext(AuthContext);
     const { id } = useParams();
     const navigate = useNavigate();
-
-
     const [isEditing, setIsEditing] = useState(false);
-    const techOptions = [
-        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
-        'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
-        'React', 'Vue', 'Angular', 'Node.js', 'Express', 
-        'Django', 'Flask', 'Spring', 'MongoDB', 'PostgreSQL'
-    ];
 
     const [project, setProject] = useState(null);
     const [liked, setLiked] = useState(false)
@@ -273,7 +265,6 @@ function ProjectDetails() {
                         <input name="name" value={formData.name || ""} onChange={handleChange} />
                         <input name="description" value={formData.description || ""} onChange={handleChange} />
                         <TagSelector
-                            options={techOptions}
                             selected={formData.tags}
                             setSelected={handleTagsChange} 
                         />

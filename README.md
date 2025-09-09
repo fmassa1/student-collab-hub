@@ -1,6 +1,5 @@
 # TODOs
 ## Project Posting
-- [ ] fix tags
 - [ ] upload pictures instead of url
 
 ## Project Page

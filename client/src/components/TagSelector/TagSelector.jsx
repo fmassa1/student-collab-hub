@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import "./tagselector.css";
 
-function TagSelector({ options, selected, setSelected }) {
+function TagSelector({ selected, setSelected }) {
     const [search, setSearch] = useState("");
 
-    const filteredOptions = options.filter(
+
+    const techOptions = [
+        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
+        'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
+        'React', 'Vue', 'Angular', 'Node.js', 'Express', 
+        'Django', 'Flask', 'Spring', 'MongoDB', 'PostgreSQL'
+    ];
+
+    const filteredOptions = techOptions.filter(
         (opt) =>
         opt.toLowerCase().includes(search.toLowerCase()) &&
         !selected.includes(opt)
