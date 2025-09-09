@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
+import TagSelector from '../../components/TagSelector/TagSelector';
 import { AuthContext } from "../../context/AuthContext";
 import './createproject.css';
 
@@ -177,21 +177,16 @@ function CreateProject() {
                     />
                 </label>
 
-                <label>
-                    Tags
-                    <select
-                        name="tags"
-                        multiple
-                        value={formData.tags}
-                        onChange={handleTagsChange}
-                    >
-                        {techOptions.map(tag => (
-                            <option key={tag} value={tag}>
-                                {tag}
-                            </option>
-                        ))}
-                    </select>
-                </label>
+                <TagSelector
+                    options={techOptions}
+                    selected={formData.tags}
+                    setSelected={(updater) =>
+                        setFormData((prev) => ({
+                        ...prev,
+                        tags: typeof updater === "function" ? updater(prev.tags) : updater
+                        }))
+                    }
+                />
 
                 <button type="submit" disabled={loading}>
                     {loading ? 'Submitting...' : 'Create Project'}

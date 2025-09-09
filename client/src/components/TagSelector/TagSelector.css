@@ -1,0 +1,71 @@
+.tag-selector {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #e6f0ff;
+    border: 1px solid #ccc;
+    padding: 0.3rem 0.6rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.tag-chip button {
+    color: black;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.3em 0.6em;
+}
+
+.tag-chip button:hover {
+    background: rgb(216, 225, 253);
+}
+
+.tag-s input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 0.2rem;
+    z-index: 10;
+}
+
+.dropdown li {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background: #f0f6ff;
+}
+
+.no-match {
+    padding: 0.5rem;
+    color: #888;
+}
