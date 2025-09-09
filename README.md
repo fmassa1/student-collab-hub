@@ -3,7 +3,8 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
-- [ ] front end for searching by tags
+- [--] front end for searching by tags
+- - - - fix routing for tags like c++, c#, etc
 - [ ] front end for sorting projects based on likes, views, etc
 - [ ] search bar
 
