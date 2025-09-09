@@ -179,12 +179,9 @@ function CreateProject() {
 
                 <TagSelector
                     options={techOptions}
-                    selected={formData.tags}
-                    setSelected={(updater) =>
-                        setFormData((prev) => ({
-                        ...prev,
-                        tags: typeof updater === "function" ? updater(prev.tags) : updater
-                        }))
+                    selected={formData.tags || []}
+                    setSelected={(tags) =>
+                        setFormData((prev) => ({ ...prev, tags }))
                     }
                 />
 

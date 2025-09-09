@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 
 import { postComment, deleteComment, likeComment, unlikeComment } from '../../services/commentAPI';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
+import TagSelector from "../../components/TagSelector/TagSelector";
 
 import './projectdetails.css'
 
@@ -12,9 +13,10 @@ function ProjectDetails() {
     const [error, setError] = useState(null);
     const { user, token } = useContext(AuthContext);
     const { id } = useParams();
+    const navigate = useNavigate();
+
 
     const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({});
     const techOptions = [
         'JavaScript', 'TypeScript', 'Python', 'Java', 'C++', 
         'C#', 'Go', 'Ruby', 'PHP', 'Swift', 
@@ -27,8 +29,11 @@ function ProjectDetails() {
     const [likes, setLikes] = useState(0)
     const [newComment, setNewComment] = useState('');
 
-    
-    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        name: "",
+        description: "",
+        tags: []
+      });
     
     useEffect(() => {
         fetch(`http://localhost:5055/api/projects/${id}`, {
@@ -83,11 +88,10 @@ function ProjectDetails() {
         }));
     };
       
-    const handleTagsChange = (e) => {
-        const values = Array.from(e.target.selectedOptions, option => option.value);
+    const handleTagsChange = (newTags) => {
         setFormData(prev => ({
-          ...prev,
-          tags: values
+            ...prev,
+            tags: newTags
         }));
     };
 
@@ -268,21 +272,11 @@ function ProjectDetails() {
                     <>
                         <input name="name" value={formData.name || ""} onChange={handleChange} />
                         <input name="description" value={formData.description || ""} onChange={handleChange} />
-                        <label>
-                            Tags
-                            <select
-                                name="tags"
-                                multiple
-                                value={formData.tags}
-                                onChange={handleTagsChange}
-                            >
-                                {techOptions.map(tag => (
-                                    <option key={tag} value={tag}>
-                                        {tag}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
+                        <TagSelector
+                            options={techOptions}
+                            selected={formData.tags}
+                            setSelected={handleTagsChange} 
+                        />
                         <button onClick={handleSave}>Save</button>
                         <button onClick={() => setIsEditing(false)}>Cancel</button>
                     

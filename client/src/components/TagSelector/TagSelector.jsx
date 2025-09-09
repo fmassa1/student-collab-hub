@@ -11,12 +11,12 @@ function TagSelector({ options, selected, setSelected }) {
     );
 
     const addTag = (tag) => {
-        setSelected((prev) => [...prev, tag]);
+        setSelected([...selected, tag]);
         setSearch(""); 
     };
 
     const removeTag = (tag) => {
-        setSelected((prev) => prev.filter((t) => t !== tag));
+        setSelected(selected.filter((t) => t !== tag));
     };
 
     return (

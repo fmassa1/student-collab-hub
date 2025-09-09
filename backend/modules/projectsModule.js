@@ -114,9 +114,7 @@ async function updateProject(user_id, project_id, name, description, tags) {
     );
   }
   
-
-
-  return getProjectById(project_id);
+  return getProjectById(project_id, user_id);
 }
 
 async function deleteProject(user_id, project_id) {
