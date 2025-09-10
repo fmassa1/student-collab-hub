@@ -5,6 +5,7 @@ import { postComment, deleteComment, likeComment, unlikeComment } from '../../se
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import TagSelector from "../../components/TagSelector/TagSelector";
+import projectTags from "../../components/TagSelector/projectTags.json";
 
 import './projectdetails.css'
 
@@ -24,7 +25,7 @@ function ProjectDetails() {
     const [formData, setFormData] = useState({
         name: "",
         description: "",
-        tags: []
+        tags: [],
       });
     
     useEffect(() => {
@@ -60,11 +61,14 @@ function ProjectDetails() {
 
     useEffect(() => {
         if (isEditing && project) {
-          setFormData({
-            name: project.name || "",
-            description: project.description || "",
-            tags: project.tags || []
-          });
+            const tagIds = projectTags
+                .filter(tag => project.tags.includes(tag.label))
+                .map(tag => tag.id);
+            setFormData({
+                name: project.name || "",
+                description: project.description || "",
+                tags: tagIds || [],
+            });
         }
     }, [isEditing, project]);
 
