@@ -1,4 +1,5 @@
 const projectsModule = require('../Modules/projectsModule');
+const projectTags = require('../data/projectTags.json');
 
 
 async function getAllProjects(req, res) {
@@ -14,9 +15,15 @@ async function getAllProjects(req, res) {
         const sortColumn = validSorts[sort] || "date_posted";
 
         if (tags) {
-            const tagList = tags.split(",");
-            const projects = await projectsModule.getProjectsByTags(tagList);
+            const tagList = tags.split(",").map(Number);
+
+            const tagLabels = projectTags
+                .filter(tag => tagList.includes(tag.id))
+                .map(tag => tag.label);
+
+            const projects = await projectsModule.getProjectsByTags(tagLabels);
             return res.json(projects);
+
         }
 
         const projects = await projectsModule.getAllProjects(sortColumn);
@@ -59,6 +66,10 @@ async function postProject(req, res) {
     try {
         const user_id = req.user.id;         
         const { name, description, image_url, linkedin_url, github_url, tags } = req.body;
+
+        const tagLabels = projectTags
+            .filter(tag => tags.includes(tag.id))
+            .map(tag => tag.label);
         
         const project = await projectsModule.postProject({
             name,
@@ -66,7 +77,7 @@ async function postProject(req, res) {
             image_url,
             linkedin_url,
             github_url,
-            tags,
+            tags: tagLabels,
             user_id
         });    
 
@@ -85,7 +96,11 @@ async function updateProjectHandler(req, res) {
         const project_id = req.params.id;
         const { name, description, tags } = req.body;
 
-        const updated_project = await projectsModule.updateProject(user_id, project_id, name, description, tags);
+        const tagLabels = projectTags
+            .filter(tag => tags.includes(tag.id))
+            .map(tag => tag.label);
+
+        const updated_project = await projectsModule.updateProject(user_id, project_id, name, description, tagLabels);
         res.json(updated_project);
     } catch (err) {
         console.error(err);

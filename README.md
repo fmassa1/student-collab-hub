@@ -4,7 +4,7 @@
 
 ## Project Page
 - [--] front end for searching by tags
-- - - - fix routing for tags like c++, c#, etc
+- - - - fix making sure projects contain all selected tags, not just one
 - [ ] front end for sorting projects based on likes, views, etc
 - [ ] search bar
 
