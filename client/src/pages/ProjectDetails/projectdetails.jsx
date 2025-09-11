@@ -12,6 +12,8 @@ import './projectdetails.css'
 
 function ProjectDetails() {
     const [error, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
+
     const { user, token } = useContext(AuthContext);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -56,6 +58,7 @@ function ProjectDetails() {
             console.error("Fetch failed:", err);
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
+            setErrorMessage(`Server error fetching project #${id}`)
         });
     }, [id]);
 
@@ -71,10 +74,6 @@ function ProjectDetails() {
             });
         }
     }, [isEditing, project]);
-
-    if (error) {
-        return <ErrorPage code={error} />;
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -110,6 +109,8 @@ function ProjectDetails() {
         } catch (err) {
           console.error("Failed to update project:", err);
           setError(parseInt(err.message) || 500);
+          setErrorMessage(`Server error updating project #${id}`);
+
         }
       };
 
@@ -131,12 +132,14 @@ function ProjectDetails() {
                 setLikes(prev => liked ? prev - 1 : prev + 1);
 
             } else {
-                throw new Error(res.status);
+                throw new Error(res.status, `Server error liking project #${id}`);
             }
         } catch (err) {
             console.error('Error toggling like:', err);
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
+            setErrorMessage(`Server error toggling like`);
+
         }
     };
 
@@ -166,6 +169,8 @@ function ProjectDetails() {
             console.error('Failed to post comment:', err);
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
+            setErrorMessage(`Server error posting comment`);
+
         }
     };
 
@@ -181,6 +186,8 @@ function ProjectDetails() {
             console.error("Failed to delete comment:", err);
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
+            setErrorMessage(`Server error deleting comment #${commentId}`);
+
         }
     };
 
@@ -210,6 +217,8 @@ function ProjectDetails() {
         } catch (err) {
             console.error("Error toggling comment like:", err);
             setError(parseInt(err.message) || 500);
+            setErrorMessage(`Server error liking comment #${commentId}`);
+
         }
     };
 
@@ -235,11 +244,13 @@ function ProjectDetails() {
             console.error("Failed to delete project:", err);
             const statusCode = parseInt(err.message);
             setError(statusCode || 500);
+            setErrorMessage(`Server error deleting project #${id}`);
+
         }
     };
 
     if (error) {
-        return <ErrorPage code={error} />;
+        return <ErrorPage code={error} error={errorMessage} />;
     }
 
     if(!project) {

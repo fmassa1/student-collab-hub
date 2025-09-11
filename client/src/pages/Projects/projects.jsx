@@ -57,7 +57,7 @@ function Projects() {
     }, [location.search, token]);
     
     if (error) {
-        return <ErrorPage code={error} />;
+        return <ErrorPage code={error}  />;
     }
     const loadMore = () => {
         setVisibleCount(prev=> Math.min(prev + 10, allProjects.length));

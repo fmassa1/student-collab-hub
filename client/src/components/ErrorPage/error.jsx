@@ -3,7 +3,7 @@ import { useContext } from "react";
 import './error.css';
 
 
-function ErrorPage({code}) {
+function ErrorPage({code, error }) {
     const messages = {
         404: "Page Not Found",
         401: "Unauthorized Access",
@@ -12,11 +12,13 @@ function ErrorPage({code}) {
         503: "Service Unavailable",
     };
 
+    const message = error || (messages[code] || "Something went wrong");
+    
     return (
          <div className="error-page">
             <div className="error-container">
                 <h1 className="error-code">{code}</h1>
-                <p className="error-message">{messages[code] || "Something went wrong"}</p>
+                <p className="error-message">{message}</p>
                 <a href="/" className="btn-primary">Go Home</a>
             </div>
         </div>

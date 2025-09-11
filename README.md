@@ -4,7 +4,7 @@
 
 ## Project Page
 - [--] front end for searching by tags
-- - - - fix making sure projects contain all selected tags, not just one
+- - - - fix making sure projects contain all selected tags, not just
 - [ ] front end for sorting projects based on likes, views, etc
 - [ ] search bar
 

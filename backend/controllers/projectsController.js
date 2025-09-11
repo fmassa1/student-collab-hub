@@ -78,7 +78,7 @@ async function postProject(req, res) {
             linkedin_url,
             github_url,
             tags: tagLabels,
-            user_id
+            user_id,
         });    
 
         res.status(201).json(project);
