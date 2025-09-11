@@ -39,7 +39,7 @@ function ProjectDetails() {
         })
         .then(res => {
             if (!res.ok) {
-                throw new Error(res.status);
+                throw { status: res.status, message: res.statusText };
             }
             return res.json();
         })
@@ -56,9 +56,9 @@ function ProjectDetails() {
         
         .catch(err => {
             console.error("Fetch failed:", err);
-            const statusCode = parseInt(err.message);
+            const statusCode = err.status;
             setError(statusCode || 500);
-            setErrorMessage(`Server error fetching project #${id}`)
+            setErrorMessage(err.message || `Server error fetching project #${id}`)
         });
     }, [id]);
 
@@ -251,10 +251,6 @@ function ProjectDetails() {
 
     if (error) {
         return <ErrorPage code={error} error={errorMessage} />;
-    }
-
-    if(!project) {
-        return <p>Project not found</p>
     }
 
     return (

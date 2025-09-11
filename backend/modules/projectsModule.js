@@ -1,6 +1,7 @@
 const db = require('../db');
 
-async function getAllProjects(sortColumn) {
+async function getAllProjects(sortColumn, sortOrder) {
+  const order = sortOrder === "most" ? "DESC" : "ASC";
   const [rows] = await db.query(`
     SELECT p.*, COUNT(DISTINCT pl.user_id) AS likes, COUNT(DISTINCT pv.user_id) AS views
     FROM projects p
@@ -8,7 +9,7 @@ async function getAllProjects(sortColumn) {
     LEFT JOIN project_views pv ON p.id = pv.project_id
     WHERE p.deleted = false
     GROUP BY p.id
-    ORDER BY ${sortColumn} DESC
+    ORDER BY ${sortColumn} ${order}
   `);
   return rows;
 }
@@ -19,7 +20,7 @@ async function getProjectsByTags(tags) {
     `
     SELECT p.*
     FROM projects p
-    JOIN project_tags pt ON p.id = pt.project_idzw
+    JOIN project_tags pt ON p.id = pt.project_id
     WHERE LOWER(pt.tag) IN (${placeholders}) AND p.deleted = false
     GROUP BY p.id
     HAVING COUNT(DISTINCT LOWER(pt.tag)) = ?
@@ -36,7 +37,8 @@ async function getProjectById(project_id, user_id) {
     JOIN users ON projects.user_id = users.id 
     WHERE projects.id = ? AND projects.deleted = false`, [project_id]);
 
-  if(project) {
+  
+  if(project.length >= 1) {
     projectViewed(user_id, project_id);
   }
   const [tags] = await db.query(`SELECT tag FROM project_tags WHERE project_id = ?`, [project_id]);

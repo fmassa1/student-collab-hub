@@ -25,11 +25,13 @@ function Projects() {
         const params = new URLSearchParams(location.search);
         const tags = params.get('tags'); 
         const sort = params.get('sort'); 
+        const order = params.get('order'); 
 
         let url = 'http://localhost:5055/api/projects';
         const query = [];
         if (tags) query.push(`tags=${encodeURIComponent(tags)}`);
         if (sort) query.push(`sort=${encodeURIComponent(sort)}`);
+        if (order) query.push(`order=${encodeURIComponent(order)}`);
         if (query.length) url += `?${query.join("&")}`;
 
         fetch(url, {
