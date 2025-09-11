@@ -22,7 +22,6 @@
 
 ## Error Page
 - [ ] better styling
-- [ ] better message (display error message received from server)
 
 ## General
 - [+] keep users logged in (sessions)

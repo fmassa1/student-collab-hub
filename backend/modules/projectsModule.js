@@ -14,13 +14,17 @@ async function getAllProjects(sortColumn) {
 }
 
 async function getProjectsByTags(tags) {
-  const placeholders = tags.map(() => "?").join(","); 
+  const placeholders = tags.map(() => "?").join(",");
   const [rows] = await db.query(
-    `SELECT DISTINCT p.* 
-     FROM projects p
-     JOIN project_tags pt ON p.id = pt.project_id
-     WHERE LOWER(pt.tag) IN (${placeholders}) AND p.deleted = false`,
-    tags.map(t => t.toLowerCase())
+    `
+    SELECT p.*
+    FROM projects p
+    JOIN project_tags pt ON p.id = pt.project_idzw
+    WHERE LOWER(pt.tag) IN (${placeholders}) AND p.deleted = false
+    GROUP BY p.id
+    HAVING COUNT(DISTINCT LOWER(pt.tag)) = ?
+    `,
+    [...tags.map(t => t.toLowerCase()), tags.length]
   );
   return rows;
 }
