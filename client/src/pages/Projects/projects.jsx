@@ -16,6 +16,9 @@ function Projects() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const [sort, setSort] = useState("date_posted");
+    const [order, setOrder] = useState("desc");
+
     const [formData, setFormData] = useState({
         tags: []
     });
@@ -24,14 +27,17 @@ function Projects() {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const tags = params.get('tags'); 
-        const sort = params.get('sort'); 
-        const order = params.get('order'); 
+        const sortParam = params.get('sort') || "date_posted"; 
+        const orderParam = params.get('order') || "desc"; 
+
+        setSort(sortParam);
+        setOrder(orderParam); 
 
         let url = 'http://localhost:5055/api/projects';
         const query = [];
         if (tags) query.push(`tags=${encodeURIComponent(tags)}`);
-        if (sort) query.push(`sort=${encodeURIComponent(sort)}`);
-        if (order) query.push(`order=${encodeURIComponent(order)}`);
+        if (sortParam) query.push(`sort=${encodeURIComponent(sortParam)}`);
+        if (orderParam) query.push(`order=${encodeURIComponent(orderParam)}`);
         if (query.length) url += `?${query.join("&")}`;
 
         fetch(url, {
@@ -83,12 +89,48 @@ function Projects() {
         });
     };
 
-    return (
-        
-        
-        <div className="projects-page">
+    const handleSortChange = (e) => {
+        const newSort = e.target.value;
+        setSort(newSort);
 
+        const query = new URLSearchParams(location.search);
+        query.set("sort", newSort);
+        query.set("order", order);
+
+        navigate({
+            pathname: "/projects",
+            search: query.toString()
+        });
+    };
+
+    const toggleOrder = () => {
+        const newOrder = order === "desc" ? "asc" : "desc";
+        setOrder(newOrder);
+
+        const query = new URLSearchParams(location.search);
+        query.set("sort", sort);
+        query.set("order", newOrder);
+
+        navigate({
+            pathname: "/projects",
+            search: query.toString()
+        });
+    };
+
+    return (
+        <div className="projects-page">
             <h1 className="projects-heading">Featured Projects</h1>
+
+            <div className='sort-controls'>
+                <select value={sort} onChange={handleSortChange}>
+                    <option value="date_posted">Date Posted</option>
+                    <option value="views">Views</option>
+                    <option value="likes">Likes</option>
+                </select>
+                <button onClick={toggleOrder}>
+                    {order === "desc" ? "↓ Desc" : "↑ Asc"}
+                </button>
+            </div>
 
             <div className="filter-by-tag">
                 <TagSelector 

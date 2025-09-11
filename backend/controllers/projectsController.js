@@ -4,7 +4,7 @@ const projectTags = require('../data/projectTags.json');
 
 async function getAllProjects(req, res) {
     try {
-        const { tags, sort = "date_posted", order = "most" } = req.query;
+        const { tags, sort = "date_posted", order = "desc" } = req.query;
 
         const validSorts = {
             views: "views",
@@ -13,10 +13,10 @@ async function getAllProjects(req, res) {
         };
 
         const validOrders = {
-            most: "most",
-            least: "least",
+            desc: "desc",
+            asc: "asc",
         };
-        const sortOrder = validOrders[order] || "most";
+        const sortOrder = validOrders[order] || "desc";
         const sortColumn = validSorts[sort] || "date_posted";
 
         if (tags) {
@@ -44,14 +44,12 @@ async function getProjectById(req, res) {
         const user_id = req.user.id; 
         const project_id = req.params.id;
 
-        
-
-
         const project = await projectsModule.getProjectById(project_id, user_id);
         if(!project.id) {
             return res.status(404).json({ error: 'Project not found' });
         }
         
+        console.log(project);
         res.json(project);
 
     } catch (err) {

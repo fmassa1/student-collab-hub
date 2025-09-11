@@ -24,6 +24,8 @@ function ProjectDetails() {
     const [likes, setLikes] = useState(0)
     const [newComment, setNewComment] = useState('');
 
+    const [loading, setLoading] = useState(true);
+
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -52,6 +54,8 @@ function ProjectDetails() {
             setProject(projectData);
             setLiked(isLiked); 
             setLikes(numberOfLikes);
+            setLoading(false);
+
         })
         
         .catch(err => {
@@ -253,6 +257,10 @@ function ProjectDetails() {
         return <ErrorPage code={error} error={errorMessage} />;
     }
 
+    if (loading) {
+        return <div className="loading">Loading project...</div>;
+    }
+    
     return (
         <div className="project-details-page">
             
@@ -261,8 +269,6 @@ function ProjectDetails() {
                         <button className="delete-project-btn" onClick={handleDeleteProject}>
                             Delete Project
                         </button>
-
-
                 )}
 
                 {user && project.user_id === user.id && (

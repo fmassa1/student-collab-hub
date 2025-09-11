@@ -1,7 +1,7 @@
 const db = require('../db');
 
 async function getAllProjects(sortColumn, sortOrder) {
-  const order = sortOrder === "most" ? "DESC" : "ASC";
+  const order = sortOrder === "desc" ? "DESC" : "ASC";
   const [rows] = await db.query(`
     SELECT p.*, COUNT(DISTINCT pl.user_id) AS likes, COUNT(DISTINCT pv.user_id) AS views
     FROM projects p

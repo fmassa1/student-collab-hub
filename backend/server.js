@@ -33,7 +33,7 @@ app.use(express.json());
 
 
 //project apis
-app.get('/api/projects', projectsController.getAllProjects);
+app.get('/api/projects', authenticator, projectsController.getAllProjects);
 app.get('/api/projects/:id', authenticator, projectsController.getProjectById);
 
 
