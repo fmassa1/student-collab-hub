@@ -21,10 +21,11 @@ function NavBar() {
                     <li><a href="/contact">Contact</a></li>
                     <li><a href="/create">Create Post</a></li>
                     {user ? (
-                        <>
-                            <Link to={`/profile/${user.username}`}>
-                                {user.username}
-                            </Link>
+                        <>  <li>
+                                <Link to={`/profile/${user.username}`}>
+                                    {user.username}
+                                </Link>
+                            </li>
                             <li>
                                 <button className="logout-button" onClick={logout}>
                                     Logout
