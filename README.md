@@ -3,10 +3,9 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
-- [ ] Sorting projects based on likes and sortings
-- [ ] search bar
+- [ ] search bar based on titles
 
-## Project Page
+## Project Detail Page
 - [ ] replying to comments
 - [ ] sorting comments
 - [ ] style better
@@ -15,7 +14,7 @@
 - [ ] styling
 
 ## User Profile
-- [ ] more user info
+- [ ] let users add github/linkedin url, profile pic, bio, resume, etc
 - [ ] style better
 
 ## Error Page

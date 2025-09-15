@@ -14,7 +14,6 @@ function SignUp() {
         first_name: '',
         last_name: '',
         university: '',
-
     });    
 
     const [error, setError] = useState('');
