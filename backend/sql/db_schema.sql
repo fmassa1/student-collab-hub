@@ -18,7 +18,13 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
+    bio VARCHAR(255),
     university VARCHAR(100),
+    linkedin_url VARCHAR(500),
+    github_url VARCHAR(500),
+    profile_picture_url VARCHAR(100),
+    resume_url VARCHAR(100),
+    likes_received INT DEFAULT 0,
     deleted BOOL DEFAULT FALSE,
     date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_logged_in TIMESTAMP DEFAULT NULL
