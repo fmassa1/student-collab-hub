@@ -3,7 +3,7 @@
 - [ ] upload pictures instead of url
 
 ## Project Page
-- [ ] front end for sorting projects based on likes, views, etc
+- [ ] Sorting projects based on likes and sortings
 - [ ] search bar
 
 ## Project Page

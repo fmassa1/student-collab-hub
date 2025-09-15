@@ -121,22 +121,24 @@ function Projects() {
         <div className="projects-page">
             <h1 className="projects-heading">Featured Projects</h1>
 
-            <div className='sort-controls'>
-                <select value={sort} onChange={handleSortChange}>
-                    <option value="date_posted">Date Posted</option>
-                    <option value="views">Views</option>
-                    <option value="likes">Likes</option>
-                </select>
-                <button onClick={toggleOrder}>
-                    {order === "desc" ? "↓ Desc" : "↑ Asc"}
-                </button>
-            </div>
+            <div className="controls-container">
+                <div className='sort-controls'>
+                    <select value={sort} onChange={handleSortChange}>
+                        <option value="date_posted">Date Posted</option>
+                        <option value="views">Views</option>
+                        <option value="likes">Likes</option>
+                    </select>
+                    <button onClick={toggleOrder}>
+                        {order === "desc" ? "↓ Desc" : "↑ Asc"}
+                    </button>
+                </div>
 
-            <div className="filter-by-tag">
-                <TagSelector 
-                    selected={formData.tags || []}
-                    setSelected={handleTagsChange}
-                />
+                <div className="filter-by-tag">
+                    <TagSelector 
+                        selected={formData.tags || []}
+                        setSelected={handleTagsChange}
+                    />
+                </div>
             </div>
 
             <div className="project-grid">
