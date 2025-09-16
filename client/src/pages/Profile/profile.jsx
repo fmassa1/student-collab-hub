@@ -111,15 +111,32 @@ function Profile() {
             <div className="profile-header">
                 {isEditing ? (
                     <>
-                        {editingError && <p className="error">{editingError}</p>}
-                        <input name="first_name" value={formData.first_name || ""} onChange={handleChange} />
-                        <input name="last_name" value={formData.last_name || ""} onChange={handleChange} />
-                        <input name="university" value={formData.university || ""} onChange={handleChange} />
-                        <input name="bio" value={formData.bio || ""} onChange={handleChange} />
-                        <input name="linkedin_url" value={formData.linkedin_url || ""} onChange={handleChange} />
-                        <input name="github_url" value={formData.github_url || ""} onChange={handleChange} />
-                        <button onClick={handleSave}>Save</button>
-                        <button onClick={() => setIsEditing(false)}>Cancel</button>
+                        <div className="edit-profile-form">
+                            {editingError && <p className="error">{editingError}</p>}
+
+                            <label className="edit-label" htmlFor="first_name">First Name</label>
+                            <input id="first_name" className="edit-input" name="first_name" value={formData.first_name || ""} onChange={handleChange} placeholder="First Name" />
+
+                            <label className="edit-label" htmlFor="last_name">Last Name</label>
+                            <input id="last_name" className="edit-input" name="last_name" value={formData.last_name || ""} onChange={handleChange} placeholder="Last Name" />
+
+                            <label className="edit-label" htmlFor="university">University</label>
+                            <input id="university" className="edit-input" name="university" value={formData.university || ""} onChange={handleChange} placeholder="University" />
+
+                            <label className="edit-label" htmlFor="bio">Bio</label>
+                            <textarea id="bio" className="edit-textarea" name="bio" value={formData.bio || ""} onChange={handleChange} placeholder="Write a short bio"></textarea>
+
+                            <label className="edit-label" htmlFor="linkedin_url">LinkedIn</label>
+                            <input id="linkedin_url" className="edit-input" name="linkedin_url" value={formData.linkedin_url || ""} onChange={handleChange} placeholder="https://linkedin.com/in/username" />
+
+                            <label className="edit-label" htmlFor="github_url">GitHub</label>
+                            <input id="github_url" className="edit-input" name="github_url" value={formData.github_url || ""} onChange={handleChange} placeholder="https://github.com/username" />
+
+                            <div className="edit-buttons">
+                            <button className="save-btn" onClick={handleSave}>Save</button>
+                            <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+                            </div>
+                        </div>
                     </>
                 ) : (
                     <>
