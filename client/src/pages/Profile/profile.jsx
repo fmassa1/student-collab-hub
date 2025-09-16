@@ -1,11 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
+import { isValidGitHubUrl, isValidLinkedInUrl } from '../../services/urlChecker';
+
 import ErrorPage from "../../components/ErrorPage/error";
 import './profile.css'
 
 function Profile() {
     const [error, setError] = useState(null);
+    const [editingError, setEditingError] = useState(null);
     const { username } = useParams();
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
@@ -60,6 +63,18 @@ function Profile() {
     };
 
     const handleSave = () => {
+
+        if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
+            setEditingError('Invalid Github Url');
+            return;
+        }
+        if(formData.linkedin_url && !isValidLinkedInUrl(formData.linkedin_url)) {
+            setEditingError('Invalid LinkedIn Url');
+            return;
+        }
+
+        setEditingError('');
+    
         fetch(`http://localhost:5055/api/profile/${username}`, {
             method: 'PUT',
             headers: {
@@ -75,8 +90,10 @@ function Profile() {
         .then(updatedProfile => {
             setProfile(updatedProfile);
             setIsEditing(false);
+
         })
         .catch(err => console.error("Update failed:", err));
+
     };
 
     if (error) {
@@ -94,6 +111,7 @@ function Profile() {
             <div className="profile-header">
                 {isEditing ? (
                     <>
+                        {editingError && <p className="error">{editingError}</p>}
                         <input name="first_name" value={formData.first_name || ""} onChange={handleChange} />
                         <input name="last_name" value={formData.last_name || ""} onChange={handleChange} />
                         <input name="university" value={formData.university || ""} onChange={handleChange} />

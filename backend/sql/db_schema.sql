@@ -36,7 +36,6 @@ CREATE TABLE projects (
     name VARCHAR(255) NOT NULL,
     image_url VARCHAR(500),
     description TEXT,
-    linkedin_url VARCHAR(500),
     github_url VARCHAR(500),
     deleted BOOL DEFAULT FALSE,
     date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+import { isValidGitHubUrl } from '../../services/urlChecker';
+
 import TagSelector from '../../components/TagSelector/TagSelector';
 import { AuthContext } from "../../context/AuthContext";
 import './createproject.css';
@@ -8,13 +11,12 @@ import './createproject.css';
 
 function CreateProject() {
     const navigate = useNavigate();
-    const { user, token} = useContext(AuthContext);
+    const {token} = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         image_url: '',
-        linkedin_url: '',
         github_url: '',
         tags: []
     });
@@ -27,36 +29,12 @@ function CreateProject() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const isValidGitHubUrl = (string) => {
-        try {
-            new URL(string);
-            return string.startsWith('https://github.com') || string.startsWith('https://www.github.com')
-
-        } catch (_) {
-            return false;
-        }
-    }
-
-    const isValidLinkedInUrl = (string) => {
-        try {
-            new URL(string);
-            return string.startsWith('https://linkedin.com') || string.startsWith('https://www.linkedin.com')
-
-        } catch (_) {
-            return false;
-        }
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!formData.name || !formData.description) {
             setError('Name and description are required.');
-            return;
-        }
-
-        if(formData.linkedin_url && !isValidLinkedInUrl(formData.linkedin_url)) {
-            setError('Invalid LinkedIn Url');
             return;
         }
 
@@ -141,16 +119,6 @@ function CreateProject() {
                         type="text"
                         name="image_url"
                         value={formData.image_url}
-                        onChange={handleChange}
-                    />
-                </label>
-
-                <label>
-                    LinkedIn URL
-                    <input
-                        type="text"
-                        name="linkedin_url"
-                        value={formData.linkedin_url}
                         onChange={handleChange}
                     />
                 </label>

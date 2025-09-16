@@ -21,21 +21,21 @@ VALUES
 -- ====================
 INSERT INTO projects (user_id, name, image_url, description, linkedin_url, github_url, date_posted)
 VALUES
-(1, 'AI Chatbot', '/images/project1.png', 'Conversational bot using NLP.', 'https://linkedin.com/p1', 'https://github.com/p1', NOW()),
-(2, 'Task Manager', '/images/project2.png', 'Productivity app with reminders.', 'https://linkedin.com/p2', 'https://github.com/p2', NOW()),
-(3, 'Portfolio Website', '/images/project3.png', 'Personal portfolio with React.', 'https://linkedin.com/p3', 'https://github.com/p3', NOW()),
-(4, 'Game Engine', '/images/project4.png', '2D engine from scratch.', 'https://linkedin.com/p4', 'https://github.com/p4', NOW()),
-(5, 'Network Scanner', '/images/project5.png', 'Tool for scanning open ports.', 'https://linkedin.com/p5', 'https://github.com/p5', NOW()),
-(6, 'Weather App', '/images/project6.png', 'Mobile app for live weather.', 'https://linkedin.com/p6', 'https://github.com/p6', NOW()),
-(7, 'Data Dashboard', '/images/project7.png', 'Interactive analytics dashboard.', 'https://linkedin.com/p7', 'https://github.com/p7', NOW()),
-(8, 'AR Project', '/images/project8.png', 'AR visualization demo.', 'https://linkedin.com/p8', 'https://github.com/p8', NOW()),
-(9, 'Game Prototype', '/images/project9.png', 'Indie game prototype.', 'https://linkedin.com/p9', 'https://github.com/p9', NOW()),
-(10, 'E-Commerce Site', '/images/project10.png', 'Shop with payments.', 'https://linkedin.com/p10', 'https://github.com/p10', NOW()),
-(1, 'Crypto Tracker', '/images/project11.png', 'App to track crypto prices.', 'https://linkedin.com/p11', 'https://github.com/p11', NOW()),
-(2, 'Note Sharing', '/images/project12.png', 'App for students to share notes.', 'https://linkedin.com/p12', 'https://github.com/p12', NOW()),
-(3, 'Fitness Tracker', '/images/project13.png', 'Tracks workouts and diet.', 'https://linkedin.com/p13', 'https://github.com/p13', NOW()),
-(4, 'Compiler Project', '/images/project14.png', 'Custom toy compiler.', 'https://linkedin.com/p14', 'https://github.com/p14', NOW()),
-(5, 'Vision Project', '/images/project15.png', 'Computer vision demo.', 'https://linkedin.com/p15', 'https://github.com/p15', NOW());
+(1, 'AI Chatbot', '/images/project1.png', 'Conversational bot using NLP.', 'https://github.com/p1', NOW()),
+(2, 'Task Manager', '/images/project2.png', 'Productivity app with reminders.', 'https://github.com/p2', NOW()),
+(3, 'Portfolio Website', '/images/project3.png', 'Personal portfolio with React.', 'https://github.com/p3', NOW()),
+(4, 'Game Engine', '/images/project4.png', '2D engine from scratch.', 'https://github.com/p4', NOW()),
+(5, 'Network Scanner', '/images/project5.png', 'Tool for scanning open ports.', 'https://github.com/p5', NOW()),
+(6, 'Weather App', '/images/project6.png', 'Mobile app for live weather.', 'https://github.com/p6', NOW()),
+(7, 'Data Dashboard', '/images/project7.png', 'Interactive analytics dashboard.', 'https://github.com/p7', NOW()),
+(8, 'AR Project', '/images/project8.png', 'AR visualization demo.', 'https://github.com/p8', NOW()),
+(9, 'Game Prototype', '/images/project9.png', 'Indie game prototype.', 'https://github.com/p9', NOW()),
+(10, 'E-Commerce Site', '/images/project10.png', 'Shop with payments.', 'https://github.com/p10', NOW()),
+(1, 'Crypto Tracker', '/images/project11.png', 'App to track crypto prices.', 'https://github.com/p11', NOW()),
+(2, 'Note Sharing', '/images/project12.png', 'App for students to share notes.', 'https://github.com/p12', NOW()),
+(3, 'Fitness Tracker', '/images/project13.png', 'Tracks workouts and diet.', 'https://github.com/p13', NOW()),
+(4, 'Compiler Project', '/images/project14.png', 'Custom toy compiler.', 'https://github.com/p14', NOW()),
+(5, 'Vision Project', '/images/project15.png', 'Computer vision demo.', 'https://github.com/p15', NOW());
 
 -- ====================
 -- PROJECT TAGS

@@ -333,11 +333,6 @@ function ProjectDetails() {
                         )}
 
                         <div className="project-links">
-                            {project.linkedin_url ? (
-                                <a href={project.linkedin_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/linkedin.svg' alt="LinkedIn" />
-                                </a>
-                            ) : null}
                             {project.github_url ? (
                                 <a href={project.github_url} target="_blank" rel="noopener noreferrer">
                                     <img src='/github.svg' alt="Github" />
