@@ -81,7 +81,15 @@ async function getAllUsers() {
 
 async function getUserByUsername(username) {
   const [rows] = await db.query(`
-    SELECT users.id, users.email, users.username, users.first_name, users.last_name, users.university         
+    SELECT users.id, 
+        users.email, 
+        users.username,
+        users.first_name, 
+        users.last_name, 
+        users.university,
+        users.bio,
+        users.linkedin_url,
+        users.github_url
     FROM users
     WHERE username = ?
   `, [username]
@@ -89,22 +97,38 @@ async function getUserByUsername(username) {
   return rows;
 }
 
-async function updateProfile(id, first_name, last_name, school) {
-    const [updated] = await db.query(`
-        UPDATE users
-        SET first_name = ?, last_name = ?, university = ?
-        WHERE id = ?
-    `, [first_name, last_name, school, id]
-    );
-
+async function getUserByID(id) {
     const [rows] = await db.query(`
-        SELECT id, email, username, first_name, last_name, university
-        FROM users
-        WHERE id = ?
+      SELECT users.id, 
+            users.email, 
+            users.username, 
+            users.first_name, 
+            users.last_name, 
+            users.university,
+            users.bio,
+            users.linkedin_url,
+            users.github_url
+      FROM users
+      WHERE id = ?
     `, [id]
     );
+    return rows;
+  }
 
-    return rows[0];
+async function updateProfile(id, first_name, last_name, school, bio, linkedin_url, github_url) {
+    const [updated] = await db.query(`
+        UPDATE users
+        SET first_name = ?, 
+            last_name = ?, 
+            university = ?,
+            bio = ?, 
+            linkedin_url = ?, 
+            github_url = ?
+        WHERE id = ?
+    `, [first_name, last_name, school, bio, linkedin_url, github_url, id]
+    );
+    user = await getUserByID(id);
+    return user[0];
 }
 
 async function getUserNotifications(user_id) {
@@ -161,6 +185,7 @@ module.exports = {
     loginUser,
     getAllUsers,
     getUserByUsername,
+    getUserByID,
     updateProfile,
     getUserNotifications,
     markUserNotificationRead,

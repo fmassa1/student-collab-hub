@@ -91,23 +91,46 @@ function Profile() {
 
     return (
         <div className="profile-details-page">
-            {/* User Info */}
             <div className="profile-header">
                 {isEditing ? (
                     <>
                         <input name="first_name" value={formData.first_name || ""} onChange={handleChange} />
                         <input name="last_name" value={formData.last_name || ""} onChange={handleChange} />
-                        {/* <input name="email" value={formData.email || ""} onChange={handleChange} /> */}
                         <input name="university" value={formData.university || ""} onChange={handleChange} />
+                        <input name="bio" value={formData.bio || ""} onChange={handleChange} />
+                        <input name="linkedin_url" value={formData.linkedin_url || ""} onChange={handleChange} />
+                        <input name="github_url" value={formData.github_url || ""} onChange={handleChange} />
                         <button onClick={handleSave}>Save</button>
                         <button onClick={() => setIsEditing(false)}>Cancel</button>
                     </>
                 ) : (
                     <>
+                        <div className='profile-picture'>
+                        <img 
+                            src={profile.profile_picture ? profile.profile_picture : '/placeholder_profile_picture.jpg'} 
+                            alt={`${profile.username}'s profile`} 
+                            />
+                        </div>
                         <h1>{profile.first_name} {profile.last_name}</h1>
                         <p>@{profile.username}</p>
-                        <p>{profile.email}</p>
                         {profile.university && <p>🎓 {profile.university}</p>}
+                        <p>{profile.email}</p>
+                        <p>{profile.bio}</p>
+
+
+                        <div className="project-links">
+                            {profile.linkedin_url ? (
+                                <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
+                                    <img src='/linkedin.svg' alt="LinkedIn" />
+                                </a>
+                            ) : null}
+                            {profile.github_url ? (
+                                <a href={profile.github_url} target="_blank" rel="noopener noreferrer">
+                                    <img src='/github.svg' alt="Github" />
+                                </a>
+                            ) : null}
+                        </div>
+                        
                         {isOwner && <button onClick={() => setIsEditing(true)}>Edit Profile</button>}
                     </>
                 )}

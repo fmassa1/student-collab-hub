@@ -75,10 +75,11 @@ async function updateProfileHandler(req, res) {
     try {
 
         const user_id = req.user.id;
-        const { first_name, last_name, university } = req.body;
+        const { first_name, last_name, university, bio, linkedin_url, github_url } = req.body;
 
-        const users = await usersModule.updateProfile(user_id, first_name, last_name, university);
-        res.json(users);
+        const user = await usersModule.updateProfile(user_id, first_name, last_name, university, bio, linkedin_url, github_url);
+        console.log(user);
+        res.json(user);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Database error getAllUsers' });
