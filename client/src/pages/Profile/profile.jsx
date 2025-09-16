@@ -78,7 +78,6 @@ function Profile() {
         fetch(`http://localhost:5055/api/profile/${username}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(formData)

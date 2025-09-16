@@ -14,7 +14,7 @@
 - [ ] styling
 
 ## User Profile
-- [ ] let users add github/linkedin url, profile pic, bio, resume, etc
+- [ ] upload profile pics
 - [ ] style better
 
 ## Error Page
