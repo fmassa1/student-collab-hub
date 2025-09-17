@@ -207,7 +207,7 @@ function Profile() {
                                 formData.append("profile_picture", newPfp);
 
                                 const res = await fetch(
-                                `http://localhost:5055/api/profile/${username}/picture`, 
+                                `http://localhost:5055/api/profile/${username}/profilepicture`, 
                                 {
                                     method: "POST",
                                     headers: {

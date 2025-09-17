@@ -71,30 +71,39 @@ async function loginUser(user_info) {
     }
 }
 
+async function updateProfilePicture(imageUrl, userId) {
+    const [rows] = await db.query(`
+        UPDATE users
+        SET profile_picture_url = ?
+        WHERE id = ?
+      `, [imageUrl, userId]);
+    return rows;
+}
+
 async function getAllUsers() {
-  const [rows] = await db.query(`
-    SELECT id, email, username, first_name, last_name, university
-    FROM users
-  `);
-  return rows;
+    const [rows] = await db.query(`
+        SELECT id, email, username, first_name, last_name, university
+        FROM users
+    `);
+    return rows;
 }
 
 async function getUserByUsername(username) {
-  const [rows] = await db.query(`
-    SELECT users.id, 
-        users.email, 
-        users.username,
-        users.first_name, 
-        users.last_name, 
-        users.university,
-        users.bio,
-        users.linkedin_url,
-        users.github_url
-    FROM users
-    WHERE username = ?
-  `, [username]
-  );
-  return rows;
+    const [rows] = await db.query(`
+        SELECT users.id, 
+            users.email, 
+            users.username,
+            users.first_name, 
+            users.last_name, 
+            users.university,
+            users.bio,
+            users.linkedin_url,
+            users.github_url
+        FROM users
+        WHERE username = ?
+    `, [username]
+    );
+    return rows;
 }
 
 async function getUserByID(id) {
@@ -189,4 +198,5 @@ module.exports = {
     updateProfile,
     getUserNotifications,
     markUserNotificationRead,
+    updateProfilePicture
   };

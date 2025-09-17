@@ -82,7 +82,26 @@ async function updateProfileHandler(req, res) {
         res.json(user);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Database error getAllUsers' });
+        res.status(500).json({ error: 'Database error updating profile' });
+    }
+}
+
+async function updateProfilePictureHandler(req, res) {
+    try {
+        const userId = req.params.id;
+    
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+    
+        const imageUrl = `/uploads/profiles/${req.file.filename}`;
+        console.log(imageUrl);
+        const updated = await usersModule.updateProfilePicture(imageUrl, userId);
+
+        res.json({ profile_picture: imageUrl });
+      } catch (err) {
+        console.error("Error updating profile picture:", err);
+        res.status(500).json({ error: "Server error" });
     }
 }
 
@@ -115,6 +134,7 @@ module.exports = {
     getAllUsers,
     getUserByUsername,
     updateProfileHandler,
+    updateProfilePictureHandler,
     getNotificationsHandler,
     markNotificationReadHandler,
 };

@@ -8,6 +8,8 @@ const usersController = require('./controllers/usersController');
 const requestLogger = require('./middleware/logger');
 const requestLimiter = require('./middleware/limiter');
 const authenticator = require('./middleware/authenticator');
+const { createUploader } = require("./middleware/uploader");
+
 
 
 
@@ -31,6 +33,7 @@ app.use(requestLogger);
 app.use(requestLimiter);
 app.use(express.json());
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //project apis
 app.get('/api/projects', authenticator, projectsController.getAllProjects);
@@ -58,7 +61,8 @@ app.get('/api/profile/notifications', authenticator, usersController.getNotifica
 app.post('/api/profile/notifications/:id', authenticator, usersController.markNotificationReadHandler);
 
 app.get('/api/profile/:username', authenticator, usersController.getUserByUsername);
-app.put('/api/profile/:username', authenticator, usersController.updateProfileHandler);
+app.get('/api/profile/:username', authenticator, usersController.getUserByUsername);
+app.post('/api/profile/:username/profilepicture', authenticator, createUploader("profiles", "profile_picture"), usersController.updateProfilePictureHandler);
 
 
 
