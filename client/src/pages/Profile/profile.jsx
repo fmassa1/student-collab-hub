@@ -9,6 +9,8 @@ import './profile.css'
 function Profile() {
     const [error, setError] = useState(null);
     const [editingError, setEditingError] = useState(null);
+    const [showPfpUpload, setShowPfpUpload] = useState(false);
+    const [newPfp, setNewPfp] = useState(null);
     const { username } = useParams();
     const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
@@ -139,11 +141,24 @@ function Profile() {
                     </>
                 ) : (
                     <>
-                        <div className='profile-picture'>
-                        <img 
-                            src={profile.profile_picture ? profile.profile_picture : '/placeholder_profile_picture.jpg'} 
-                            alt={`${profile.username}'s profile`} 
+                        <div className='profile-picture-container'>
+                            <img 
+                                src={profile.profile_picture ? profile.profile_picture : '/placeholder_profile_picture.jpg'} 
+                                alt={`${profile.username}'s profile`} 
+                                className='profile-picture'
                             />
+                            {isOwner && (
+                                <button 
+                                    className="edit-pfp-btn" 
+                                    onClick={() => setShowPfpUpload(true)}
+                                >
+                                    <img 
+                                    src="/svg/pencil-simple.svg" 
+                                    alt="Edit profile picture" 
+                                    className="edit-pfp-icon" 
+                                    />
+                                </button>
+                            )}
                         </div>
                         <h1>{profile.first_name} {profile.last_name}</h1>
                         <p>@{profile.username}</p>
@@ -155,12 +170,12 @@ function Profile() {
                         <div className="project-links">
                             {profile.linkedin_url ? (
                                 <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/linkedin.svg' alt="LinkedIn" />
+                                    <img src='/svg/linkedin.svg' alt="LinkedIn" />
                                 </a>
                             ) : null}
                             {profile.github_url ? (
                                 <a href={profile.github_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/github.svg' alt="Github" />
+                                    <img src='/svg/github.svg' alt="Github" />
                                 </a>
                             ) : null}
                         </div>
@@ -169,6 +184,54 @@ function Profile() {
                     </>
                 )}
             </div>
+            {showPfpUpload && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                    <h3>Upload New Profile Picture</h3>
+                    <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => setNewPfp(e.target.files[0])} 
+                    />
+                    <div className="modal-actions">
+                        <button 
+                        onClick={() => setShowPfpUpload(false)}
+                        >
+                        Cancel
+                        </button>
+                        <button 
+                        onClick={async () => {
+                            if (!newPfp) return;
+
+                            const formData = new FormData();
+                            formData.append("profile_picture", newPfp);
+
+                            const res = await fetch(
+                            `http://localhost:5055/api/profile/${username}/picture`, 
+                            {
+                                method: "POST",
+                                headers: {
+                                Authorization: `Bearer ${token}`,
+                                },
+                                body: formData
+                            }
+                            );
+
+                            if (res.ok) {
+                            const data = await res.json();
+                            setProfile({ ...profile, profile_picture: data.profile_picture });
+                            setShowPfpUpload(false);
+                            } else {
+                            console.error("Upload failed");
+                            }
+                        }}
+                        >
+                        Upload
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                )}
 
             <hr />
 

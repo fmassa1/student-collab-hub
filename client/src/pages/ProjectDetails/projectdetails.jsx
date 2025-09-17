@@ -311,7 +311,7 @@ function ProjectDetails() {
                             </div>
                             
                             <div className="project-views">
-                                <img src='/eye.svg' alt=""  className="views-icon" />
+                                <img src='/svg/eye.svg' alt=""  className="views-icon" />
                                 <span>{project.views} views </span>
                             </div>
                         </div>
@@ -335,7 +335,7 @@ function ProjectDetails() {
                         <div className="project-links">
                             {project.github_url ? (
                                 <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/github.svg' alt="Github" />
+                                    <img src='/svg/github.svg' alt="Github" />
                                 </a>
                             ) : null}
                         </div>
@@ -345,7 +345,7 @@ function ProjectDetails() {
                             onClick={handleToggleLike}
                             >
                             <img 
-                                src={liked ? "/thumbs-up-filled.svg" : "/thumbs-up-outline.svg"} 
+                                src={liked ? "/svg/thumbs-up-filled.svg" : "/svg/thumbs-up-outline.svg"} 
                                 alt="Like" 
                                 className="like-icon"
                             />
@@ -377,7 +377,7 @@ function ProjectDetails() {
                                         onClick={() => handleToggleCommentLike(c.id, c.liked_by_user)}
                                     >
                                         <img 
-                                            src={c.liked_by_user ? "/thumbs-up-filled.svg" : "/thumbs-up-outline.svg"} 
+                                            src={c.liked_by_user ? "/svg/thumbs-up-filled.svg" : "/svg/thumbs-up-outline.svg"} 
                                             alt="Like" 
                                             className="like-icon"
                                         />
