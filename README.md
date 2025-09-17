@@ -14,7 +14,7 @@
 - [ ] styling
 
 ## User Profile
-- [ ] upload profile pics
+- [ ] display current pfp
 - [ ] style better
 
 ## Error Page
