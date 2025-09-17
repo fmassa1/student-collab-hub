@@ -187,48 +187,48 @@ function Profile() {
             {showPfpUpload && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                    <h3>Upload New Profile Picture</h3>
-                    <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={(e) => setNewPfp(e.target.files[0])} 
-                    />
-                    <div className="modal-actions">
-                        <button 
-                        onClick={() => setShowPfpUpload(false)}
-                        >
-                        Cancel
-                        </button>
-                        <button 
-                        onClick={async () => {
-                            if (!newPfp) return;
+                        <h3>Upload New Profile Picture</h3>
+                        <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => setNewPfp(e.target.files[0])} 
+                        />
+                        <div className="modal-actions">
+                            <button 
+                            onClick={() => setShowPfpUpload(false)}
+                            >
+                            Cancel
+                            </button>
+                            <button 
+                            onClick={async () => {
+                                if (!newPfp) return;
 
-                            const formData = new FormData();
-                            formData.append("profile_picture", newPfp);
+                                const formData = new FormData();
+                                formData.append("profile_picture", newPfp);
 
-                            const res = await fetch(
-                            `http://localhost:5055/api/profile/${username}/picture`, 
-                            {
-                                method: "POST",
-                                headers: {
-                                Authorization: `Bearer ${token}`,
-                                },
-                                body: formData
-                            }
-                            );
+                                const res = await fetch(
+                                `http://localhost:5055/api/profile/${username}/picture`, 
+                                {
+                                    method: "POST",
+                                    headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    },
+                                    body: formData
+                                }
+                                );
 
-                            if (res.ok) {
-                            const data = await res.json();
-                            setProfile({ ...profile, profile_picture: data.profile_picture });
-                            setShowPfpUpload(false);
-                            } else {
-                            console.error("Upload failed");
-                            }
-                        }}
-                        >
-                        Upload
-                        </button>
-                    </div>
+                                if (res.ok) {
+                                    const data = await res.json();
+                                    setProfile({ ...profile, profile_picture: data.profile_picture });
+                                    setShowPfpUpload(false);
+                                } else {
+                                    console.error("Upload failed");
+                                }
+                            }}
+                            >
+                            Upload
+                            </button>
+                        </div>
                     </div>
                 </div>
                 )}
