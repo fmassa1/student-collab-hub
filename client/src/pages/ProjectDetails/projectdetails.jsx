@@ -1,11 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useContext, useCallback } from 'react';
-
-import { postComment, deleteComment, likeComment, unlikeComment } from '../../services/commentAPI';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import TagSelector from "../../components/TagSelector/TagSelector";
 import projectTags from "../../components/TagSelector/projectTags.json";
+import { 
+    postComment, deleteComment, likeComment, unlikeComment,
+    getProject, updateProject, deleteProject,
+    unlikeProject, likeProject
+ } from '../../services/projectDetailsAPI';
 
 import './projectdetails.css'
 
@@ -33,37 +36,23 @@ function ProjectDetails() {
       });
     
     useEffect(() => {
-        fetch(`http://localhost:5055/api/projects/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
+        async function fetchData() {
+            try {
+                const projectData = await getProject(id);
+                const isLiked = projectData.liked_by?.includes(user.id) || false;
+                const numberOfLikes = projectData.liked_by?.length || 0;
+                setProject(projectData);
+                setLiked(isLiked); 
+                setLikes(numberOfLikes);
+                setLoading(false);
+            } catch (err) {
+                console.error("Fetch failed:", err);
+                const statusCode = err.status;
+                setError(statusCode || 500);
+                setErrorMessage(err.message || `Server error fetching project #${id}`)
             }
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw { status: res.status, message: res.statusText };
-            }
-            return res.json();
-        })
-        .then(data => {
-            const projectData = data;
-            const isLiked = projectData.liked_by?.includes(user.id) || false;
-            const numberOfLikes = projectData.liked_by?.length || 0;
-
-
-            setProject(projectData);
-            setLiked(isLiked); 
-            setLikes(numberOfLikes);
-            setLoading(false);
-
-        })
-        
-        .catch(err => {
-            console.error("Fetch failed:", err);
-            const statusCode = err.status;
-            setError(statusCode || 500);
-            setErrorMessage(err.message || `Server error fetching project #${id}`)
-        });
+        }
+        fetchData();
     }, [id]);
 
     useEffect(() => {
@@ -95,56 +84,43 @@ function ProjectDetails() {
     };
 
     const handleSave = async () => {
-        try {
-          const res = await fetch(`http://localhost:5055/api/projects/${id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(formData)
-          });
+        async function fetchData() {
+            try {
+                const updatedProjectData = await updateProject(id, JSON.stringify(formData));
+                const updated = await updatedProjectData;
       
-          if (!res.ok) throw new Error(res.status);
-          const updated = await res.json();
-      
-          setProject(updated);
-          setIsEditing(false);
-        } catch (err) {
-          console.error("Failed to update project:", err);
-          setError(parseInt(err.message) || 500);
-          setErrorMessage(`Server error updating project #${id}`);
-
+                setProject(updated);
+                setIsEditing(false);
+            } catch (err) {
+                console.error("Failed to update project:", err);
+                setError(parseInt(err.message) || 500);
+                setErrorMessage(`Server error updating project #${id}`);
+            }
         }
-      };
+        fetchData();
+    };
 
     const handleToggleLike = async () => {
-        try {
-            const url = `http://localhost:5055/api/projects/${id}/${liked ? 'unlike' : 'like'}`;
-            const method = liked ? 'DELETE' : 'POST';
+        async function fetchData() {
+            try {
+                let res;
+                if(!liked) res = await likeProject(id);
+                else res =  await unlikeProject(id);
 
-            const res = await fetch(url, { 
-                method,
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                setLiked(!liked);
-                setLikes(prev => liked ? prev - 1 : prev + 1);
-
-            } else {
-                throw new Error(res.status, `Server error liking project #${id}`);
+                if (res.status >= 200 && res.status < 300) {
+                    setLiked(!liked);
+                    setLikes(prev => liked ? prev - 1 : prev + 1);
+    
+                } 
+                else throw new Error(res.status, `Server error liking project #${id}`);
+            } catch (err) {
+                console.error('Error toggling like:', err);
+                const statusCode = parseInt(err.message);
+                setError(statusCode || 500);
+                setErrorMessage(`Server error toggling like`);
             }
-        } catch (err) {
-            console.error('Error toggling like:', err);
-            const statusCode = parseInt(err.message);
-            setError(statusCode || 500);
-            setErrorMessage(`Server error toggling like`);
-
         }
+        fetchData();
     };
 
     const handlePostComment = async (e) => {
@@ -227,30 +203,23 @@ function ProjectDetails() {
     };
 
     const handleDeleteProject = async () => {
-        if (!window.confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
-            return;
-        }
-    
-        try {
-            const res = await fetch(`http://localhost:5055/api/projects/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-    
-            if (res.ok) {
-                navigate('/');
-            } else {
-                throw new Error(res.status);
-            }
-        } catch (err) {
-            console.error("Failed to delete project:", err);
-            const statusCode = parseInt(err.message);
-            setError(statusCode || 500);
-            setErrorMessage(`Server error deleting project #${id}`);
+        if (!window.confirm("Are you sure you want to delete this project? This action cannot be undone.")) return;
 
+        async function fetchData() {
+            try {
+                const updatedProjectData = await deleteProject(id);
+                navigate('/');
+                if (res.ok) navigate('/'); 
+                else throw new Error(res.status);
+
+            } catch (err) {
+                console.error("Failed to delete project:", err);
+                const statusCode = parseInt(err.message);
+                setError(statusCode || 500);
+                setErrorMessage(`Server error deleting project #${id}`);
+            }
         }
+        fetchData();
     };
 
     if (error) {

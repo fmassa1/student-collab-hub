@@ -4,6 +4,7 @@
 
 ## Project Page
 - [ ] search bar based on titles
+- [ ] if user tries to like/comment on a project that has been deleted route to home
 
 ## Project Detail Page
 - [ ] replying to comments
