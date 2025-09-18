@@ -16,7 +16,7 @@ function createUploader(type, fieldName) {
             const ext = path.extname(file.originalname);
 
             if (type === "profiles") {
-                cb(null, `${req.params.username}${ext}`);
+                cb(null, `${req.user.id}${ext}`);
             } else if (type === "projects") {
                 cb(null, `${req.params.project_id}_${Date.now()}${ext}`);
             } else {

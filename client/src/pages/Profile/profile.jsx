@@ -143,7 +143,7 @@ function Profile() {
                     <>
                         <div className='profile-picture-container'>
                             <img 
-                                src={profile.profile_picture ? profile.profile_picture : '/placeholder_profile_picture.jpg'} 
+                                src={profile.profile_picture_url ? profile.profile_picture_url : '/placeholder_profile_picture.jpg'} 
                                 alt={`${profile.username}'s profile`} 
                                 className='profile-picture'
                             />
@@ -165,7 +165,6 @@ function Profile() {
                         {profile.university && <p>🎓 {profile.university}</p>}
                         <p>{profile.email}</p>
                         <p>{profile.bio}</p>
-
 
                         <div className="project-links">
                             {profile.linkedin_url ? (

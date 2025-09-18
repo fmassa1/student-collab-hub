@@ -72,6 +72,7 @@ async function loginUser(user_info) {
 }
 
 async function updateProfilePicture(imageUrl, userId) {
+
     const [rows] = await db.query(`
         UPDATE users
         SET profile_picture_url = ?
@@ -98,7 +99,8 @@ async function getUserByUsername(username) {
             users.university,
             users.bio,
             users.linkedin_url,
-            users.github_url
+            users.github_url,
+            users.profile_picture_url
         FROM users
         WHERE username = ?
     `, [username]

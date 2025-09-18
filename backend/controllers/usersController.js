@@ -88,7 +88,7 @@ async function updateProfileHandler(req, res) {
 
 async function updateProfilePictureHandler(req, res) {
     try {
-        const userId = req.params.id;
+        const userId = req.user.id;
     
         if (!req.file) {
             return res.status(400).json({ error: "No file uploaded" });
