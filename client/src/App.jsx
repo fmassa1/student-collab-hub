@@ -5,7 +5,7 @@ import Home from './pages/Home/home';
 //import About from './pages/about';
 import Contact from './pages/Contact/contact';
 import Projects from './pages/Projects/projects';
-import Profile from './pages/Profile/profile';
+import Profile from './pages/Profile/profile.jsx';
 import ProjectDetails from './pages/ProjectDetails/projectdetails';
 import CreateProject from './pages/CreateProject/createproject';
 import SignUp from './pages/SignUp/signup';

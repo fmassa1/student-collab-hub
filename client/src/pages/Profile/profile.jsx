@@ -4,6 +4,14 @@ import { AuthContext } from "../../context/AuthContext";
 import { isValidGitHubUrl, isValidLinkedInUrl } from '../../services/urlChecker';
 
 import ErrorPage from "../../components/ErrorPage/error";
+
+import {
+    getProfile,
+    getProjects,
+    updateProfile,
+    uploadProfilePicture,
+  } from "../../services/profileAPI";
+
 import './profile.css'
 
 function Profile() {
@@ -21,50 +29,24 @@ function Profile() {
     const { token, user } = useContext(AuthContext);
 
     useEffect(() => {
-        fetch(`http://localhost:5055/api/profile/${username}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
+        async function fetchData() {
+            try {
+                const profileData = await getProfile(username);
+                setProfile(profileData);
+                const projectData = await getProjects(username);
+                setProjects(projectData);
+            } catch (err) {
+                setError(err.response?.status || 500);
             }
-        })
-        .then(res => {
-            if (!res.ok) {
-                setError(res.status);
-                return;
-            }
-            return res.json();
-        })
-        .then(data => {
-            const profileData = data[0];
-            setProfile(profileData);
-            setFormData(profileData);
-        })
-
-        fetch(`http://localhost:5055/api/profile/${username}/projects`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(res.status);
-            }
-            return res.json();
-        })
-        .then(data => setProjects(data))
-        .catch(err => {
-            console.error("Fetch failed:", err);
-            const statusCode = parseInt(err.message);
-            setError(statusCode || 500);    
-        });
+        }
+        fetchData();
     }, [username]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
 
         if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
             setEditingError('Invalid Github Url');
@@ -77,33 +59,28 @@ function Profile() {
 
         setEditingError('');
     
-        fetch(`http://localhost:5055/api/profile/${username}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(res => {
-            if (!res.ok) throw new Error(res.status);
-            return res.json();
-        })
-        .then(updatedProfile => {
+        try {
+            const updatedProfile = await updateProfile(username, formData, token);
             setProfile(updatedProfile);
             setIsEditing(false);
-
-        })
-        .catch(err => console.error("Update failed:", err));
-
+        } catch (err) {
+            console.error("Update failed:", err);
+            setEditingError("Profile update failed.");
+        }
     };
 
-    if (error) {
-        return <ErrorPage code={error} />;
-    }
+    const handlePictureUpload = async (file) => {
+        try {
+          const data = await uploadProfilePicture(username, file);
+          setProfile({ ...profile, profile_picture_url: data.profile_picture_url });
+          setShowPfpUpload(false);
+        } catch (err) {
+          console.error("Upload failed:", err);
+        }
+      };
 
-    if (!profile) {
-        return <p>No profile found with username {username}</p>;
-    }
+    if (error)  return <ErrorPage code={error} />;
+    if (!profile) return <p>No profile found with username {username}</p>;
 
     const isOwner = user?.username === username;
 
@@ -179,7 +156,13 @@ function Profile() {
                             ) : null}
                         </div>
                         
-                        {isOwner && <button onClick={() => setIsEditing(true)}>Edit Profile</button>}
+                        {isOwner && (
+                            <button onClick={() => {
+                                    setFormData(profile);
+                                    setIsEditing(true);
+                                }}>
+                                    Edit Profile
+                            </button>)}
                     </>
                 )}
             </div>
@@ -199,33 +182,18 @@ function Profile() {
                             Cancel
                             </button>
                             <button 
-                            onClick={async () => {
-                                if (!newPfp) return;
-
-                                const formData = new FormData();
-                                formData.append("profile_picture", newPfp);
-
-                                const res = await fetch(
-                                `http://localhost:5055/api/profile/${username}/profilepicture`, 
-                                {
-                                    method: "POST",
-                                    headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    },
-                                    body: formData
-                                }
-                                );
-
-                                if (res.ok) {
-                                    const data = await res.json();
-                                    setProfile({ ...profile, profile_picture: data.profile_picture });
-                                    setShowPfpUpload(false);
-                                } else {
-                                    console.error("Upload failed");
-                                }
-                            }}
-                            >
-                            Upload
+                                onClick={async () => {
+                                    if (!newPfp) return;
+                                    try {
+                                        const data = await uploadProfilePicture(username, newPfp, token);
+                                        setProfile({ ...profile, profile_picture_url: data.profile_picture_url });
+                                        setShowPfpUpload(false);
+                                    } catch (err) {
+                                        console.error("Upload failed:", err);
+                                    }
+                                }}
+                                >
+                                Upload
                             </button>
                         </div>
                     </div>

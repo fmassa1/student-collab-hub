@@ -61,7 +61,7 @@ app.get('/api/profile/notifications', authenticator, usersController.getNotifica
 app.post('/api/profile/notifications/:id', authenticator, usersController.markNotificationReadHandler);
 
 app.get('/api/profile/:username', authenticator, usersController.getUserByUsername);
-app.get('/api/profile/:username', authenticator, usersController.getUserByUsername);
+app.put('/api/profile/:username', authenticator, usersController.updateProfileHandler);
 app.post('/api/profile/:username/profilepicture', authenticator, createUploader("profiles", "profile_picture"), usersController.updateProfilePictureHandler);
 
 

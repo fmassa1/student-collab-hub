@@ -78,7 +78,6 @@ async function updateProfileHandler(req, res) {
         const { first_name, last_name, university, bio, linkedin_url, github_url } = req.body;
 
         const user = await usersModule.updateProfile(user_id, first_name, last_name, university, bio, linkedin_url, github_url);
-        console.log(user);
         res.json(user);
     } catch (err) {
         console.error(err);

@@ -118,7 +118,9 @@ async function getUserByID(id) {
             users.university,
             users.bio,
             users.linkedin_url,
-            users.github_url
+            users.github_url,
+            users.profile_picture_url
+
       FROM users
       WHERE id = ?
     `, [id]
