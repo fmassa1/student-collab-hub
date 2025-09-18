@@ -73,7 +73,6 @@ function SignUp() {
         }
     };
 
-
     return (
         <div className="signup-page">
             <form className="signup-form" onSubmit={handleSubmit}>
