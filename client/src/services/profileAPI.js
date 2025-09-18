@@ -1,5 +1,11 @@
 import apiClient from "./apiClient";
 
+
+export async function loginUser(loginData) {
+    const res = await apiClient.post(`login`, loginData);
+    return res.data;
+}
+
 export async function getProfile(username) {
     const res = await apiClient.get(`/profile/${username}`);
     return res.data[0];

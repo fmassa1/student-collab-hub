@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "../../context/AuthContext";
+import { loginUser } from '../../services/profileAPI';
 import './login.css';
 
 function LoginPage() {
@@ -26,7 +27,7 @@ function LoginPage() {
         e.preventDefault();
 
         if (!formData.email || !formData.password) {
-            setError('Username, email, first name, and last name required');
+            setError('Email and password required');
             return;
         }
 
@@ -34,30 +35,15 @@ function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch('http://localhost:5055/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                })
-            });
+            const data = await loginUser(formData);
+            login(data);
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.error || 'Failed to login in.');
-                return
-            }
-
-            login(data)
-
-
-            // TODO: Navigate to users profile page
-            //navigate(`/users/${data.id}`);
             navigate(`/profile/${data.user.username}`);
         } catch (err) {
             console.error('Failed to login user:', err);
-            setError('Failed to login. Please try again.: ', err);
+            setError(
+                err.response?.data?.error || 'Failed to login. Please try again.'
+            );
         } finally {
             setLoading(false);
         }

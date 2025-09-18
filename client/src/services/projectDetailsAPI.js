@@ -17,6 +17,7 @@ export async function deleteProject(projectId) {
     return res;
 }
 
+
 //MARK: Like API
 export async function likeProject(projectId) {
     const res = await apiClient.post(`projects/${projectId}/like`);
