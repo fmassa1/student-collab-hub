@@ -154,7 +154,6 @@ async function unlikeProjectHandler(req, res) {
     }
 }
 
-
 async function postCommentOnProjectHandler(req, res) {
     try {
         const user_id = req.user.id;         

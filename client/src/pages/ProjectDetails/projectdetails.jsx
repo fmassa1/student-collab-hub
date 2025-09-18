@@ -152,7 +152,7 @@ function ProjectDetails() {
         if (!newComment.trim()) return;
 
         try {
-            const createdComment = await postComment(id, newComment, token);
+            const createdComment = await postComment(id, newComment);
             
             const commentWithUser = {
 
@@ -180,7 +180,7 @@ function ProjectDetails() {
 
     const handleDeleteComment = async (commentId) => {
         try {
-            await deleteComment(id, commentId, token);
+            await deleteComment(id, commentId);
             
             setProject(prev => ({
                 ...prev,
@@ -198,7 +198,7 @@ function ProjectDetails() {
     const handleToggleCommentLike = async (commentId, userLiked) => {
         try {
             if (userLiked) {
-                await unlikeComment(id, commentId, token);
+                await unlikeComment(id, commentId);
                 setProject(prev => ({
                     ...prev,
                     comments: prev.comments.map(c =>
@@ -208,7 +208,7 @@ function ProjectDetails() {
                     )
                 }));
             } else {
-                await likeComment(id, commentId, token);
+                await likeComment(id, commentId);
                 setProject(prev => ({
                     ...prev,
                     comments: prev.comments.map(c =>
