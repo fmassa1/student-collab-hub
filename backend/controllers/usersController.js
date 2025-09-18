@@ -16,7 +16,6 @@ async function addNewUser(req, res) {
             last_name,
             university
         });    
-
         res.status(201).json(new_user);
 
     } catch (err) {

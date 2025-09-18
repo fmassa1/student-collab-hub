@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signUpUser } from '../../services/profileAPI';
 
 import './signup.css';
 
@@ -60,29 +61,13 @@ function SignUp() {
 
         try {
             const { confirmPassword, ...submitData } = formData;
-            const res = await fetch('http://localhost:5055/api/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(submitData)
-            });
-
-            
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.error || 'Failed to create new user.');
-                return
-            }
-
+            const data = await signUpUser(submitData); // no stringify, no res.json()
+        
             console.log('User created:', data);
-
-
-            // TODO: Navigate to users profile page
-            //navigate(`/users/${data.id}`);
             navigate(`/login`);
         } catch (err) {
             console.error('Failed to create new user:', err);
-            setError('Failed to create new user. Please try again.');
+            setError(err.response?.data?.error || 'Failed to create new user. Please try again.');
         } finally {
             setLoading(false);
         }

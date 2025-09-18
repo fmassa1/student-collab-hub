@@ -1,8 +1,13 @@
 import apiClient from "./apiClient";
 
 
+export async function signUpUser(userData) {
+    const res = await apiClient.post(`/signup`, userData);
+    return res;
+}
+
 export async function loginUser(loginData) {
-    const res = await apiClient.post(`login`, loginData);
+    const res = await apiClient.post(`/login`, loginData);
     return res.data;
 }
 

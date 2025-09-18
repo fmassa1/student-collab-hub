@@ -8,7 +8,7 @@ import './login.css';
 function LoginPage() {
     const navigate = useNavigate();
 
-    const { login, user } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -41,9 +41,7 @@ function LoginPage() {
             navigate(`/profile/${data.user.username}`);
         } catch (err) {
             console.error('Failed to login user:', err);
-            setError(
-                err.response?.data?.error || 'Failed to login. Please try again.'
-            );
+            setError(err.response?.data?.error || 'Failed to login. Please try again.');
         } finally {
             setLoading(false);
         }
