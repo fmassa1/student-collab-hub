@@ -8,7 +8,7 @@ import {
     postComment, deleteComment, likeComment, unlikeComment,
     getProject, updateProject, deleteProject,
     unlikeProject, likeProject
- } from '../../services/projectDetailsAPI';
+ } from '../../services/projectAPI';
 
 import './projectdetails.css'
 

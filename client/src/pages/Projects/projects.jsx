@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import TagSelector from "../../components/TagSelector/TagSelector";
+import { getProjectSearch } from "../../services/projectAPI";
 
 import './projects.css';
 
@@ -24,44 +25,36 @@ function Projects() {
     });
 
 
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const tags = params.get('tags'); 
-        const sortParam = params.get('sort') || "date_posted"; 
-        const orderParam = params.get('order') || "desc"; 
+    useEffect(()  => {
+        async function fetchData() {
+            const params = new URLSearchParams(location.search);
+            const tags = params.get('tags'); 
+            const sortParam = params.get('sort') || "date_posted"; 
+            const orderParam = params.get('order') || "desc"; 
 
-        setSort(sortParam);
-        setOrder(orderParam); 
+            setSort(sortParam);
+            setOrder(orderParam); 
 
-        let url = 'http://localhost:5055/api/projects';
-        const query = [];
-        if (tags) query.push(`tags=${encodeURIComponent(tags)}`);
-        if (sortParam) query.push(`sort=${encodeURIComponent(sortParam)}`);
-        if (orderParam) query.push(`order=${encodeURIComponent(orderParam)}`);
-        if (query.length) url += `?${query.join("&")}`;
+            let url = '/projects';
+            const query = [];
+            if (tags) query.push(`tags=${encodeURIComponent(tags)}`);
+            if (sortParam) query.push(`sort=${encodeURIComponent(sortParam)}`);
+            if (orderParam) query.push(`order=${encodeURIComponent(orderParam)}`);
+            if (query.length) url += `?${query.join("&")}`;
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
+
+            try {
+                const data = await getProjectSearch(url);
+                setProjects(data);
+            } catch (err) {
+                console.error("Fetch failed:", err);
+                const statusCode = parseInt(err.message);
+                setError(statusCode || 500);
+            } finally {
+                setLoading(false);
             }
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(res.status);
-            }
-            return res.json();
-        })
-        .then(data => {
-            console.log('Fetched projects:', data);
-            setProjects(data);
-        })
-        
-        .catch(err => {
-            console.error("Fetch failed:", err);
-            const statusCode = parseInt(err.message);
-            setError(statusCode || 500);
-        });
+        }
+        fetchData();
     }, [location.search, token]);
     
     if (error) {
