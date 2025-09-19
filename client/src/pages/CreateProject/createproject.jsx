@@ -6,6 +6,8 @@ import { isValidGitHubUrl } from '../../services/urlChecker';
 
 import TagSelector from '../../components/TagSelector/TagSelector';
 import { AuthContext } from "../../context/AuthContext";
+import { postProject } from "../../services/projectAPI";
+
 import './createproject.css';
 
 
@@ -31,56 +33,30 @@ function CreateProject() {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!formData.name || !formData.description) {
-            setError('Name and description are required.');
-            return;
-        }
-
-        if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
-            setError('Invalid Github Url');
-            return;
-        }
-
-        setError('');
-        setLoading(true);
-
-        try {
-            const res = await fetch('http://localhost:5055/api/projects', {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    ...formData,
-                })
-            });
-
-            if (!res.ok) {
-                let errorMsg = 'Something went wrong';
-                try {
-                  const errData = await res.json();
-                  errorMsg = errData.error || errorMsg;
-                } catch {
-                  errorMsg = await res.text();
-                }
-            
-                setError(errorMsg);
+        async function fetchData() {
+            e.preventDefault();
+            if (!formData.name || !formData.description) {
+                setError('Name and description are required.');
                 return;
-              }
+            }
+    
+            if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
+                setError('Invalid Github Url');
+                return;
+            }
+            setError('');
+            setLoading(true);
 
-            const data = await res.json();
-            console.log('Project created:', data);
-
-            navigate(`/projects/${data.id}`);
-        } catch (err) {
-            console.error('Failed to create project:', err);
-            setError(err);
-        } finally {
-            setLoading(false);
+            try {
+                const data = await postProject(formData);
+                navigate(`/projects/${data.id}`);
+                setLoading(false);
+            } catch (err) {
+                console.error('Failed to create project:', err);
+                setError(err);
+            }
         }
+        fetchData();
     };
 
 
