@@ -93,7 +93,6 @@ async function updateProfilePictureHandler(req, res) {
         }
     
         const imageUrl = `/uploads/profiles/${req.file.filename}`;
-        console.log(imageUrl);
         const updated = await usersModule.updateProfilePicture(imageUrl, userId);
 
         res.json({ profile_picture_url: imageUrl });

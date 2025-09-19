@@ -71,7 +71,7 @@ async function getProjectsByUsername(req, res) {
 async function postProject(req, res) {
     try {
         const user_id = req.user.id;         
-        const { name, description, image_url, linkedin_url, github_url, tags } = req.body;
+        const { name, description, linkedin_url, github_url, tags } = req.body;
 
         const tagLabels = projectTags
             .filter(tag => tags.includes(tag.id))
@@ -80,12 +80,12 @@ async function postProject(req, res) {
         const project = await projectsModule.postProject({
             name,
             description,
-            image_url,
             linkedin_url,
             github_url,
             tags: tagLabels,
             user_id,
-        });    
+        }); 
+        console.log(project);
 
         res.status(201).json(project);
 
@@ -93,6 +93,12 @@ async function postProject(req, res) {
         console.error('Error posting project: ', err);
         res.status(500).json({ error: 'Database error' });
     }
+}
+async function uploadImagesHandler(req, res) {
+    //TODO: return routes of images
+    console.log("hit");
+    res.json({ images: ['image', 'image2', 'image3'] });
+
 }
 
 async function updateProjectHandler(req, res) {
@@ -221,6 +227,7 @@ module.exports = {
     getProjectById,
     getProjectsByUsername,
     postProject,
+    uploadImagesHandler,
     updateProjectHandler,
     deleteProjectHandler,
     likeProjectHandler,

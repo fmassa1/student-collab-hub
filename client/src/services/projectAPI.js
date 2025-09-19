@@ -13,6 +13,20 @@ export async function postProject(project) {
     return res.data;
 }
 
+export async function postProjectImages(projectId, projectImages) {
+    const formData = new FormData();
+    projectImages.forEach((file, idx) => {
+        formData.append("images", file);
+    });
+
+    const res = await apiClient.post(
+        `projects/${projectId}/images`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return res.data;
+}
+
 //MARK: Project API
 export async function getProject(projectId) {
     const res = await apiClient.get(`projects/${projectId}`);

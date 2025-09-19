@@ -81,9 +81,9 @@ async function getProjectsByUsername(username) {
 
 async function postProject(project) {
   const [result] = await db.query(
-    `INSERT INTO projects (name, description, image_url, linkedin_url, github_url, user_id)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [project.name, project.description, project.image_url, project.linkedin_url, project.github_url, project.user_id]
+    `INSERT INTO projects (name, description, linkedin_url, github_url, user_id)
+     VALUES (?, ?, ?, ?, ?)`,
+    [project.name, project.description, project.linkedin_url, project.github_url, project.user_id]
   );
 
   if (Array.isArray(project.tags) && project.tags.length > 0) {

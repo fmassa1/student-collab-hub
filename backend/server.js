@@ -40,7 +40,9 @@ app.get('/api/projects', authenticator, projectsController.getAllProjects);
 app.get('/api/projects/:id', authenticator, projectsController.getProjectById);
 
 
-app.post('/api/projects', authenticator, projectsController.postProject);
+app.post('/api/projects', authenticator,  projectsController.postProject);
+app.post('/api/projects/:project_id/images', authenticator, createUploader("projects", "images"), projectsController.uploadImagesHandler);
+
 app.put('/api/projects/:id', authenticator, projectsController.updateProjectHandler);
 app.delete('/api/projects/:id', authenticator, projectsController.deleteProjectHandler);
 

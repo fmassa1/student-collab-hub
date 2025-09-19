@@ -80,7 +80,7 @@ function Profile() {
         } catch (err) {
           console.error("Upload failed:", err);
         }
-      };
+    };
 
     if (error)  return <ErrorPage code={error} />;
     if (!profile) return <p>No profile found with username {username}</p>;

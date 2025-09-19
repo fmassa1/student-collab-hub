@@ -6,21 +6,21 @@ import { isValidGitHubUrl } from '../../services/urlChecker';
 
 import TagSelector from '../../components/TagSelector/TagSelector';
 import { AuthContext } from "../../context/AuthContext";
-import { postProject } from "../../services/projectAPI";
+import { postProject, postProjectImages } from "../../services/projectAPI";
 
 import './createproject.css';
 
 
 function CreateProject() {
     const navigate = useNavigate();
-    const {token} = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         image_url: '',
         github_url: '',
-        tags: []
+        tags: [],
+        images: []
     });
 
     const [error, setError] = useState('');
@@ -48,8 +48,15 @@ function CreateProject() {
             setLoading(true);
 
             try {
-                const data = await postProject(formData);
-                navigate(`/projects/${data.id}`);
+                const data = new FormData();
+                data.append("name", formData.name);
+                data.append("description", formData.description);
+                data.append("github_url", formData.github_url);
+                data.append("tags", JSON.stringify(formData.tags));
+
+                const project = await postProject(data);
+                const projectImages = await postProjectImages(project.id, formData.images);
+                navigate(`/projects/${project.id}`);
                 setLoading(false);
             } catch (err) {
                 console.error('Failed to create project:', err);
@@ -88,16 +95,33 @@ function CreateProject() {
                 </label>
 
 
-                {/* will change later to upload pictures */}
                 <label>
-                    Image URL
+                    Upload Images (max 3)
                     <input
-                        type="text"
-                        name="image_url"
-                        value={formData.image_url}
-                        onChange={handleChange}
+                        type="file"
+                        name="images"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                            const files = Array.from(e.target.files);
+                            setFormData((prev) => ({
+                                ...prev,
+                                images: [...prev.images, ...files].slice(0, 3), // merge + enforce max 3
+                            }));
+                        }}
                     />
                 </label>
+
+                <div className="image-preview">
+                    {formData.images.map((file, idx) => (
+                        <img
+                            key={idx}
+                            src={URL.createObjectURL(file)}
+                            alt={`preview-${idx}`}
+                            style={{ width: "100px", marginRight: "10px" }}
+                        />
+                    ))}
+                </div>
 
                 <label>
                     GitHub URL
