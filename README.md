@@ -15,7 +15,6 @@
 - [ ] styling
 
 ## User Profile
-- [ ] display current pfp
 - [ ] style better
 
 ## Error Page

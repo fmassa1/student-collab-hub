@@ -60,7 +60,7 @@ function Profile() {
         setEditingError('');
     
         try {
-            const updatedProfile = await updateProfile(username, formData, token);
+            const updatedProfile = await updateProfile(username, formData);
             setProfile(updatedProfile);
             setIsEditing(false);
         } catch (err) {
@@ -72,7 +72,10 @@ function Profile() {
     const handlePictureUpload = async (file) => {
         try {
           const data = await uploadProfilePicture(username, file);
-          setProfile({ ...profile, profile_picture_url: data.profile_picture_url });
+          setProfile({
+            ...profile,
+            profile_picture_url: `${data.profile_picture_url}?t=${Date.now()}`
+        });
           setShowPfpUpload(false);
         } catch (err) {
           console.error("Upload failed:", err);
@@ -120,7 +123,7 @@ function Profile() {
                     <>
                         <div className='profile-picture-container'>
                             <img 
-                                src={profile.profile_picture_url ? profile.profile_picture_url : '/placeholder_profile_picture.jpg'} 
+                                src={profile.profile_picture_url || '/placeholder_profile_picture.jpg'} 
                                 alt={`${profile.username}'s profile`} 
                                 className='profile-picture'
                             />
@@ -142,6 +145,7 @@ function Profile() {
                         {profile.university && <p>🎓 {profile.university}</p>}
                         <p>{profile.email}</p>
                         <p>{profile.bio}</p>
+                        <p>{profile.profile_picture_url}</p>
 
                         <div className="project-links">
                             {profile.linkedin_url ? (
@@ -184,13 +188,7 @@ function Profile() {
                             <button 
                                 onClick={async () => {
                                     if (!newPfp) return;
-                                    try {
-                                        const data = await uploadProfilePicture(username, newPfp, token);
-                                        setProfile({ ...profile, profile_picture_url: data.profile_picture_url });
-                                        setShowPfpUpload(false);
-                                    } catch (err) {
-                                        console.error("Upload failed:", err);
-                                    }
+                                    handlePictureUpload(newPfp);
                                 }}
                                 >
                                 Upload

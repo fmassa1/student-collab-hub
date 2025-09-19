@@ -96,7 +96,7 @@ async function updateProfilePictureHandler(req, res) {
         console.log(imageUrl);
         const updated = await usersModule.updateProfilePicture(imageUrl, userId);
 
-        res.json({ profile_picture: imageUrl });
+        res.json({ profile_picture_url: imageUrl });
       } catch (err) {
         console.error("Error updating profile picture:", err);
         res.status(500).json({ error: "Server error" });
