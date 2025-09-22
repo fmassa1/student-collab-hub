@@ -4,6 +4,8 @@ import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import TagSelector from "../../components/TagSelector/TagSelector";
 import projectTags from "../../components/TagSelector/projectTags.json";
+import CommentSection from "./components/CommentSection/CommentSection";
+
 import { 
     postComment, deleteComment, likeComment, unlikeComment,
     getProject, updateProject, deleteProject,
@@ -17,7 +19,7 @@ function ProjectDetails() {
     const [error, setError] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
 
-    const { user, token } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const { id } = useParams();
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
@@ -321,62 +323,17 @@ function ProjectDetails() {
                             <span className="like-count">{likes}</span>
                          </button>
 
-                        <div className="project-comments">
-                            <h3>Comments ({project.comments.length})</h3>
-                            {project.comments.length === 0 ? (
-                                <p>No comments yet.</p>
-                            ) : (
-                                project.comments.map((c) => (
-                                    <div key={c.id} className="comment-card">
-                                    <strong 
-                                        onClick={() => navigate(`/profile/${c.username}`)} 
-                                        className="clickable-username"
-                                    >
-                                        {c.username} 
-                                    </strong>
-                                    <span>{"on "}
-                                        {new Date(c.date_posted).toLocaleDateString("en-US", {
-                                            year: "numeric",
-                                            month: "short",
-                                            day: "numeric"
-                                        })}</span>
-                                    <p>{c.comment}</p>
-                                    <button 
-                                        className={`comment-like-button ${c.liked_by_user ? 'liked' : ''}`}
-                                        onClick={() => handleToggleCommentLike(c.id, c.liked_by_user)}
-                                    >
-                                        <img 
-                                            src={c.liked_by_user ? "/svg/thumbs-up-filled.svg" : "/svg/thumbs-up-outline.svg"} 
-                                            alt="Like" 
-                                            className="like-icon"
-                                        />
-                                        <span>{c.likes}</span>
-                                    </button>
-                                
-                                    {user && c.username === user.username && (
-                                        <button
-                                        className="delete-comment-btn"
-                                        onClick={() => handleDeleteComment(c.id)}
-                                        >
-                                        Delete
-                                        </button>
-                                    )}
-                                    </div>
-                                ))
-                            )}
-                            {user && (
-                                <form className="comment-form" onSubmit={handlePostComment}>
-                                    <input
-                                        type="text"
-                                        placeholder="Add a comment..."
-                                        value={newComment}
-                                        onChange={(e) => setNewComment(e.target.value)}
-                                        className="comment-input"
-                                    />
-                                    <button type="submit" className="comment-submit">Post</button>
-                                </form>
-                            )}
-                        </div>
+
+                        <CommentSection 
+                            user={user}
+                            comments={project.comments}
+                            toggleLike={handleToggleCommentLike}
+                            onPost={handlePostComment}
+                            onDelete={handleDeleteComment}
+                            newComment={newComment}
+                            setNewComment={setNewComment}
+                        />
+                        
                     </>
                 )}
             </div>
