@@ -1,9 +1,14 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
 import { isValidGitHubUrl, isValidLinkedInUrl } from '../../services/urlChecker';
 
 import ErrorPage from "../../components/ErrorPage/error";
+import ProjectSection from "./components/ProjectSection/ProjectSection"
+import ProfileCard from "./components/ProfileCard/ProfileCard"
+import PfpUpload from "./components/PfpUpload/PfpUpload"
+
+
 
 import {
     getProfile,
@@ -20,7 +25,6 @@ function Profile() {
     const [showPfpUpload, setShowPfpUpload] = useState(false);
     const [newPfp, setNewPfp] = useState(null);
     const { username } = useParams();
-    const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
     const [projects, setProjects] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -89,132 +93,32 @@ function Profile() {
 
     return (
         <div className="profile-details-page">
-            <div className="profile-header">
-                {isEditing ? (
-                    <>
-                        <div className="edit-profile-form">
-                            {editingError && <p className="error">{editingError}</p>}
+            <ProfileCard
+                profile={profile}
+                formData={formData}
+                isEditing={isEditing}
+                isOwner={isOwner}
+                editingError={editingError}
+                onChange={handleChange}
+                onSave={handleSave}
+                onCancel={() => setIsEditing(false)}
+                onEditProfile={() => {
+                    setFormData(profile);
+                    setIsEditing(true);
+                }}
+                onEditPicture={() => setShowPfpUpload(true)}
+            />
+            
+            <PfpUpload 
+                show={showPfpUpload}
+                newPfp={newPfp}
+                setNewPfp={setNewPfp}
+                onClose={() => setShowPfpUpload(false)}
+                onUpload={handlePictureUpload}
+            />
 
-                            <label className="edit-label" htmlFor="first_name">First Name</label>
-                            <input id="first_name" className="edit-input" name="first_name" value={formData.first_name || ""} onChange={handleChange} placeholder="First Name" />
+            <ProjectSection profile={profile} projects={projects} />
 
-                            <label className="edit-label" htmlFor="last_name">Last Name</label>
-                            <input id="last_name" className="edit-input" name="last_name" value={formData.last_name || ""} onChange={handleChange} placeholder="Last Name" />
-
-                            <label className="edit-label" htmlFor="university">University</label>
-                            <input id="university" className="edit-input" name="university" value={formData.university || ""} onChange={handleChange} placeholder="University" />
-
-                            <label className="edit-label" htmlFor="bio">Bio</label>
-                            <textarea id="bio" className="edit-textarea" name="bio" value={formData.bio || ""} onChange={handleChange} placeholder="Write a short bio"></textarea>
-
-                            <label className="edit-label" htmlFor="linkedin_url">LinkedIn</label>
-                            <input id="linkedin_url" className="edit-input" name="linkedin_url" value={formData.linkedin_url || ""} onChange={handleChange} placeholder="https://linkedin.com/in/username" />
-
-                            <label className="edit-label" htmlFor="github_url">GitHub</label>
-                            <input id="github_url" className="edit-input" name="github_url" value={formData.github_url || ""} onChange={handleChange} placeholder="https://github.com/username" />
-
-                            <div className="edit-buttons">
-                            <button className="save-btn" onClick={handleSave}>Save</button>
-                            <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className='profile-picture-container'>
-                            <img 
-                                src={profile.profile_picture_url || '/placeholder_profile_picture.jpg'} 
-                                alt={`${profile.username}'s profile`} 
-                                className='profile-picture'
-                            />
-                            {isOwner && (
-                                <button 
-                                    className="edit-pfp-btn" 
-                                    onClick={() => setShowPfpUpload(true)}
-                                >
-                                    <img 
-                                    src="/svg/pencil-simple.svg" 
-                                    alt="Edit profile picture" 
-                                    className="edit-pfp-icon" 
-                                    />
-                                </button>
-                            )}
-                        </div>
-                        <h1>{profile.first_name} {profile.last_name}</h1>
-                        <p>@{profile.username}</p>
-                        {profile.university && <p>🎓 {profile.university}</p>}
-                        <p>{profile.email}</p>
-                        <p>{profile.bio}</p>
-                        <p>{profile.profile_picture_url}</p>
-
-                        <div className="project-links">
-                            {profile.linkedin_url ? (
-                                <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/svg/linkedin.svg' alt="LinkedIn" />
-                                </a>
-                            ) : null}
-                            {profile.github_url ? (
-                                <a href={profile.github_url} target="_blank" rel="noopener noreferrer">
-                                    <img src='/svg/github.svg' alt="Github" />
-                                </a>
-                            ) : null}
-                        </div>
-                        
-                        {isOwner && (
-                            <button onClick={() => {
-                                    setFormData(profile);
-                                    setIsEditing(true);
-                                }}>
-                                    Edit Profile
-                            </button>)}
-                    </>
-                )}
-            </div>
-            {showPfpUpload && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h3>Upload New Profile Picture</h3>
-                        <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={(e) => setNewPfp(e.target.files[0])} 
-                        />
-                        <div className="modal-actions">
-                            <button 
-                            onClick={() => setShowPfpUpload(false)}
-                            >
-                            Cancel
-                            </button>
-                            <button 
-                                onClick={async () => {
-                                    if (!newPfp) return;
-                                    handlePictureUpload(newPfp);
-                                }}
-                                >
-                                Upload
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                )}
-
-            <hr />
-
-            <div className="projects-section">
-                <h2>{profile.first_name}'s Projects</h2>
-                {projects.length > 0 ? (
-                    <ul className="projects-list">
-                        {projects.map((project, idx) => (
-                            <li key={idx} className="project-card" onClick={() => navigate(`/projects/${project.id}`)}>
-                                <h3>{project.name}</h3>
-                                <p>{project.description}</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No projects found for this user.</p>
-                )}
-            </div>
         </div>
     );
 }
