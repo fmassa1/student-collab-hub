@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
-import TagSelector from "../../components/TagSelector/TagSelector";
-import projectTags from "../../components/TagSelector/projectTags.json";
 import CommentSection from "./components/CommentSection/CommentSection";
+import ProjectEditForm from "./components/ProjectEditForm/ProjectEditForm";
+import projectTags from "../../components/TagSelector/projectTags.json";
 
 import { 
     postComment, deleteComment, likeComment, unlikeComment,
@@ -133,7 +133,6 @@ function ProjectDetails() {
             const createdComment = await postComment(id, newComment);
             
             const commentWithUser = {
-
                 id: createdComment.id,
                 username: user.username,
                 date_posted: createdComment.date_posted,
@@ -233,8 +232,7 @@ function ProjectDetails() {
     }
     
     return (
-        <div className="project-details-page">
-            
+        <div className="project-details-page">            
             <div className="project-post-card">
                 {user && project.user_id === user.id && (
                         <button className="delete-project-btn" onClick={handleDeleteProject}>
@@ -250,15 +248,13 @@ function ProjectDetails() {
 
                 {isEditing ? (
                     <>
-                        <input name="name" value={formData.name || ""} onChange={handleChange} />
-                        <input name="description" value={formData.description || ""} onChange={handleChange} />
-                        <TagSelector
-                            selected={formData.tags}
-                            setSelected={handleTagsChange} 
+                        <ProjectEditForm 
+                            formData={formData}
+                            onChange={handleChange}
+                            tagsChange={handleTagsChange}
+                            onSave={handleSave}
+                            onCancel={() => setIsEditing(false)}
                         />
-                        <button onClick={handleSave}>Save</button>
-                        <button onClick={() => setIsEditing(false)}>Cancel</button>
-                    
                     </>
                 ): (
                     <>
