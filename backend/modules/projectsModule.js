@@ -59,7 +59,8 @@ async function getProjectById(project_id, user_id) {
     tags: tags.map(t => t.tag),
     liked_by: likes.map(l => l.user_id),
     comments,
-    views: views.length
+    views: views.length,
+    images: images
   };
 }
 
@@ -82,9 +83,9 @@ async function getProjectsByUsername(username) {
 
 async function postProject(project) {
   const [result] = await db.query(
-    `INSERT INTO projects (name, description, linkedin_url, github_url, user_id)
-     VALUES (?, ?, ?, ?, ?)`,
-    [project.name, project.description, project.linkedin_url, project.github_url, project.user_id]
+    `INSERT INTO projects (name, description, github_url, user_id)
+     VALUES (?, ?, ?, ?)`,
+    [project.name, project.description, project.github_url, project.user_id]
   );
 
   if (Array.isArray(project.tags) && project.tags.length > 0) {
@@ -101,7 +102,7 @@ async function postProject(project) {
 async function postProjectPictures(id, files) {
   for (const img of files) {
     await db.query(
-      `INSERT INTO projects_images (project_id, image_path)
+      `INSERT INTO project_images (project_id, image_path)
        VALUES (?, ?)`,
       [id, img]
     );

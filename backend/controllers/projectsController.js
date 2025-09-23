@@ -48,7 +48,7 @@ async function getProjectById(req, res) {
         if(!project.id) {
             return res.status(404).json({ error: 'Project not found' });
         }
-        
+        console.log(project);
         res.json(project);
 
     } catch (err) {
@@ -71,7 +71,7 @@ async function getProjectsByUsername(req, res) {
 async function postProject(req, res) {
     try {
         const user_id = req.user.id;         
-        const { name, description, linkedin_url, github_url, tags } = req.body;
+        const { name, description, github_url, tags } = req.body;
 
         const tagLabels = projectTags
             .filter(tag => tags.includes(tag.id))
@@ -80,13 +80,10 @@ async function postProject(req, res) {
         const project = await projectsModule.postProject({
             name,
             description,
-            linkedin_url,
             github_url,
             tags: tagLabels,
             user_id,
         }); 
-        console.log(project);
-
         res.status(201).json(project);
 
     } catch (err) {
@@ -94,11 +91,12 @@ async function postProject(req, res) {
         res.status(500).json({ error: 'Database error' });
     }
 }
+
 async function uploadImagesHandler(req, res) {
     try {
         const project_id = req.params.project_id;
         const filenames = req.files.map(file => file.filename);
-        await postProjectPictures(project_id, filenames);
+        await projectsModule.postProjectPictures(project_id, filenames);
         res.json({ images: filenames });
     } catch (err){
         console.error(err);
