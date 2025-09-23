@@ -18,7 +18,7 @@ function createUploader(type, fieldName) {
             if (type === "profiles") {
                 cb(null, `${req.user.id}${ext}`);
             } else if (type === "projects") {
-                cb(null, `$project_${req.params.project_id}_${Date.now()}${ext}`);
+                cb(null, `project_${req.params.project_id}_${Date.now()}${ext}`);
             } else {
                 cb(null, `${Date.now()}${ext}`);
             }

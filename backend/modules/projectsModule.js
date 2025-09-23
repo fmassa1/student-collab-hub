@@ -52,6 +52,7 @@ async function getProjectById(project_id, user_id) {
     GROUP BY pc.id, pc.comment, pc.date_posted, u.username`, 
   [user_id, project_id]);
   const [views] = await db.query(`SELECT * FROM project_views WHERE project_id = ?`, [project_id]);
+  const [images] = await db.query(`SELECT image_path FROM project_images WHERE project_id = ?`, [project_id]);
 
   return {
     ...project[0],
@@ -95,6 +96,16 @@ async function postProject(project) {
   }
 
   return { id: result.insertId, ...project };
+}
+
+async function postProjectPictures(id, files) {
+  for (const img of files) {
+    await db.query(
+      `INSERT INTO projects_images (project_id, image_path)
+       VALUES (?, ?)`,
+      [id, img]
+    );
+  }
 }
 
 async function updateProject(user_id, project_id, name, description, tags) {
@@ -304,6 +315,7 @@ module.exports = {
     getProjectById,
     getProjectsByUsername,
     postProject,
+    postProjectPictures,
     updateProject,
     deleteProject,
     likeProject,

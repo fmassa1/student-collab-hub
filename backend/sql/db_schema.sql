@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS peer_spark;
 USE peer_spark;
 
+DROP TABLE IF EXISTS project_images;
 DROP TABLE IF EXISTS project_likes;
 DROP TABLE IF EXISTS project_comment_likes;
 DROP TABLE IF EXISTS notifications;
@@ -34,12 +35,17 @@ CREATE TABLE projects (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
     name VARCHAR(255) NOT NULL,
-    image_url VARCHAR(500),
     description TEXT,
     github_url VARCHAR(500),
     deleted BOOL DEFAULT FALSE,
     date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+CREATE TABLE project_images (
+    project_id BIGINT UNSIGNED NOT NULL,
+    image_path VARCHAR(100) NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 CREATE TABLE project_tags (

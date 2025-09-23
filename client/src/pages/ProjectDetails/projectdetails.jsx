@@ -283,11 +283,11 @@ function ProjectDetails() {
                             </div>
                         </div>
 
-                        {project.image_url && (
-                            <div className="project-image-wrapper">
-                                <img src={project.image_url} alt={project.image_url} className="project-image" />
-                            </div>
-                        )}
+
+                        <div className="project-image-wrapper">
+                            <img src={project.image_url || "/placeholder.jpg"} alt={"project_image"} className="project-image" />
+                        </div>
+
 
                         <p className="project-description">{project.description}</p>
 

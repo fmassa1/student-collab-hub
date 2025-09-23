@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import ErrorPage from "../../components/ErrorPage/error";
-import ProjectCard from "./Components/ProjectCard/ProjectCard";
-import SearchBar from "./Components/SearchBar/SearchBar";
+import ProjectCard from "./components/ProjectCard/ProjectCard";
+import SearchBar from "./components/SearchBar/SearchBar";
 import { getProjectSearch } from "../../services/projectAPI";
 
 import './projects.css';
@@ -126,6 +126,7 @@ function Projects() {
                     <ProjectCard project={project}/>
                 ))}
             </div>
+
             {visibleCount < allProjects.length && (
                 <div className="load-more-container">
                     <button className="load-more-btn" onClick={loadMore}>Load More</button>

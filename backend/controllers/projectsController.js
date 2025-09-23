@@ -95,9 +95,15 @@ async function postProject(req, res) {
     }
 }
 async function uploadImagesHandler(req, res) {
-    //TODO: return routes of images
-    console.log("hit");
-    res.json({ images: ['image', 'image2', 'image3'] });
+    try {
+        const project_id = req.params.project_id;
+        const filenames = req.files.map(file => file.filename);
+        await postProjectPictures(project_id, filenames);
+        res.json({ images: filenames });
+    } catch (err){
+        console.error(err);
+        res.status(500).json({ error: 'Database error uploadingImages' });
+    }
 
 }
 
