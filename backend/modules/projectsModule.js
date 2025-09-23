@@ -3,10 +3,19 @@ const db = require('../db');
 async function getAllProjects(sortColumn, sortOrder) {
   const order = sortOrder === "desc" ? "DESC" : "ASC";
   const [rows] = await db.query(`
-    SELECT p.*, COUNT(DISTINCT pl.user_id) AS likes, COUNT(DISTINCT pv.user_id) AS views
+    SELECT 
+      p.*, 
+      COUNT(DISTINCT pl.user_id) AS likes, 
+      COUNT(DISTINCT pv.user_id) AS views,
+      COALESCE(
+        JSON_ARRAYAGG(
+          JSON_OBJECT('image_path', pi.image_path)
+        ), JSON_ARRAY()
+      ) AS images
     FROM projects p
     LEFT JOIN project_likes pl ON p.id = pl.project_id
     LEFT JOIN project_views pv ON p.id = pv.project_id
+    LEFT JOIN project_images pi ON p.id = pi.project_id
     WHERE p.deleted = false
     GROUP BY p.id
     ORDER BY ${sortColumn} ${order}
@@ -18,9 +27,15 @@ async function getProjectsByTags(tags) {
   const placeholders = tags.map(() => "?").join(",");
   const [rows] = await db.query(
     `
-    SELECT p.*
+    SELECT p.*,
+      COALESCE(
+          JSON_ARRAYAGG(
+            JSON_OBJECT('image_path', pi.image_path)
+          ), JSON_ARRAY()
+        ) AS images
     FROM projects p
     JOIN project_tags pt ON p.id = pt.project_id
+    LEFT JOIN project_images pi ON p.id = pi.project_id
     WHERE LOWER(pt.tag) IN (${placeholders}) AND p.deleted = false
     GROUP BY p.id
     HAVING COUNT(DISTINCT LOWER(pt.tag)) = ?
@@ -104,7 +119,7 @@ async function postProjectPictures(id, files) {
     await db.query(
       `INSERT INTO project_images (project_id, image_path)
        VALUES (?, ?)`,
-      [id, img]
+      [id, `/uploads/projects/${img}`]
     );
   }
 }

@@ -285,7 +285,7 @@ function ProjectDetails() {
 
 
                         <div className="project-image-wrapper">
-                            <img src={project.image_url || "/placeholder.jpg"} alt={"project_image"} className="project-image" />
+                            <img src={project.images?.[0]?.image_path || "/placeholder.jpg"} alt={"project_image"} className="project-image" />
                         </div>
 
 

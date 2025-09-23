@@ -48,7 +48,6 @@ async function getProjectById(req, res) {
         if(!project.id) {
             return res.status(404).json({ error: 'Project not found' });
         }
-        console.log(project);
         res.json(project);
 
     } catch (err) {

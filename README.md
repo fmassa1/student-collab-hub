@@ -1,4 +1,7 @@
 # TODOs
+
+add slider that goes through project images
+
 ## Project Posting
 - [ ] upload pictures instead of url
 
