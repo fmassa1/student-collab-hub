@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import ErrorPage from "../../components/ErrorPage/error";
-import TagSelector from "../../components/TagSelector/TagSelector";
 import ProjectCard from "./Components/ProjectCard/ProjectCard";
+import SearchBar from "./Components/SearchBar/SearchBar";
 import { getProjectSearch } from "../../services/projectAPI";
 
 import './projects.css';
@@ -112,26 +112,14 @@ function Projects() {
     return (
         <div className="projects-page">
             <h1 className="projects-heading">Featured Projects</h1>
-
-            <div className="controls-container">
-                <div className='sort-controls'>
-                    <select value={sort} onChange={handleSortChange}>
-                        <option value="date_posted">Date Posted</option>
-                        <option value="views">Views</option>
-                        <option value="likes">Likes</option>
-                    </select>
-                    <button onClick={toggleOrder}>
-                        {order === "desc" ? "↓ Desc" : "↑ Asc"}
-                    </button>
-                </div>
-
-                <div className="filter-by-tag">
-                    <TagSelector 
-                        selected={formData.tags || []}
-                        setSelected={handleTagsChange}
-                    />
-                </div>
-            </div>
+            <SearchBar
+                tags={formData.tags}
+                sort={sort}
+                order={order}
+                handleSortChange={handleSortChange}
+                toggleOrder={toggleOrder}
+                handleTagsChange={handleTagsChange}
+            />
 
             <div className="project-grid">
                 {visibleProjects.map(project => (
