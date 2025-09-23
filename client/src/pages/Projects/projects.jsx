@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import TagSelector from "../../components/TagSelector/TagSelector";
+import ProjectCard from "./Components/ProjectCard/ProjectCard";
 import { getProjectSearch } from "../../services/projectAPI";
 
 import './projects.css';
@@ -12,7 +12,6 @@ function Projects() {
     const [error, setError] = useState(null);
     const [allProjects, setProjects] = useState([]);
     const [visibleCount, setVisibleCount] = useState(10);
-    const { token } = useContext(AuthContext);
     
     const location = useLocation();
     const navigate = useNavigate();
@@ -55,7 +54,7 @@ function Projects() {
             }
         }
         fetchData();
-    }, [location.search, token]);
+    }, [location.search]);
     
     if (error) {
         return <ErrorPage code={error}  />;
@@ -136,18 +135,7 @@ function Projects() {
 
             <div className="project-grid">
                 {visibleProjects.map(project => (
-                <div key={project.id} className="project-card" onClick={() => navigate(`/projects/${project.id}`)}>
-                    <img src={project.image_url} alt={project.name} />
-                    <h2>{project.name}</h2>
-                    <p>{project.description}</p>
-                    <div className="icon-container">
-                    {project.github_url ? (
-                        <a href={project.github_url} target="_blank" rel="noopener noreferrer">
-                            <img src='/svg/github.svg' alt="Github" />
-                        </a>
-                    ) : null}
-                    </div>
-                </div>
+                    <ProjectCard project={project}/>
                 ))}
             </div>
             {visibleCount < allProjects.length && (
