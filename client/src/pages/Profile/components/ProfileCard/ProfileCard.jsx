@@ -1,18 +1,49 @@
+import { useState } from "react";
+
 import EditProfileForm from "../EditProfileForm/EditProfileForm";
+import { isValidGitHubUrl, isValidLinkedInUrl } from '../../../../services/urlChecker';
+import {updateProfile} from "../../../../services/profileAPI";
+
 import "./ProfileCard.css";
 
 function ProfileCard({
     profile,
-    formData,
-    isEditing,
     isOwner,
-    editingError,
-    onChange,
     onSave,
-    onCancel,
-    onEditProfile,
-    onEditPicture,
+    onEditPicture
   }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingError, setEditingError] = useState(null);
+    const [formData, setFormData] = useState({});
+
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSave = async () => {
+
+        if(formData.github_url && !isValidGitHubUrl(formData.github_url)) {
+            setEditingError('Invalid Github Url');
+            return;
+        }
+        if(formData.linkedin_url && !isValidLinkedInUrl(formData.linkedin_url)) {
+            setEditingError('Invalid LinkedIn Url');
+            return;
+        }
+
+        setEditingError('');
+    
+        try {
+            const updatedProfile = await updateProfile(profile.username, formData);
+            onSave(updatedProfile);
+            setIsEditing(false);
+        } catch (err) {
+            console.error("Update failed:", err);
+            setEditingError("Profile update failed.");
+        }
+    };
+
 
     if (isEditing) {
         return (
@@ -20,9 +51,9 @@ function ProfileCard({
                 <EditProfileForm
                     formData={formData}
                     editingError={editingError}
-                    onChange={onChange}
-                    onSave={onSave}
-                    onCancel={onCancel}
+                    onChange={handleChange}
+                    onSave={handleSave}
+                    onCancel={() => setIsEditing(false)}
                 />
             </div>
         );
@@ -54,7 +85,6 @@ function ProfileCard({
             {profile.university && <p>🎓 {profile.university}</p>}
             <p>{profile.email}</p>
             <p>{profile.bio}</p>
-            <p>{profile.profile_picture_url}</p>
 
             <div className="profile-links">
                 {profile.linkedin_url ? (
@@ -70,7 +100,10 @@ function ProfileCard({
             </div>
             
             {isOwner && (
-                <button onClick={onEditProfile}>
+                <button onClick={() => {
+                    setFormData(profile);
+                    setIsEditing(true);
+                }}>
                         Edit Profile
                 </button>
             )}

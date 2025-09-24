@@ -33,7 +33,7 @@ A full-stack web application for showcasing and discovering projects. Users can 
 
 ---
 
-## 🛠️ Tech Stack  
+## Tech Stack  
 
 **Frontend**  
 - React (with Hooks + Context)  

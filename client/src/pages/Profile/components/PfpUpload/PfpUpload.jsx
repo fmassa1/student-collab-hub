@@ -1,12 +1,29 @@
+import { useState } from 'react';
+import { uploadProfilePicture } from "../../../../services/profileAPI";
 import "./PfpUpload.css";
 
-function PfpUpload({ 
+function PfpUpload({
     show, 
-    newPfp, 
-    setNewPfp, 
-    onClose, 
+    profile,
+    setShow, 
+    username, 
     onUpload
- }) {
+}) {
+
+    const [newPfp, setNewPfp] = useState(null);
+
+    const handlePictureUpload = async (file) => {
+        try {
+          const data = await uploadProfilePicture(username, file);
+          onUpload({
+            ...profile,
+            profile_picture_url: `${data.profile_picture_url}?t=${Date.now()}`
+        });
+        setShow(false);
+        } catch (err) {
+          console.error("Upload failed:", err);
+        }
+    };
 
     if (!show) return null;
 
@@ -20,11 +37,11 @@ function PfpUpload({
                     onChange={(e) => setNewPfp(e.target.files[0])} 
                 />
                 <div className="modal-actions">
-                    <button onClick={onClose}> Cancel </button>
+                    <button onClick={() => setShow(false)}> Cancel </button>
                     <button 
                         onClick={async () => {
                             if (!newPfp) return;
-                            onUpload(newPfp);
+                            handlePictureUpload(newPfp);
                         }}
                     >
                         Upload
