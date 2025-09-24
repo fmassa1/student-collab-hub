@@ -21,13 +21,13 @@ app.set('trust proxy', false);
 
 
 app.use(cors());
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      imgSrc: ["'self'", "data:", "https://placehold.co"],
-    },
-  },
-}));
+// app.use(helmet({
+//   contentSecurityPolicy: {
+//     directives: {
+//       imgSrc: ["'self'", "data:", "https://placehold.co"],
+//     },
+//   },
+// }));
 
 app.use(requestLogger);
 app.use(requestLimiter);

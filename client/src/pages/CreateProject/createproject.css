@@ -68,3 +68,48 @@ button:hover {
     background: #e6f0ff;
 }
   
+
+.image-preview {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  
+.preview-container {
+    position: relative;
+    display: inline-block;
+}
+
+.preview-img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trash-icon {
+    width: 16px;
+    height: 16px;
+    filter: invert(100%);
+    pointer-events: none;
+}
+
+.remove-btn:hover {
+    background: rgba(255,0,0,0.7);
+}

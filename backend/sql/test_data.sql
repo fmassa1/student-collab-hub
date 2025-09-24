@@ -122,3 +122,50 @@ VALUES
 (2, 2, 1, 'LIKE', NULL, '{"msg":"Alice liked your project"}', 0, 0, NOW()),
 (3, 3, 5, 'COMMENT', 4, '{"msg":"Eve commented"}', 0, 0, NOW()),
 (4, 4, 6, 'LIKE', NULL, '{"msg":"Frank liked your project"}', 0, 0, NOW());
+
+
+INSERT INTO project_images (project_id, image_path)
+VALUES
+(1, '/uploads/projects/test.jpg'),
+(1, '/uploads/projects/test2.jpeg'),
+(1, '/uploads/projects/test3.jpg'),
+
+(2, '/uploads/projects/test4.jpeg'),
+(2, '/uploads/projects/test5.jpeg'),
+
+(4, '/uploads/projects/test6.jpeg'),
+(4, '/uploads/projects/test.jpg'),
+(4, '/uploads/projects/test2.jpeg'),
+(4, '/uploads/projects/test3.jpg'),
+
+(5, '/uploads/projects/test4.jpeg'),
+
+(6, '/uploads/projects/test5.jpeg'),
+(6, '/uploads/projects/test6.jpeg'),
+(6, '/uploads/projects/test.jpg'),
+(6, '/uploads/projects/test2.jpeg'),
+(6, '/uploads/projects/test3.jpg'),
+
+(8, '/uploads/projects/test4.jpeg'),
+(8, '/uploads/projects/test5.jpeg'),
+
+(9, '/uploads/projects/test6.jpeg'),
+(9, '/uploads/projects/test.jpg'),
+(9, '/uploads/projects/test2.jpeg'),
+(9, '/uploads/projects/test3.jpg'),
+(9, '/uploads/projects/test4.jpeg'),
+(9, '/uploads/projects/test5.jpeg'),
+
+(10, '/uploads/projects/test6.jpeg'),
+
+(11, '/uploads/projects/test.jpg'),
+(11, '/uploads/projects/test2.jpeg'),
+(11, '/uploads/projects/test3.jpg'),
+
+(13, '/uploads/projects/test4.jpeg'),
+(13, '/uploads/projects/test5.jpeg'),
+(13, '/uploads/projects/test6.jpeg'),
+(13, '/uploads/projects/test.jpg'),
+
+(14, '/uploads/projects/test2.jpeg'),
+(14, '/uploads/projects/test3.jpg');

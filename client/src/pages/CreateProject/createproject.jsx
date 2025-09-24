@@ -103,25 +103,38 @@ function CreateProject() {
                         accept="image/*"
                         multiple
                         onChange={(e) => {
-                            const files = Array.from(e.target.files);
-                            setFormData((prev) => ({
-                                ...prev,
-                                images: [...prev.images, ...files].slice(0, 3), // merge + enforce max 3
-                            }));
+                        const files = Array.from(e.target.files);
+                        setFormData((prev) => ({
+                            ...prev,
+                            images: [...prev.images, ...files].slice(0, 3),
+                        }));
                         }}
                     />
-                </label>
+                    </label>
 
-                <div className="image-preview">
+                    <div className="image-preview">
                     {formData.images.map((file, idx) => (
+                        <div key={idx} className="preview-container">
                         <img
-                            key={idx}
                             src={URL.createObjectURL(file)}
                             alt={`preview-${idx}`}
-                            style={{ width: "100px", marginRight: "10px" }}
+                            className="preview-img"
                         />
+                        <button
+                            type="button"
+                            className="remove-btn"
+                            onClick={() => {
+                            setFormData((prev) => ({
+                                ...prev,
+                                images: prev.images.filter((_, i) => i !== idx),
+                            }));
+                            }}
+                        >
+                            <img src="/svg/trash.svg" alt="Remove" className="trash-icon" />
+                        </button>
+                        </div>
                     ))}
-                </div>
+                 </div>
 
                 <label>
                     GitHub URL
