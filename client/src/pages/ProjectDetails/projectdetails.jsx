@@ -286,10 +286,7 @@ function ProjectDetails() {
 
 
                         <div className="project-image-wrapper">
-
                             <ImageSlider images={project.images} />
-
-                            {/* <img src={project.images?.[0] || "/placeholder.jpg"} alt={"project_image"} className="project-image" /> */}
                         </div>
 
 
