@@ -7,11 +7,7 @@ async function getAllProjects(sortColumn, sortOrder) {
       p.*, 
       COUNT(DISTINCT pl.user_id) AS likes, 
       COUNT(DISTINCT pv.user_id) AS views,
-      COALESCE(
-        JSON_ARRAYAGG(
-          JSON_OBJECT('image_path', pi.image_path)
-        ), JSON_ARRAY()
-      ) AS images
+      COALESCE(JSON_ARRAYAGG(pi.image_path), JSON_ARRAY()) AS images
     FROM projects p
     LEFT JOIN project_likes pl ON p.id = pl.project_id
     LEFT JOIN project_views pv ON p.id = pv.project_id
@@ -28,11 +24,7 @@ async function getProjectsByTags(tags) {
   const [rows] = await db.query(
     `
     SELECT p.*,
-      COALESCE(
-          JSON_ARRAYAGG(
-            JSON_OBJECT('image_path', pi.image_path)
-          ), JSON_ARRAY()
-        ) AS images
+      COALESCE(JSON_ARRAYAGG(pi.image_path), JSON_ARRAY()) AS images
     FROM projects p
     JOIN project_tags pt ON p.id = pt.project_id
     LEFT JOIN project_images pi ON p.id = pi.project_id
@@ -68,14 +60,14 @@ async function getProjectById(project_id, user_id) {
   [user_id, project_id]);
   const [views] = await db.query(`SELECT * FROM project_views WHERE project_id = ?`, [project_id]);
   const [images] = await db.query(`SELECT image_path FROM project_images WHERE project_id = ?`, [project_id]);
-
+  
   return {
     ...project[0],
     tags: tags.map(t => t.tag),
     liked_by: likes.map(l => l.user_id),
     comments,
     views: views.length,
-    images: images
+    images: images.map(img => img.image_path)
   };
 }
 

@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import ErrorPage from "../../components/ErrorPage/error";
 import CommentSection from "./components/CommentSection/CommentSection";
 import ProjectEditForm from "./components/ProjectEditForm/ProjectEditForm";
+import ImageSlider from "./components/ImageSlider/ImageSlider";
 import projectTags from "../../components/TagSelector/projectTags.json";
 
 import { 
@@ -285,7 +286,10 @@ function ProjectDetails() {
 
 
                         <div className="project-image-wrapper">
-                            <img src={project.images?.[0]?.image_path || "/placeholder.jpg"} alt={"project_image"} className="project-image" />
+
+                            <ImageSlider images={project.images} />
+
+                            {/* <img src={project.images?.[0] || "/placeholder.jpg"} alt={"project_image"} className="project-image" /> */}
                         </div>
 
 

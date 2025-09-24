@@ -10,7 +10,7 @@ function ProjectCard({
 
     return (
         <div key={project.id} className="project-card" onClick={() => navigate(`/projects/${project.id}`)}>
-            <img  src={project.images?.[0]?.image_path || "/placeholder.jpg"} alt={"project_image"} />
+            <img  src={project.images?.[0] || "/placeholder.jpg"} alt={"project_image"} />
             <h2>{project.name}</h2>
             <p>{project.description}</p>
             <div className="icon-container">
