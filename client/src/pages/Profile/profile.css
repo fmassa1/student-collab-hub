@@ -1,15 +1,122 @@
 .profile-details-page {
-    max-width: 900px;
-    margin: 3rem auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 0;
+}
+
+.profile-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     padding: 2rem;
+}
+
+.profile-details-page .profile-header {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    animation: fadeInUp 0.8s ease-out;
-    font-family: 'Inter', sans-serif;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 30, 98, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    animation: slideInFromTop 0.6s ease-out;
+    margin: 0 -2rem;
+    max-width: none;
+    width: calc(100% + 4rem);
+    border-radius: 0;
+}
+
+.profile-details-page .profile-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 40px rgba(0, 30, 98, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-details-page .project-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 
+        0 8px 32px rgba(0, 30, 98, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.05);
+    animation: slideInFromBottom 0.6s ease-out 0.2s both;
 }
 
 .error {
-    color: red;
+    color: #dc3545;
     font-weight: 500;
-}  
+    background: rgba(220, 53, 69, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-content-wrapper {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+    
+    .profile-details-page .profile-header {
+        margin: 0 -1rem;
+        width: calc(100% + 2rem);
+    }
+    
+    .profile-details-page .project-section {
+        margin: 0;
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .profile-content-wrapper {
+        max-width: 1400px;
+        padding: 3rem;
+    }
+    
+    .profile-details-page .profile-header {
+        margin: 0 -3rem;
+        width: calc(100% + 6rem);
+    }
+}
+
+.profile-details-page.loading .profile-header,
+.profile-details-page.loading .project-section {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.profile-details-page *:focus {
+    outline: 2px solid #001e62;
+    outline-offset: 2px;
+    border-radius: 4px;
+}

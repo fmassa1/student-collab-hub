@@ -43,26 +43,27 @@ function Profile() {
 
     return (
         <div className="profile-details-page">
-            <ProfileCard
-                profile={profile}
-                isOwner={isOwner}
-                onSave={(updatedData) => setProfile(updatedData)}
-                onEditPicture={() => setShowPfpUpload(true)}
-            />
-            
-            <PfpUpload 
-                show={showPfpUpload}
-                profile={profile}
-                setShow={setShowPfpUpload}
-                username={username}
-                onUpload={(updatedProfile) => setProfile(updatedProfile)}
-            />
+            <div className="profile-content-wrapper">
+                <ProfileCard
+                    profile={profile}
+                    isOwner={isOwner}
+                    onSave={(updatedData) => setProfile(updatedData)}
+                    onEditPicture={() => setShowPfpUpload(true)}
+                />
+                
+                <PfpUpload 
+                    show={showPfpUpload}
+                    profile={profile}
+                    setShow={setShowPfpUpload}
+                    username={username}
+                    onUpload={(updatedProfile) => setProfile(updatedProfile)}
+                />
 
-            <ProjectSection 
-                profile={profile} 
-                projects={projects} 
-            />
-
+                <ProjectSection 
+                    profile={profile} 
+                    projects={projects} 
+                />
+            </div>
         </div>
     );
 }
