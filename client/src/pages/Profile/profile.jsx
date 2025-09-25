@@ -7,8 +7,6 @@ import ProjectSection from "./components/ProjectSection/ProjectSection"
 import ProfileCard from "./components/ProfileCard/ProfileCard"
 import PfpUpload from "./components/PfpUpload/PfpUpload"
 
-
-
 import {
     getProfile,
     getProjects,
@@ -60,7 +58,10 @@ function Profile() {
                 onUpload={(updatedProfile) => setProfile(updatedProfile)}
             />
 
-            <ProjectSection profile={profile} projects={projects} />
+            <ProjectSection 
+                profile={profile} 
+                projects={projects} 
+            />
 
         </div>
     );
