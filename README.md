@@ -56,27 +56,3 @@ A full-stack web application for showcasing and discovering projects. Users can 
 
 ---
 
-# TODOs
-## Project Page
-- [ ] search bar based on titles
-- [ ] if user tries to like/comment on a project that has been deleted route to home
-
-## Project Detail Page
-- [ ] update images
-- [ ] replying to comments
-- [ ] sorting comments
-- [ ] style better
- 
-## Login/SignUp
-- [ ] styling
-
-## User Profile
-- [ ] style better
-
-## Error Page
-- [ ] better styling
-
-## General
-- [+] keep users logged in (sessions)
-- - refresh tokens so users can stay logged in 
-- [ ] fix formating of notification drop downs
